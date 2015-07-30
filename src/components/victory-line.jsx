@@ -2,9 +2,6 @@ import React from "react";
 import Radium from "radium";
 import d3 from "d3";
 
-const defaultXScale = d3.scale.linear().range([0, 50]);
-const defaultYScale = d3.scale.linear().range([50, 0]);
-
 @Radium
 class VictoryLine extends React.Component {
   constructor(props) {
