@@ -10,6 +10,7 @@ class VictoryLine extends React.Component {
   constructor(props) {
     super(props);
   }
+
   getStyles() {
     return {
       base: {
@@ -36,13 +37,13 @@ class VictoryLine extends React.Component {
   render() {
     const styles = this.getStyles();
 
-    const xFunc = this.props.xScale || defaultXScale;
-    const yFunc = this.props.yScale || defaultYScale;
+    const xScale = this.props.scale(this.props.xMin, this.props.width);
+    const yScale = this.props.scale(this.props.height, this.props.yMin);
 
     const data = this.props.data;
 
-    xFunc.domain();
-    yFunc.domain(d3.extent(data, function(d) { return d.y; }));
+    this.props.xDomain(data);
+    this.props.yDomain(data);
 
     const d3Line = d3.svg.line()
                      .x(obj => xFunc(obj.x))
@@ -70,7 +71,10 @@ VictoryLine.propTypes = {
   height: React.PropTypes.string,
   stroke: React.PropTypes.string
   fill: React.PropTypes.string,
-  xDomain: React.PropTypes.func
+  xDomain: React.PropTypes.func,
+  yDomain: React.PropTypes.func,
+  xMin: React.PropTypes.number,
+  yMin: React.PropTypes.number,
 };
 
 VictoryLine.defaultProps = {
@@ -78,10 +82,11 @@ VictoryLine.defaultProps = {
   height: "1000",
   stroke: "black",
   fill: "none",
-  xDomain: d3.extent(data, function(d) { return d.x; }),
-  yDomain: d3.extent(data, function(d) { return d.y; })
-    /* xScale: d3.scale.linear().range([0, this.props.width]),
-       yScale: d3.scale.linear().range([this.props.height, 0]) */
+  xMin: 0,
+  yMin: 0,
+  xDomain: (data) => d3.extent(data, function(d) { return d.x; }),
+  yDomain: (data) => d3.extent(data, function(d) { return d.y; }),
+  scale: (min, max) => d3.scale.linear().range([min, max])
 }
 
 export default VictoryLine;
