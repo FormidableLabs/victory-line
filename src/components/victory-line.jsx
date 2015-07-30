@@ -32,11 +32,6 @@ class VictoryLine extends React.Component {
             }
         };
     }
-    d3Line(obj) {
-        return d3.svg.line()
-                 .x(obj => obj.x)
-                 .y(obj => obj.y);
-    }
 
     render() {
         const styles = this.getStyles();
@@ -44,35 +39,40 @@ class VictoryLine extends React.Component {
         const xFunc = this.props.xScale || defaultXScale;
         const yFunc = this.props.yScale || defaultYScale;
 
+        const data = this.props.data;
+
+        xFunc.domain(d3.extent(data, function(d) { return d.x; }));
+        yFunc.domain(d3.extent(data, function(d) { return d.y; }));
+
         const d3Line = d3.svg.line()
                          .x(obj => xFunc(obj.x))
                          .y(obj => yFunc(obj.y));
 
-        const path = d3Line(
-                      [{"x": 5, "y": 5},
-                       {"x": 6, "y": 6},
-                       {"x": 7, "y": 7}]);
+        const path = d3Line(data);
 
-        console.log(path);
         return (
-            <g height="100" width="100">
-                <path stroke="black"
-                      height="100"
-                      width="100"
-                  d={path} />
-            </g>
+            <svg height={this.props.height}
+                 width={this.props.width} >
+                <path d={path}
+                      stroke="black"
+                      fill="none"
+                />
+            </svg>
         );
     }
 }
 
 VictoryLine.propTypes = {
-    color: React.PropTypes.string
+    color: React.PropTypes.string,
+    data: React.PropTypes.node,
+    width: React.PropTypes.string,
+    height: React.PropTypes.string,
 };
 
 VictoryLine.defaultProps = {
-    /* width: 100,
-       height: 100
-       xScale: d3.scale.linear().range([0, this.props.width]),
+    width: "1000",
+    height: "1000"
+    /* xScale: d3.scale.linear().range([0, this.props.width]),
        yScale: d3.scale.linear().range([this.props.height, 0]) */
 }
 
