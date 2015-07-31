@@ -93,7 +93,7 @@ val` and `y val` are numbers.
 
 An array of numbers representing the points along the x axis to plot.
 
-**Defaults to:** _range(xMin, xMax, sample)
+**Defaults to:** `_range(xMin, xMax, sample)`
 
 #### `y`
 
