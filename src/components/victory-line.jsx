@@ -43,7 +43,7 @@ class VictoryLine extends React.Component {
 
   returnOrGenerateY() {
     const y = this.props.y;
-    if (y && y.isArray()) {
+    if (typeof y === "object" && y.isArray()) {
       return y;
     } else if (typeof y === "function") {
       return _.map(this.state.x, (x) => y(x));
