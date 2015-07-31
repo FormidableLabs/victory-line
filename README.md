@@ -21,7 +21,7 @@ This:
 
 Gets you this:
 
-![A chart!][victory-line_rand.png]
+![A chart!](victory-line_rand.png)
 
 Styles can be overridden by passing them in as a map. Also, we can graph
 arbitrary equations.
@@ -36,7 +36,7 @@ sample={25}/>
 
 Makes this:
 
-![Oooooh! Ahhhhh!][victory-line_sin.png]
+![Oooooh! Ahhhhh!](victory-line_sin.png)
 
 Likewise:
 
@@ -47,7 +47,7 @@ y={(x) => x * x} />
 
 Makes this:
 
-![V. Nice][victory-line_equation.png]
+![V. Nice](victory-line_equation.png)
 
 Or you can pass in your own data:
 
@@ -68,7 +68,7 @@ Or you can pass in your own data:
 
 Makes:
 
-![Victory!][victory-line_data-passed-in.png]
+![Victory!](victory-line_data-passed-in.png)
 
 ## Build
 
