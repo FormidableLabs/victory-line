@@ -53,17 +53,17 @@ Or you can pass in your own data:
 
 ``` javascript
 <VictoryLine data={[
-                           {x: 1, y: 1},
-                           {x: 2, y: 4},
-                           {x: 3, y: 5},
-                           {x: 4, y: 2},
-                           {x: 5, y: 11},
-                           {x: 6, y: 7},
-                           {x: 7, y: 6},
-                           {x: 8, y: 7},
-                           {x: 9, y: 8},
-                           {x: 10, y: 12}
-                           ]}/>
+  {x: 1, y: 1},
+  {x: 2, y: 4},
+  {x: 3, y: 5},
+  {x: 4, y: 2},
+  {x: 5, y: 11},
+  {x: 6, y: 7},
+  {x: 7, y: 6},
+  {x: 8, y: 7},
+  {x: 9, y: 8},
+  {x: 10, y: 12}
+]}/>
 ```
 
 Makes:
@@ -76,20 +76,20 @@ Makes:
 
 All props are **optional** -- they can all be omitted, and the component will
 still render. So: the values listed for each prop are the values you should pass
-_if you pass them at all_. 
+_if you pass them at all_.
 
 The following props are supported:
 
-#### `data` 
+#### `data`
 
 Primary way to pass in a data set for plotting. If the `data` prop is omitted,
 `victory-line` will fall back to plotting the `x` and `y` props; if `x` and `y`
 are absent, random data is generated and plotted.
 
 `data`, must be of the form `[{x: <x val>, y: <y-val>}]`, where `x
-val` and `y val` are numbers. 
+val` and `y val` are numbers.
 
-#### `x` 
+#### `x`
 
 An array of numbers representing the points along the x axis to plot.
 
