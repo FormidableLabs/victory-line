@@ -8,6 +8,23 @@ class VictoryLine extends React.Component {
     super(props);
   }
 
+  genData() {
+    const numPts = 100;
+
+    let pts = [];
+    let i = 0;
+
+    while (pts.length < numPts) {
+      let x = i;
+      let y = Math.round(Math.random() * numPts, 1);
+      pts.push({"x": x, "y": y});
+      i = i + 1;
+    }
+
+    console.log(pts);
+    return pts;
+  }
+
   getStyles() {
     return {
       base: {
@@ -22,7 +39,7 @@ class VictoryLine extends React.Component {
       path: {
         "fill": "none",
         "stroke": "darkgrey",
-        "strokeWidth": ".4px"
+        "strokeWidth": "2px"
       },
       svg: {
         "border": "2px solid black",
@@ -37,14 +54,14 @@ class VictoryLine extends React.Component {
     const xScale = this.props.scale(this.props.xMin, this.props.width);
     const yScale = this.props.scale(this.props.height, this.props.yMin);
 
-    const data = this.props.data;
+    const data = this.props.data || this.genData();
 
-    this.props.xDomain(data);
-    this.props.yDomain(data);
+    xScale.domain(this.props.xExtent(data));
+    yScale.domain(this.props.yExtent(data));
 
     const d3Line = d3.svg.line()
-                     .x(obj => xFunc(obj.x))
-                     .y(obj => yFunc(obj.y));
+                     .x(obj => xScale(obj.x))
+                     .y(obj => yScale(obj.y));
 
     const path = d3Line(data);
 
@@ -66,7 +83,7 @@ VictoryLine.propTypes = {
   data: React.PropTypes.node,
   width: React.PropTypes.string,
   height: React.PropTypes.string,
-  stroke: React.PropTypes.string
+  stroke: React.PropTypes.string,
   fill: React.PropTypes.string,
   xDomain: React.PropTypes.func,
   yDomain: React.PropTypes.func,
@@ -81,8 +98,8 @@ VictoryLine.defaultProps = {
   fill: "none",
   xMin: 0,
   yMin: 0,
-  xDomain: (data) => d3.extent(data, function(d) { return d.x; }),
-  yDomain: (data) => d3.extent(data, function(d) { return d.y; }),
+  xExtent: (data) => d3.extent(data, function(d) { return d.x; }),
+  yExtent: (data) => d3.extent(data, function(d) { return d.y; }),
   scale: (min, max) => d3.scale.linear().range([min, max])
 }
 

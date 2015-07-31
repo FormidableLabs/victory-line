@@ -6,7 +6,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="demo">
-        < VictoryLine data={this.props.data} />
+        < VictoryLine  />
       </div>
     );
   }
@@ -23,4 +23,4 @@ const data = [
 
 const content = document.getElementById("content");
 
-React.render(<App data={data} />, content);
+React.render(<App />, content);
