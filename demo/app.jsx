@@ -7,10 +7,11 @@ class App extends React.Component {
     return (
       <div className="demo">
         <VictoryLine style={{stroke: "blue"}}
-                     y={(x) => Math.sin(x)} />
-        <VictoryLine style={{stroke: "blue"}}
+                     y={(x) => Math.sin(x)}
+                     sample={25}/>
+        <VictoryLine style={{stroke: "green"}}
                      y={(x) => x*x} />
-        <VictoryLine style={{stroke: "blue"}} />
+        <VictoryLine />
       </div>
     );
   }
