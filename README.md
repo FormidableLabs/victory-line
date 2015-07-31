@@ -70,6 +70,63 @@ Makes:
 
 ![Victory!](victory-line_data-passed-in.png)
 
+## The API
+
+### Props
+
+All props are **optional** -- they can all be omitted, and the component will
+still render. So: the values listed for each prop are the values you should pass
+_if you pass them at all_. 
+
+The following props are supported:
+
+#### `data` 
+
+Primary way to pass in a data set for plotting. If the `data` prop is omitted,
+`victory-line` will fall back to plotting the `x` and `y` props; if `x` and `y`
+are absent, random data is generated and plotted.
+
+`data`, must be of the form `[{x: <x val>, y: <y-val>}]`, where `x
+val` and `y val` are numbers. 
+
+#### `x` 
+
+An array of numbers representing the points along the x axis to plot.
+
+**Defaults to:** _range(xMin, xMax, sample)
+
+#### `y`
+
+An array of numbers OR a function in terms of `x` (i.e. `(x) => x * x`).
+
+**Defaults to:** `Math.random()`
+
+#### `xMin`, `xMax`, `yMin`, and `yMax`
+
+Contol the min and max values for their respective axis.
+
+**Defaults to:** The mins default to 0; the maxes default to 100.
+
+#### `sample`
+
+Controls the number of points generated when plotting a function.
+
+**Defaults to:** 100
+
+#### `scale`
+
+A `d3` scale. Currently, teh same scale is used for both the x and y axis.
+
+**Defaults to:** `d3.scale.linear`
+
+#### `interpolation`
+
+A `d3`
+[interpolation](https://github.com/mbostock/d3/wiki/SVG-Shapes#line_interpolate). Can
+take the name of any valid interpolation as a string.
+
+**Defaults to:** "basis"
+
 ## Build
 
 Build for production use (NPM, bower, etc).
