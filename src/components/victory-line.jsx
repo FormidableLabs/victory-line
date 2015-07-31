@@ -11,17 +11,45 @@ class VictoryLine extends React.Component {
   genData() {
     const numPts = 100;
 
+    const generator = this.props.generatorFunction ||
+                      () => Math.round(Math.random() * numPts, 1);
+
+    const x = this.props.x;
+    const y = this.props.y;
+
+    if (x && !y) {
+      this.gen("x", generator, numPts);
+    } else if (y && !x) {
+      this.gen("y", generator, numPts);
+    } else if (x && y) {
+      // wat
+    } else {
+      // just die
+    }
+
+    return generator(x, y, numPts);
+
+  }
+
+  gen(forPt, genFn, numPts) {
     let pts = [];
     let i = 0;
 
+    if (typeof(forPt) == "array") { /*easy peasy*/}
+    else if (typeof(forPt) == "function") { /* call funciton */ }
+    else if (typeof(forPt) == "numeric") { /* why is even here */ }
+    else if (min && max) { /* make range */ }
+    else { /* diaf, probs */ }
+
+    const other = "y" ? forPt == "x" : "x"
+
     while (pts.length < numPts) {
-      let x = i;
-      let y = Math.round(Math.random() * numPts, 1);
-      pts.push({"x": x, "y": y});
+      let forPtVal = i;
+      let otherVal = genFn(forPtVal);
+      pts.push({forPt: forPtVal, other: otherVal});
       i = i + 1;
     }
 
-    console.log(pts);
     return pts;
   }
 
