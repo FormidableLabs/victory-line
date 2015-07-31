@@ -1,56 +1,51 @@
 import React from "react";
 import Radium from "radium";
 import d3 from "d3";
+import _ from "lodash";
 
 @Radium
 class VictoryLine extends React.Component {
+
   constructor(props) {
     super(props);
-  }
-
-  genData() {
-    const numPts = 100;
-
-    const generator = this.props.generatorFunction ||
-                      () => Math.round(Math.random() * numPts, 1);
-
-    const x = this.props.x;
-    const y = this.props.y;
-
-    if (x && !y) {
-      this.gen("x", generator, numPts);
-    } else if (y && !x) {
-      this.gen("y", generator, numPts);
-    } else if (x && y) {
-      // wat
+    /**
+     * Our use-cases are:
+     * 1. The user passes in data as an array of {x: 1, y: 2}-style pairs
+     * 2. The user provides no x; make it from xMin and xMax
+     * 3. */
+    if (this.props.data) {
+      this.state = {
+        data: this.props.data,
+        x: this.props.data.map(row => row.x),
+        y: this.props.data.map(row => row.y)
+      };
     } else {
-      // just die
-    }
+      this.state = {
+        x: this.returnOrGenerateX(),
+        y: this.returnOrGenerateY()
+      }
 
-    return generator(x, y, numPts);
+      this.state.data = _.zip([this.state.x, this.state.y]);
+    }
 
   }
 
-  gen(forPt, genFn, numPts) {
-    let pts = [];
-    let i = 0;
+  returnOrGenerateX() {
+    return this.props.x
+         ? this.props.x
+         : _.range(this.props.xMin, this.props.xMax, this.props.sample)
+  }
 
-    if (typeof(forPt) == "array") { /*easy peasy*/}
-    else if (typeof(forPt) == "function") { /* call funciton */ }
-    else if (typeof(forPt) == "numeric") { /* why is even here */ }
-    else if (min && max) { /* make range */ }
-    else { /* diaf, probs */ }
-
-    const other = "y" ? forPt == "x" : "x"
-
-    while (pts.length < numPts) {
-      let forPtVal = i;
-      let otherVal = genFn(forPtVal);
-      pts.push({forPt: forPtVal, other: otherVal});
-      i = i + 1;
+  returnOrGenerateY() {
+    const y = this.props.y;
+    if (typeof(y) === "array") {
+      return y;
+    } else if (typeof(y) === "function") {
+      return this.props.x.map(x => y(x))
+    } else {
+      // asplode
+      return null;
     }
-
-    return pts;
   }
 
   getStyles() {
@@ -71,7 +66,9 @@ class VictoryLine extends React.Component {
       },
       svg: {
         "border": "2px solid black",
-        "margin": "20px"
+        "margin": "20px",
+        "width": "1000",
+        "height": "1000"
       }
     };
   }
@@ -79,13 +76,13 @@ class VictoryLine extends React.Component {
   render() {
     const styles = this.getStyles();
 
-    const xScale = this.props.scale(this.props.xMin, this.props.width);
-    const yScale = this.props.scale(this.props.height, this.props.yMin);
+    const xScale = this.props.scale(this.props.xMin, styles.width);
+    const yScale = this.props.scale(styles.height, this.props.yMin);
 
-    const data = this.props.data || this.genData();
+    console.log(this.state.data);
 
-    xScale.domain(this.props.xExtent(data));
-    yScale.domain(this.props.yExtent(data));
+    xScale.domain(d3.extent(this.state.data, (data) => data.x));
+    yScale.domain(d3.extent(this.state.data, (data) => data.y));
 
     const d3Line = d3.svg.line()
                      .x(obj => xScale(obj.x))
@@ -94,40 +91,37 @@ class VictoryLine extends React.Component {
     const path = d3Line(data);
 
     return (
-      <svg height={this.props.height}
-           width={this.props.width}
-           >
-        <path d={path}
-              stroke={this.props.stroke}
-              fill={this.props.fill}
-        />
+      <svg style={[styles.text]} >
+        <path d={path} />
       </svg>
     );
   }
 }
 
 VictoryLine.propTypes = {
-  color: React.PropTypes.string,
   data: React.PropTypes.node,
-  width: React.PropTypes.string,
-  height: React.PropTypes.string,
-  stroke: React.PropTypes.string,
-  fill: React.PropTypes.string,
-  xDomain: React.PropTypes.func,
-  yDomain: React.PropTypes.func,
   xMin: React.PropTypes.number,
   yMin: React.PropTypes.number,
+  xMax: React.PropTypes.number,
+  yMax: React.PropTypes.number,
+  sample: React.PropTypes.number,
+  x: React.PropTypes.array,
+  y: React.PropTypes.oneOfType([
+    React.PropTypes.array,
+    React.PropTypes.func
+  ]),
+  scale: React.PropTypes.func
 };
 
 VictoryLine.defaultProps = {
-  width: "1000",
-  height: "1000",
-  stroke: "black",
-  fill: "none",
   xMin: 0,
   yMin: 0,
-  xExtent: (data) => d3.extent(data, function(d) { return d.x; }),
-  yExtent: (data) => d3.extent(data, function(d) { return d.y; }),
+  xMax: 100,
+  yMax: 100,
+  data: null,
+  sample: 100,
+  x: null,
+  y: () => Math.round(Math.random(), 1),
   scale: (min, max) => d3.scale.linear().range([min, max])
 }
 
