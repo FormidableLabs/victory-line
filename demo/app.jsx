@@ -12,6 +12,18 @@ class App extends React.Component {
         <VictoryLine style={{stroke: "green"}}
                      y={(x) => x * x} />
         <VictoryLine />
+        <VictoryLine data={[
+                           {x: 1, y: 1},
+                           {x: 2, y: 4},
+                           {x: 3, y: 5},
+                           {x: 4, y: 2},
+                           {x: 5, y: 11},
+                           {x: 6, y: 7},
+                           {x: 7, y: 6},
+                           {x: 8, y: 7},
+                           {x: 9, y: 8},
+                           {x: 10, y: 12}
+                           ]}/>
       </div>
     );
   }
