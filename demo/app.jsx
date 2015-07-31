@@ -10,7 +10,7 @@ class App extends React.Component {
                      y={(x) => Math.sin(x)}
                      sample={25}/>
         <VictoryLine style={{stroke: "green"}}
-                     y={(x) => x*x} />
+                     y={(x) => x * x} />
         <VictoryLine />
       </div>
     );
