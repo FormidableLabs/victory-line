@@ -12,7 +12,10 @@ class VictoryLine extends React.Component {
      * Our use-cases are:
      * 1. The user passes in data as an array of {x: 1, y: 2}-style pairs
      * 2. The user provides no x; make it from xMin and xMax
-     * 3. */
+     * 3. The user provides x as an array of points; leave it be
+     * 4. The user provides y as an array of points; leave it be
+     * 5. The user provides y as a function; use x to generate y
+     */
     if (this.props.data) {
       this.state = {
         data: this.props.data,
@@ -20,7 +23,6 @@ class VictoryLine extends React.Component {
         y: this.props.data.map(row => row.y)
       };
     } else {
-
       this.state = {};
       this.state.x = this.returnOrGenerateX();
       this.state.y = this.returnOrGenerateY();
@@ -89,8 +91,10 @@ class VictoryLine extends React.Component {
     yScale.domain(d3.extent(this.state.data, (obj) => obj.y));
 
     const d3Line = d3.svg.line()
+                     .interpolate(this.props.interpolation)
                      .x((obj) => xScale(obj.x))
                      .y((obj) => yScale(obj.y));
+
 
     const path = d3Line(this.state.data);
 
@@ -104,7 +108,12 @@ class VictoryLine extends React.Component {
 }
 
 VictoryLine.propTypes = {
-  data: React.PropTypes.node,
+  data: React.PropTypes.arrayOf(
+    React.PropTypes.shape({
+      x: React.PropTypes.number,
+      y: React.PropTypes.number
+    })
+  ),
   xMin: React.PropTypes.number,
   yMin: React.PropTypes.number,
   xMax: React.PropTypes.number,
@@ -115,7 +124,20 @@ VictoryLine.propTypes = {
     React.PropTypes.array,
     React.PropTypes.func
   ]),
-  scale: React.PropTypes.func
+  scale: React.PropTypes.func,
+  interpolation: React.PropTypes.oneOf(["linear",
+                                        "linear-closed",
+                                        "step",
+                                        "step-before",
+                                        "step-after",
+                                        "basis",
+                                        "basis-open",
+                                        "basis-closed",
+                                        "bundle",
+                                        "cardinal",
+                                        "cardinal-open",
+                                        "cardinal-closed",
+                                        "monotone"])
 };
 
 VictoryLine.defaultProps = {
@@ -127,7 +149,8 @@ VictoryLine.defaultProps = {
   sample: 100,
   x: null,
   y: () => Math.random(),
-  scale: (min, max) => d3.scale.linear().range([min, max])
+  scale: (min, max) => d3.scale.linear().range([min, max]),
+  interpolation: "basis"
 }
 
 export default VictoryLine;
