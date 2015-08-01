@@ -9,12 +9,12 @@ class VictoryLine extends React.Component {
   constructor(props) {
     super(props);
     /*
-      Our use-cases are:
-      1. The user passes in data as an array of {x: 1, y: 2}
-      2. The user provides no x; make it from xMin and xMax
-      3. The user provides x as an array of points; leave it be
-      4. The user provides y as an array of points; leave it be
-      5. The user provides y as a function; use x to generate y
+       Our use-cases are:
+       1. The user passes in data as an array of {x: 1, y: 2}
+       2. The user provides no x; make it from xMin and xMax
+       3. The user provides x as an array of points; leave it be
+       4. The user provides y as an array of points; leave it be
+       5. The user provides y as a function; use x to generate y
      */
     if (this.props.data) {
       this.state = {
@@ -46,7 +46,7 @@ class VictoryLine extends React.Component {
     if (typeof y === "object" && y.isArray()) {
       return y;
     } else if (typeof y === "function") {
-      return _.map(this.state.x, (x) => y(x));
+      return _.map(this.state.x, (x) => y(x))
     } else {
       // asplode
       return null;
@@ -123,19 +123,21 @@ VictoryLine.propTypes = {
   ]),
   scale: React.PropTypes.func,
   style: React.PropTypes.node,
-  interpolation: React.PropTypes.oneOf(["linear",
-                                        "linear-closed",
-                                        "step",
-                                        "step-before",
-                                        "step-after",
-                                        "basis",
-                                        "basis-open",
-                                        "basis-closed",
-                                        "bundle",
-                                        "cardinal",
-                                        "cardinal-open",
-                                        "cardinal-closed",
-                                        "monotone"])
+  interpolation: React.PropTypes.oneOf([
+    "linear",
+    "linear-closed",
+    "step",
+    "step-before",
+    "step-after",
+    "basis",
+    "basis-open",
+    "basis-closed",
+    "bundle",
+    "cardinal",
+    "cardinal-open",
+    "cardinal-closed",
+    "monotone"
+  ])
 };
 
 VictoryLine.defaultProps = {
