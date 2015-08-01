@@ -46,7 +46,7 @@ class VictoryLine extends React.Component {
     if (typeof y === "object" && y.isArray()) {
       return y;
     } else if (typeof y === "function") {
-      return _.map(this.state.x, (x) => y(x))
+      return _.map(this.state.x, (x) => y(x));
     } else {
       // asplode
       return null;
@@ -150,7 +150,7 @@ VictoryLine.defaultProps = {
   xMin: 0,
   y: () => Math.random(),
   yMax: 100,
-  yMin: 0,
+  yMin: 0
 };
 
 export default VictoryLine;
