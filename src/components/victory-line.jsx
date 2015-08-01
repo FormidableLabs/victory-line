@@ -142,7 +142,7 @@ VictoryLine.propTypes = {
 
 VictoryLine.defaultProps = {
   data: null,
-  interpolation: "basis"
+  interpolation: "basis",
   sample: 100,
   scale: (min, max) => d3.scale.linear().range([min, max]),
   x: null,
