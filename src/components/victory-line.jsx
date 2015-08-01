@@ -111,18 +111,6 @@ VictoryLine.propTypes = {
       y: React.PropTypes.number
     })
   ),
-  xMin: React.PropTypes.number,
-  yMin: React.PropTypes.number,
-  xMax: React.PropTypes.number,
-  yMax: React.PropTypes.number,
-  sample: React.PropTypes.number,
-  x: React.PropTypes.array,
-  y: React.PropTypes.oneOfType([
-    React.PropTypes.array,
-    React.PropTypes.func
-  ]),
-  scale: React.PropTypes.func,
-  style: React.PropTypes.node,
   interpolation: React.PropTypes.oneOf([
     "linear",
     "linear-closed",
@@ -137,20 +125,32 @@ VictoryLine.propTypes = {
     "cardinal-open",
     "cardinal-closed",
     "monotone"
+  ]),
+  sample: React.PropTypes.number,
+  scale: React.PropTypes.func,
+  style: React.PropTypes.node,
+  x: React.PropTypes.array,
+  xMax: React.PropTypes.number,
+  xMin: React.PropTypes.number,
+  yMax: React.PropTypes.number,
+  yMin: React.PropTypes.number,
+  y: React.PropTypes.oneOfType([
+    React.PropTypes.array,
+    React.PropTypes.func
   ])
 };
 
 VictoryLine.defaultProps = {
-  xMin: 0,
-  yMin: 0,
-  xMax: 100,
-  yMax: 100,
   data: null,
-  sample: 100,
-  x: null,
-  y: () => Math.random(),
-  scale: (min, max) => d3.scale.linear().range([min, max]),
   interpolation: "basis"
+  sample: 100,
+  scale: (min, max) => d3.scale.linear().range([min, max]),
+  x: null,
+  xMax: 100,
+  xMin: 0,
+  y: () => Math.random(),
+  yMax: 100,
+  yMin: 0,
 };
 
 export default VictoryLine;
