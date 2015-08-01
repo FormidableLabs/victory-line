@@ -9,10 +9,12 @@ class VictoryLine extends React.Component {
   constructor(props) {
     super(props);
 
+    // Initialize state.
     this.state = {};
 
     const styles = this.getStyles();
 
+    // Extrapolate x and y range from style
     this.state.xRange = {
       min: styles.svg.margin,
       max: styles.svg.width - styles.svg.margin
