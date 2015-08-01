@@ -85,7 +85,7 @@ class VictoryLine extends React.Component {
       },
       svg: {
         "border": "2px solid black",
-        "margin": "40",
+        "margin": "5",
         "width": "500",
         "height": "200"
       }
