@@ -8,6 +8,22 @@ class VictoryLine extends React.Component {
 
   constructor(props) {
     super(props);
+
+    // Initialize state.
+    this.state = {};
+
+    const styles = this.getStyles();
+
+    // Extrapolate x and y range from style
+    this.state.xRange = {
+      min: styles.svg.margin,
+      max: styles.svg.width - styles.svg.margin
+    };
+    this.state.yRange = {
+      min: styles.svg.margin,
+      max: styles.svg.height - styles.svg.margin
+    };
+
     /*
        Our use-cases are:
        1. The user passes in data as an array of {x: 1, y: 2}
@@ -16,14 +32,12 @@ class VictoryLine extends React.Component {
        4. The user provides y as an array of points; leave it be
        5. The user provides y as a function; use x to generate y
      */
+
     if (this.props.data) {
-      this.state = {
-        data: this.props.data,
-        x: this.props.data.map(row => row.x),
-        y: this.props.data.map(row => row.y)
-      };
+      this.state.data = this.props.data;
+      this.state.x = this.props.data.map(row => row.x);
+      this.state.y = this.props.data.map(row => row.y);
     } else {
-      this.state = {};
       this.state.x = this.returnOrGenerateX();
       this.state.y = this.returnOrGenerateY();
 
@@ -35,10 +49,10 @@ class VictoryLine extends React.Component {
   }
 
   returnOrGenerateX() {
-    const step = Math.round(this.props.xMax / this.props.sample, 4);
+    const step = Math.round(this.state.xRange.max / this.props.sample, 4);
     return this.props.x
          ? this.props.x
-         : _.range(this.props.xMin, this.props.xMax, step);
+         : _.range(this.state.xRange.min, this.state.xRange.max, step);
   }
 
   returnOrGenerateY() {
@@ -54,7 +68,7 @@ class VictoryLine extends React.Component {
   }
 
   getStyles() {
-    return {
+    return _.merge({
       base: {
         color: "#000",
         fontSize: 12,
@@ -71,18 +85,18 @@ class VictoryLine extends React.Component {
       },
       svg: {
         "border": "2px solid black",
-        "margin": "20px",
+        "margin": "5",
         "width": "500",
         "height": "200"
       }
-    };
+    }, this.props.style);
   }
 
   render() {
     const styles = this.getStyles();
 
-    const xScale = this.props.scale(this.props.xMin, styles.svg.width);
-    const yScale = this.props.scale(styles.svg.height, this.props.yMin);
+    const xScale = this.props.scale(this.state.xRange.min, this.state.xRange.max);
+    const yScale = this.props.scale(this.state.yRange.max, this.state.yRange.min);
 
     xScale.domain(d3.extent(this.state.data, (obj) => obj.x));
     yScale.domain(d3.extent(this.state.data, (obj) => obj.y));
@@ -130,10 +144,6 @@ VictoryLine.propTypes = {
   scale: React.PropTypes.func,
   style: React.PropTypes.node,
   x: React.PropTypes.array,
-  xMax: React.PropTypes.number,
-  xMin: React.PropTypes.number,
-  yMax: React.PropTypes.number,
-  yMin: React.PropTypes.number,
   y: React.PropTypes.oneOfType([
     React.PropTypes.array,
     React.PropTypes.func
@@ -143,14 +153,11 @@ VictoryLine.propTypes = {
 VictoryLine.defaultProps = {
   data: null,
   interpolation: "basis",
+  range: [0, 100],
   sample: 100,
   scale: (min, max) => d3.scale.linear().range([min, max]),
   x: null,
-  xMax: 100,
-  xMin: 0,
-  y: () => Math.random(),
-  yMax: 100,
-  yMin: 0
+  y: () => Math.random()
 };
 
 export default VictoryLine;
