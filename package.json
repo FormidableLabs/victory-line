@@ -1,7 +1,7 @@
 {
   "name": "victory-line",
   "version": "0.0.5",
-  "description": "",
+  "description": "Line Component for Victory",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
