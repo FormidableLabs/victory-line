@@ -9,17 +9,17 @@ class App extends React.Component {
       margin: 5,
       width: 500,
       height: 200
-    }
+    };
 
     return (
       <div className="demo">
         <svg style={style}>
-          <VictoryLine style={[style, {stroke: "blue"}]}
+          <VictoryLine style={{stroke: "blue"}}
             y={(x) => Math.sin(x)}
             sample={25}/>
         </svg>
         <svg style={style}>
-          <VictoryLine style={[style, {stroke: "green"}]}
+          <VictoryLine style={{stroke: "green"}}
             y={(x) => x * x} />
         </svg>
         <svg style={style}>

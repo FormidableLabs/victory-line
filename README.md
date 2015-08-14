@@ -90,9 +90,7 @@ val` and `y val` are numbers.
 
 #### `x`
 
-An array of numbers representing the points along the x axis to plot.
-
-**Defaults to:** `_range(xMin, xMax, sample)`
+An array of numbers representing the points along the x axis to plot. If no array is provided, `x` will be calculated based on the `domain` and the number of `samples`.
 
 #### `y`
 
@@ -100,11 +98,31 @@ An array of numbers OR a function in terms of `x` (i.e. `(x) => x * x`).
 
 **Defaults to:** `Math.random()`
 
-#### `xMin`, `xMax`, `yMin`, and `yMax`
+#### `domain`
 
-Contol the min and max values for their respective axis.
+`domain` can be passed in as a single array, or as an object with arrays corresponding to each dimension like so:
 
-**Defaults to:** The mins default to 0; the maxes default to 100.
+```
+domain={
+  x: [0, 5],
+  y: [5, 0]
+}
+```
+
+If `domain` is not explicitly specified, it will be calculated from `data`, `x`, or `y`.  If these values are not specified either, the `domain` will be set to the default domain for the provided scale. 
+
+#### `domain`
+
+`range` can be passed in as a single array, or as an object with arrays corresponding to each dimension like so:
+
+```
+range={
+  x: [0, 5],
+  y: [5, 0]
+}
+```
+
+If `range` is not explicitly specified, it will be calculated from `height`, `width`, and `margin` properties of the styles for this component.
 
 #### `sample`
 
@@ -114,7 +132,14 @@ Controls the number of points generated when plotting a function.
 
 #### `scale`
 
-A `d3` scale. Currently, teh same scale is used for both the x and y axis.
+A `d3` scale. `scale` can be given as a function, or as an object specifying  a scale function each dimension, like so:
+
+```
+scale: {
+  x: () => d3.scale.linear(),
+  y: () => d3.scale.log()
+}
+```
 
 **Defaults to:** `d3.scale.linear`
 

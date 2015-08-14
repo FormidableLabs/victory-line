@@ -5,9 +5,14 @@ import _ from "lodash";
 
 @Radium
 class VictoryLine extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {};
+    this.state.scale = {
+      x: this.getScale("x"),
+      y: this.getScale("y")
+    };
   }
 
   getStyles() {
@@ -45,30 +50,30 @@ class VictoryLine extends React.Component {
   }
 
   getDomain(type) {
-    // scale is never undefined thanks to defaults
-    const scaleDomain = this.props.scale[type] ? this.props.scale[type]().domain() :
-      this.props.scale().domain();
-    let domain;
-    if (this.props.domain) {
-      domain = this.props.domain[type] ? this.props.domain[type] : this.props.domain;
+    if (this.props.domain && this.props.domain[type]) {
+      // if the domain for this type is given, return it
+      return this.props.domain[type];
+    } else if (this.props.domain) {
+      // if the domain is given without the type specified, return the domain (reversed for y)
+      return type === "x" ? this.props.domain : this.props.domain.concat().reverse();
     } else if (this.props.data) {
-      domain = [_.min(this.props.data, type), _.max(this.props.data, type)];
-    } else if (this.props[type]) {
-      domain = [_.min(this.props[type]), _.max(this.props[type])];
-      else if (this.props.scale)
-      domain = scaleDomain;
+      // if data is given, return the range of the data (reversed for y)
+      return type === "x" ?
+        [_.min(this.props.data, type)[type], _.max(this.props.data, type)[type]] :
+        [_.max(this.props.data, type)[type], _.min(this.props.data, type)[type]];
+    } else if (this.props[type] && _.isArray(this.props[type])) {
+      // if data of the type specified is given as an array, return the range of the
+      // data array (reversed for y)
+      return type === "x" ? [_.min(this.props[type]), _.max(this.props[type])] :
+        [_.max(this.props[type]), _.min(this.props[type])];
+    } else if (this.props.scale) {
+      // if none of the above, return the default domain of the scale. The scale will
+      // never be undefined due to default props
+      const scaleDomain = this.props.scale[type] ? this.props.scale[type]().domain() :
+        this.props.scale().domain();
+
+      return type === "x" ? scaleDomain : scaleDomain.reverse();
     }
-    // Warn when domains need more information to produce meaningful axes
-    if (domain === scaleDomain && _.isDate(scaleDomain[0])) {
-      log.warn("please specify tickValues or domain when creating a time scale axis");
-    } else if (domain === scaleDomain && scaleDomain.length === 0) {
-      log.warn("please specify tickValues or domain when creating an axis using " +
-        "ordinal or quantile scales");
-    } else if (domain === scaleDomain && scaleDomain.length === 1) {
-      log.warn("please specify tickValues or domain when creating an axis using " +
-        "a threshold scale");
-    }
-    return domain;
   }
 
   getRange(type) {
@@ -76,8 +81,8 @@ class VictoryLine extends React.Component {
       return this.props.range[type] ? this.props.range[type] : this.props.range;
     }
     const style = this.getStyles().svg; // TODO: hacky
-    const dimension = type === "x" ? "width" : "height"
-    return [style.margin, style[dimension] - style.width];
+    const dimension = type === "x" ? "width" : "height";
+    return [style.margin, style[dimension] - style.margin];
   }
 
   returnOrGenerateX() {
@@ -85,7 +90,7 @@ class VictoryLine extends React.Component {
       return this.props.x;
     }
     const domain = this.getDomain("x");
-    const samples = _.isArray(this.props.y) ? this.props.y.length : this.props.sample;
+    const samples = _.isArray(this.props.y) ? this.props.y.length : this.props.samples;
     const step = _.round(_.max(domain) / samples, 2);
     return _.range(_.min(domain), _.max(domain), step);
   }
@@ -96,7 +101,7 @@ class VictoryLine extends React.Component {
     if (typeof y === "object" && y.isArray()) {
       return y;
     } else if (typeof y === "function") {
-      return _.map(x, (x) => y(x));
+      return _.map(x, (datum) => y(datum));
     } else {
       // asplode
       return [];
@@ -104,15 +109,6 @@ class VictoryLine extends React.Component {
   }
 
   getData() {
-    /*
-       Our use-cases are:
-       1. The user passes in data as an array of {x: 1, y: 2}
-       2. The user provides no x; make it from the domain
-       3. The user provides x as an array of points; leave it be
-       4. The user provides y as an array of points; leave it be
-       5. The user provides y as a function; use x to generate y
-     */
-
     if (this.props.data) {
       return this.props.data;
     }
@@ -130,7 +126,6 @@ class VictoryLine extends React.Component {
   drawLine() {
     const xScale = this.getScale("x");
     const yScale = this.getScale("y");
-
     const d3Line = d3.svg.line()
       .interpolate(this.props.interpolation)
       .x((data) => xScale(data.x))
@@ -138,22 +133,22 @@ class VictoryLine extends React.Component {
 
     const path = d3Line(this.getData());
     const style = this.getStyles();
-    return (
-      <path style={[style.path, this.props.style]}
-          d={path} />
-    );
+    return <path style={[style.path, this.props.style]} d={path} />;
   }
 
   render() {
+    const style = this.getStyles();
     return (
-      <g>
-        {this.drawLine}
-      <g>
+      <g style={[style.svg, this.props.style]}>
+        {this.drawLine()}
+      </g>
     );
   }
+
 }
 
 VictoryLine.propTypes = {
+  style: React.PropTypes.node,
   data: React.PropTypes.arrayOf(
     React.PropTypes.shape({
       x: React.PropTypes.number,
@@ -192,8 +187,7 @@ VictoryLine.propTypes = {
       })
     )
   ]),
-  style: React.PropTypes.node,
-  sample: React.PropTypes.number,
+  samples: React.PropTypes.number,
   interpolation: React.PropTypes.oneOf([
     "linear",
     "linear-closed",
@@ -213,10 +207,9 @@ VictoryLine.propTypes = {
 
 VictoryLine.defaultProps = {
   interpolation: "basis",
-  sample: 100,
+  samples: 100,
   scale: () => d3.scale.linear(),
-  y: () => Math.random(),
-  domain: [0, 100]
+  y: () => Math.random()
 };
 
 export default VictoryLine;
