@@ -111,7 +111,7 @@ domain={
 
 If `domain` is not explicitly specified, it will be calculated from `data`, `x`, or `y`.  If these values are not specified either, the `domain` will be set to the default domain for the provided scale. 
 
-#### `domain`
+#### `range`
 
 `range` can be passed in as a single array, or as an object with arrays corresponding to each dimension like so:
 
