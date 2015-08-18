@@ -2,6 +2,7 @@ import React from "react";
 import Radium from "radium";
 import d3 from "d3";
 import _ from "lodash";
+import log from "../log";
 
 @Radium
 class VictoryLine extends React.Component {
@@ -43,43 +44,67 @@ class VictoryLine extends React.Component {
       // identity scale, reset the domain and range
       scale.range(range);
       scale.domain(range);
-      this.warn("Identity Scale: domain and range must be identical. " +
+      log.warn("Identity Scale: domain and range must be identical. " +
         "Domain has been reset to match range.");
     }
     return scale;
   }
 
   getDomain(type) {
-    if (this.props.domain && this.props.domain[type]) {
+    if (this.props.domain) {
+      return this._getDomainFromProps(type);
+    } else if (this.props.data || _.isArray(this.props[type])) {
+      return this._getDomainFromData(type);
+    } else {
+      return this._getDomainFromScale(type);
+    }
+  }
+
+  // helper methods for getDomain
+  _getDomainFromProps(type) {
+    if (this.props.domain[type]) {
       // if the domain for this type is given, return it
       return this.props.domain[type];
-    } else if (this.props.domain) {
-      // if the domain is given without the type specified, return the domain (reversed for y)
-      return type === "x" ? this.props.domain : this.props.domain.concat().reverse();
-    } else if (this.props.data) {
-      // if data is given, return the range of the data (reversed for y)
+    }
+    // if the domain is given without the type specified, return the domain (reversed for y)
+    return type === "x" ? this.props.domain : this.props.domain.concat().reverse();
+  }
+
+  _getDomainFromData(type) {
+    // if data is given, return the max/min of the data (reversed for y)
+    if (this.props.data) {
       return type === "x" ?
-        [_.min(this.props.data, type)[type], _.max(this.props.data, type)[type]] :
-        [_.max(this.props.data, type)[type], _.min(this.props.data, type)[type]];
-    } else if (this.props[type] && _.isArray(this.props[type])) {
-      // if data of the type specified is given as an array, return the range of the
-      // data array (reversed for y)
+        [_.min(_.pluck(this.props.data, type)), _.max(_.pluck(this.props.data, type))] :
+        [_.max(_.pluck(this.props.data, type)), _.min(_.pluck(this.props.data, type))];
+    } else {
+      // return the max / min of the array specified by this.props[type] (reversed for y)
       return type === "x" ? [_.min(this.props[type]), _.max(this.props[type])] :
         [_.max(this.props[type]), _.min(this.props[type])];
-    } else if (this.props.scale) {
-      // if none of the above, return the default domain of the scale. The scale will
-      // never be undefined due to default props
-      const scaleDomain = this.props.scale[type] ? this.props.scale[type]().domain() :
-        this.props.scale().domain();
-
-      return type === "x" ? scaleDomain : scaleDomain.reverse();
     }
+  }
+
+  _getDomainFromScale(type) {
+    // The scale will never be undefined due to default props
+    const scaleDomain = this.props.scale[type] ? this.props.scale[type]().domain() :
+      this.props.scale().domain();
+
+    // Warn when particular types of scales need more information to produce meaningful lines
+    if (_.isDate(scaleDomain[0])) {
+      log.warn("please specify a domain or data when using time scales");
+    } else if (scaleDomain.length === 0) {
+      log.warn("please specify a domain or data when using ordinal or quantile scales");
+    } else if (scaleDomain.length === 1) {
+      log.warn("please specify a domain or data when using a threshold scale");
+    }
+    // return the default domain for the scale (reversed for y)
+    return type === "x" ? scaleDomain : scaleDomain.reverse();
   }
 
   getRange(type) {
     if (this.props.range) {
       return this.props.range[type] ? this.props.range[type] : this.props.range;
     }
+    // if the range is not given in props, calculate it from width, height and margin
     const style = this.getStyles().svg; // TODO: hacky
     const dimension = type === "x" ? "width" : "height";
     return [style.margin, style[dimension] - style.margin];
@@ -89,6 +114,8 @@ class VictoryLine extends React.Component {
     if (this.props.x) {
       return this.props.x;
     }
+    // if x is not given in props, create an array of values evenly
+    // spaced across the x domain
     const domain = this.getDomain("x");
     const samples = _.isArray(this.props.y) ? this.props.y.length : this.props.samples;
     const step = _.round(_.max(domain) / samples, 2);
@@ -97,15 +124,15 @@ class VictoryLine extends React.Component {
 
   returnOrGenerateY() {
     const y = this.props.y;
-    const x = this.returnOrGenerateX();
-    if (typeof y === "object" && y.isArray()) {
-      return y;
-    } else if (typeof y === "function") {
+    if (_.isFunction(y)) {
+      const x = this.returnOrGenerateX();
+      // if y is a function, apply the function y to to each value of the array x,
+      // and return the results as an array
       return _.map(x, (datum) => y(datum));
-    } else {
-      // asplode
-      return [];
     }
+    // y is either a function or an array, and is never undefined
+    // if it isn't a function, just return it.
+    return y;
   }
 
   getData() {
@@ -126,12 +153,12 @@ class VictoryLine extends React.Component {
   drawLine() {
     const xScale = this.getScale("x");
     const yScale = this.getScale("y");
-    const d3Line = d3.svg.line()
+    const lineFunction = d3.svg.line()
       .interpolate(this.props.interpolation)
       .x((data) => xScale(data.x))
       .y((data) => yScale(data.y));
 
-    const path = d3Line(this.getData());
+    const path = lineFunction(this.getData());
     const style = this.getStyles();
     return <path style={[style.path, this.props.style]} d={path} />;
   }
