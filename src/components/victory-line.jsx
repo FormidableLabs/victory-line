@@ -18,17 +18,12 @@ class VictoryLine extends React.Component {
 
   getStyles() {
     return _.merge({
-      path: {
-        fill: "none",
-        stroke: "darkgrey",
-        strokeWidth: 2
-      },
-      svg: {
-        border: "2px solid black",
-        margin: 5,
-        width: 500,
-        height: 200
-      }
+      fill: "none",
+      stroke: "darkgrey",
+      strokeWidth: 2,
+      margin: 5,
+      width: 500,
+      height: 200
     }, this.props.style);
   }
 
@@ -60,7 +55,7 @@ class VictoryLine extends React.Component {
     }
   }
 
-  // helper methods for getDomain
+  // helper method for getDomain
   _getDomainFromProps(type) {
     if (this.props.domain[type]) {
       // if the domain for this type is given, return it
@@ -70,6 +65,7 @@ class VictoryLine extends React.Component {
     return type === "x" ? this.props.domain : this.props.domain.concat().reverse();
   }
 
+  // helper method for getDomain
   _getDomainFromData(type) {
     // if data is given, return the max/min of the data (reversed for y)
     if (this.props.data) {
@@ -83,6 +79,7 @@ class VictoryLine extends React.Component {
     }
   }
 
+  // helper method for getDomain
   _getDomainFromScale(type) {
     // The scale will never be undefined due to default props
     const scaleDomain = this.props.scale[type] ? this.props.scale[type]().domain() :
@@ -105,7 +102,7 @@ class VictoryLine extends React.Component {
       return this.props.range[type] ? this.props.range[type] : this.props.range;
     }
     // if the range is not given in props, calculate it from width, height and margin
-    const style = this.getStyles().svg; // TODO: hacky
+    const style = this.getStyles();
     const dimension = type === "x" ? "width" : "height";
     return [style.margin, style[dimension] - style.margin];
   }
@@ -118,7 +115,7 @@ class VictoryLine extends React.Component {
     // spaced across the x domain
     const domain = this.getDomain("x");
     const samples = _.isArray(this.props.y) ? this.props.y.length : this.props.samples;
-    const step = _.round(_.max(domain) / samples, 2);
+    const step = _.max(domain) / samples;
     return _.range(_.min(domain), _.max(domain), step);
   }
 
@@ -160,13 +157,13 @@ class VictoryLine extends React.Component {
 
     const path = lineFunction(this.getData());
     const style = this.getStyles();
-    return <path style={[style.path, this.props.style]} d={path} />;
+    return <path style={[style, this.props.style]} d={path} />;
   }
 
   render() {
     const style = this.getStyles();
     return (
-      <g style={[style.svg, this.props.style]}>
+      <g style={[style, this.props.style]}>
         {this.drawLine()}
       </g>
     );
