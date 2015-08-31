@@ -3,6 +3,8 @@ import Radium from "radium";
 import d3 from "d3";
 import _ from "lodash";
 import log from "../log";
+import {VictoryAnimation} from "victory-animation";
+
 
 @Radium
 class VictoryLine extends React.Component {
@@ -103,8 +105,9 @@ class VictoryLine extends React.Component {
     }
     // if the range is not given in props, calculate it from width, height and margin
     const style = this.getStyles();
-    const dimension = type === "x" ? "width" : "height";
-    return [style.margin, style[dimension] - style.margin];
+    return  type === "x" ?
+      [style.margin, style.width - style.margin] :
+      [style.height - style.margin, style.margin];
   }
 
   returnOrGenerateX() {
@@ -148,22 +151,31 @@ class VictoryLine extends React.Component {
   }
 
   drawLine() {
+    const style = this.getStyles();
+    const data = this.getData();
     const xScale = this.getScale("x");
     const yScale = this.getScale("y");
     const lineFunction = d3.svg.line()
       .interpolate(this.props.interpolation)
       .x((data) => xScale(data.x))
       .y((data) => yScale(data.y));
-
-    const path = lineFunction(this.getData());
-    const style = this.getStyles();
-    return <path style={[style, this.props.style]} d={path} />;
+    const path = lineFunction(data);
+    if (this.props.animate) {
+      return (
+        <VictoryAnimation data={{data: data}}>
+          {(segment) => {
+            return <path style={style} d={lineFunction(segment.data)}/>;
+          }}
+        </VictoryAnimation>
+      );
+    }
+    return <path style={style} d={lineFunction(data)}/>;
   }
 
   render() {
     const style = this.getStyles();
     return (
-      <g style={[style, this.props.style]}>
+      <g style={style}>
         {this.drawLine()}
       </g>
     );
@@ -226,14 +238,16 @@ VictoryLine.propTypes = {
     "cardinal-open",
     "cardinal-closed",
     "monotone"
-  ])
+  ]),
+  animate: React.PropTypes.bool
 };
 
 VictoryLine.defaultProps = {
   interpolation: "basis",
   samples: 100,
   scale: () => d3.scale.linear(),
-  y: () => Math.random()
+  y: (x) => x,
+  animate: true
 };
 
 export default VictoryLine;
