@@ -18,9 +18,7 @@ This:
 <VictoryLine />
 ```
 
-Gets you this:
-
-![A chart!](victory-line_rand.png)
+will produce a straight line.
 
 Styles can be overridden by passing them in as a map. Also, we can graph
 arbitrary equations.
@@ -150,6 +148,22 @@ A `d3`
 take the name of any valid interpolation as a string.
 
 **Defaults to:** "basis"
+
+### containerElement
+
+This prop determines whether to render Victory Scatter in a `<g>` or `<svg>` element. It is useful to set this prop to "g" if you are composing Victory Scatter with other victory components.
+
+**PropTypes** "g" or "svg"
+
+**Default** `containerElement: "svg"`
+
+#### animate
+
+This prop determines whether or not to animate transitions as data changes.  Animation is handled by [Victory Animation](https://github.com/FormidableLabs/victory-animation)
+
+**PropTypes** bool
+
+**Default** `animate: false`
 
 ## Development
 
