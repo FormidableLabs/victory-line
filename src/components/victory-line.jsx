@@ -180,6 +180,7 @@ class VictoryLine extends React.Component {
             return (
               <VLine
                 {...props}
+                animate={this.props.animate}
                 scale={this.props.scale}
                 y={yFunc || props.y}
                 containerElement={this.props.containerElement}
