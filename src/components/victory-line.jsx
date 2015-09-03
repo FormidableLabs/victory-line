@@ -6,7 +6,6 @@ import log from "../log";
 import {VictoryAnimation} from "victory-animation";
 
 
-@Radium
 class VLine extends React.Component {
   constructor(props) {
     super(props);
