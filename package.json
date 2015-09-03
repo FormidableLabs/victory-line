@@ -60,6 +60,7 @@
     "rimraf": "^2.4.0",
     "style-loader": "~0.8.0",
     "url-loader": "~0.5.5",
+    "victory-animation": "^0.0.6",
     "webpack": "^1.10.0"
   },
   "devDependencies": {
@@ -82,7 +83,6 @@
     "karma-sauce-launcher": "^0.2.14",
     "karma-spec-reporter": "0.0.20",
     "karma-webpack": "^1.6.0",
-    "lodash": "^3.9.3",
     "mocha": "^2.2.5",
     "opener": "^1.4.1",
     "phantomjs": "^1.9.17",
