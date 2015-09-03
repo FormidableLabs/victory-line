@@ -197,8 +197,8 @@ const propTypes = {
   style: React.PropTypes.node,
   data: React.PropTypes.arrayOf(
     React.PropTypes.shape({
-      x: React.PropTypes.number,
-      y: React.PropTypes.number
+      x: React.PropTypes.any,
+      y: React.PropTypes.any
     })
   ),
   x: React.PropTypes.array,
