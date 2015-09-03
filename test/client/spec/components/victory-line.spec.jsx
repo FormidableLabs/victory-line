@@ -9,9 +9,6 @@ import Component from "src/components/victory-line";
 const TestUtils = React.addons.TestUtils;
 
 describe("components/victory-line", function () {
-  it("is true", function () {
-    expect(true).to.equal(true);
-  });
 
   it.skip("has expected content with deep render", function () {
     // This is a "deep" render that renders children + all into an actual
@@ -28,7 +25,7 @@ describe("components/victory-line", function () {
     expect(divNode).to.have.property("innerHTML", "Edit me!");
   });
 
-  it.skip("has expected content with shallow render", function () {
+  it("has expected content with shallow render", function () {
     // This is a "shallow" render that renders only the current component
     // without using the actual DOM.
     //
@@ -37,7 +34,6 @@ describe("components/victory-line", function () {
     renderer.render(<Component />);
     const output = renderer.getRenderOutput();
 
-    expect(output.type).to.equal("div");
-    expect(output.props.children).to.contain("Edit me");
+    expect(output.type).to.equal("svg");
   });
 });

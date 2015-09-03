@@ -1,4 +1,5 @@
 /*global document:false*/
+/*global window:false */
 import React from "react";
 import {VictoryLine} from "../src/index";
 import _ from "lodash";
@@ -7,11 +8,15 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: this.getData(1)
+      data: [{x: 1, y: 2}, {x: 2, y: 3}],
+      style: {
+        stroke: "blue",
+        strokeWidth: 2
+      }
     };
   }
 
-  getData(index) {
+  getData() {
     return _.map(_.range(100), (i) => {
       return {
         x: i,
@@ -20,55 +25,53 @@ class App extends React.Component {
     });
   }
 
+  getStyles() {
+    const colors = ["red", "orange", "cyan", "green", "blue", "purple"];
+    return {
+      stroke: colors[_.random(0, 5)],
+      strokeWidth: [_.random(1, 5)]
+    };
+  }
+
   componentDidMount() {
     window.setInterval(() => {
       this.setState({
-        data: this.getData()
+        data: this.getData(),
+        style: this.getStyles()
       });
     }, 2000);
   }
 
   render() {
-    const style = {
-      border: "2px solid black",
-      margin: 5,
-      width: 500,
-      height: 200
-    };
-
     return (
       <div className="demo">
-        <svg style={style}>
-          <VictoryLine style={{stroke: "blue"}}
-            data={this.state.data}/>
-        </svg>
-        <svg style={style}>
-          <VictoryLine style={{stroke: "blue"}}
-            y={(x) => Math.sin(x)}
-            sample={25}/>
-        </svg>
-        <svg style={style}>
-          <VictoryLine style={{stroke: "green"}}
-            y={(x) => x * x} />
-        </svg>
-        <svg style={style}>
-          <VictoryLine
-            data={[
-              {x: 1, y: 1},
-              {x: 2, y: 4},
-              {x: 3, y: 5},
-              {x: 4, y: 2},
-              {x: 5, y: 11},
-              {x: 6, y: 7},
-              {x: 7, y: 6},
-              {x: 8, y: 7},
-              {x: 9, y: 8},
-              {x: 10, y: 12}
-            ]}/>
-        </svg>
-        <svg style={style}>
-          <VictoryLine/>
-        </svg>
+        <VictoryLine
+          style={_.merge({border: "2px solid black"}, this.state.style)}
+          data={this.state.data}
+          animate={true}/>
+
+        <VictoryLine style={{stroke: "blue", border: "2px solid black"}}
+          y={(x) => Math.sin(x)}
+          sample={25}/>
+
+        <VictoryLine style={{stroke: "green", border: "2px solid black"}}
+          y={(x) => x * x} />
+
+        <VictoryLine style={{border: "2px solid black"}}
+          data={[
+            {x: 1, y: 1},
+            {x: 2, y: 4},
+            {x: 3, y: 5},
+            {x: 4, y: 2},
+            {x: 5, y: 11},
+            {x: 6, y: 7},
+            {x: 7, y: 6},
+            {x: 8, y: 7},
+            {x: 9, y: 8},
+            {x: 10, y: 12}
+          ]}/>
+
+        <VictoryLine style={{border: "2px solid black"}}/>
       </div>
     );
   }

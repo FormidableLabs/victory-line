@@ -7,15 +7,9 @@ import {VictoryAnimation} from "victory-animation";
 
 
 @Radium
-class VictoryLine extends React.Component {
-
+class VLine extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    this.state.scale = {
-      x: this.getScale("x"),
-      y: this.getScale("y")
-    };
   }
 
   getStyles() {
@@ -49,7 +43,7 @@ class VictoryLine extends React.Component {
 
   getDomain(type) {
     if (this.props.domain) {
-      return this._getDomainFromProps(type);
+      return this.props.domain[type] || this.props.domain;
     } else if (this.props.data || _.isArray(this.props[type])) {
       return this._getDomainFromData(type);
     } else {
@@ -57,27 +51,15 @@ class VictoryLine extends React.Component {
     }
   }
 
-  // helper method for getDomain
-  _getDomainFromProps(type) {
-    if (this.props.domain[type]) {
-      // if the domain for this type is given, return it
-      return this.props.domain[type];
-    }
-    // if the domain is given without the type specified, return the domain (reversed for y)
-    return type === "x" ? this.props.domain : this.props.domain.concat().reverse();
-  }
 
   // helper method for getDomain
   _getDomainFromData(type) {
-    // if data is given, return the max/min of the data (reversed for y)
+    // if data is given, return the max/min of the data
     if (this.props.data) {
-      return type === "x" ?
-        [_.min(_.pluck(this.props.data, type)), _.max(_.pluck(this.props.data, type))] :
-        [_.max(_.pluck(this.props.data, type)), _.min(_.pluck(this.props.data, type))];
+      return [_.min(_.pluck(this.props.data, type)), _.max(_.pluck(this.props.data, type))];
     } else {
-      // return the max / min of the array specified by this.props[type] (reversed for y)
-      return type === "x" ? [_.min(this.props[type]), _.max(this.props[type])] :
-        [_.max(this.props[type]), _.min(this.props[type])];
+      // return the max / min of the array specified by this.props[type]
+      return [_.min(this.props[type]), _.max(this.props[type])];
     }
   }
 
@@ -95,8 +77,8 @@ class VictoryLine extends React.Component {
     } else if (scaleDomain.length === 1) {
       log.warn("please specify a domain or data when using a threshold scale");
     }
-    // return the default domain for the scale (reversed for y)
-    return type === "x" ? scaleDomain : scaleDomain.reverse();
+    // return the default domain for the scale
+    return scaleDomain;
   }
 
   getRange(type) {
@@ -105,7 +87,7 @@ class VictoryLine extends React.Component {
     }
     // if the range is not given in props, calculate it from width, height and margin
     const style = this.getStyles();
-    return  type === "x" ?
+    return type === "x" ?
       [style.margin, style.width - style.margin] :
       [style.height - style.margin, style.margin];
   }
@@ -119,7 +101,9 @@ class VictoryLine extends React.Component {
     const domain = this.getDomain("x");
     const samples = _.isArray(this.props.y) ? this.props.y.length : this.props.samples;
     const step = _.max(domain) / samples;
-    return _.range(_.min(domain), _.max(domain), step);
+    // return an array of x values spaced across the domain,
+    // include the maximum of the domain
+    return _.union(_.range(_.min(domain), _.max(domain), step), [_.max(domain)]);
   }
 
   returnOrGenerateY() {
@@ -157,33 +141,59 @@ class VictoryLine extends React.Component {
     const yScale = this.getScale("y");
     const lineFunction = d3.svg.line()
       .interpolate(this.props.interpolation)
-      .x((data) => xScale(data.x))
-      .y((data) => yScale(data.y));
+      .x((datum) => xScale(datum.x))
+      .y((datum) => yScale(datum.y));
     const path = lineFunction(data);
-    if (this.props.animate) {
-      return (
-        <VictoryAnimation data={{data: data}}>
-          {(segment) => {
-            return <path style={style} d={lineFunction(segment.data)}/>;
-          }}
-        </VictoryAnimation>
-      );
-    }
     return <path style={style} d={lineFunction(data)}/>;
   }
 
   render() {
     const style = this.getStyles();
+    if (this.props.containerElement === "svg") {
+      return (
+        <svg style={style}>
+          {this.drawLine()}
+        </svg>
+      );
+    }
     return (
       <g style={style}>
         {this.drawLine()}
       </g>
     );
   }
-
 }
 
-VictoryLine.propTypes = {
+@Radium
+class VictoryLine extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    if (this.props.animate) {
+      // dont interpolate y if it is a function!
+      const yFunc = _.isFunction(this.props.y) ? this.props.y : undefined;
+      return (
+        <VictoryAnimation data={this.props}>
+          {(props) => {
+            return (
+              <VLine
+                {...props}
+                scale={this.props.scale}
+                y={yFunc || props.y}
+                containerElement={this.props.containerElement}
+                interpolation={this.props.interpolation}/>
+            );
+          }}
+        </VictoryAnimation>
+      );
+    }
+    return (<VLine {...this.props}/>);
+  }
+}
+
+const propTypes = {
   style: React.PropTypes.node,
   data: React.PropTypes.arrayOf(
     React.PropTypes.shape({
@@ -198,30 +208,24 @@ VictoryLine.propTypes = {
   ]),
   domain: React.PropTypes.oneOfType([
     React.PropTypes.array,
-    React.PropTypes.objectOf(
-      React.PropTypes.shape({
-        x: React.PropTypes.array,
-        y: React.PropTypes.array
-      })
-    )
+    React.PropTypes.shape({
+      x: React.PropTypes.array,
+      y: React.PropTypes.array
+    })
   ]),
   range: React.PropTypes.oneOfType([
     React.PropTypes.array,
-    React.PropTypes.objectOf(
-      React.PropTypes.shape({
-        x: React.PropTypes.array,
-        y: React.PropTypes.array
-      })
-    )
+    React.PropTypes.shape({
+      x: React.PropTypes.array,
+      y: React.PropTypes.array
+    })
   ]),
   scale: React.PropTypes.oneOfType([
     React.PropTypes.func,
-    React.PropTypes.objectOf(
-      React.PropTypes.shape({
-        x: React.PropTypes.func,
-        y: React.PropTypes.func
-      })
-    )
+    React.PropTypes.shape({
+      x: React.PropTypes.func,
+      y: React.PropTypes.func
+    })
   ]),
   samples: React.PropTypes.number,
   interpolation: React.PropTypes.oneOf([
@@ -239,15 +243,22 @@ VictoryLine.propTypes = {
     "cardinal-closed",
     "monotone"
   ]),
-  animate: React.PropTypes.bool
+  animate: React.PropTypes.bool,
+  containerElement: React.PropTypes.oneOf(["svg", "g"])
 };
 
-VictoryLine.defaultProps = {
+const defaultProps = {
   interpolation: "basis",
-  samples: 100,
+  samples: 50,
   scale: () => d3.scale.linear(),
   y: (x) => x,
-  animate: true
+  animate: false,
+  containerElement: "svg"
 };
+
+VictoryLine.propTypes = propTypes;
+VictoryLine.defaultProps = defaultProps;
+VLine.propTypes = propTypes;
+VLine.defaultProps = defaultProps;
 
 export default VictoryLine;
