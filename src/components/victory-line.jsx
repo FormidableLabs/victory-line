@@ -174,7 +174,7 @@ class VictoryLine extends React.Component {
       // dont interpolate y if it is a function!
       const yFunc = _.isFunction(this.props.y) ? this.props.y : undefined;
       return (
-        <VictoryAnimation data={this.props}>
+        <VictoryAnimation data={this.props} velocity={this.props.velocity}>
           {(props) => {
             return (
               <VLine
@@ -244,6 +244,7 @@ const propTypes = {
     "monotone"
   ]),
   animate: React.PropTypes.bool,
+  velocity: React.PropTypes.number,
   containerElement: React.PropTypes.oneOf(["svg", "g"])
 };
 
@@ -253,6 +254,7 @@ const defaultProps = {
   scale: () => d3.scale.linear(),
   y: (x) => x,
   animate: false,
+  velocity: 0.02,
   containerElement: "svg"
 };
 
