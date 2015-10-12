@@ -107,7 +107,7 @@ domain={
 }
 ```
 
-If `domain` is not explicitly specified, it will be calculated from `data`, `x`, or `y`.  If these values are not specified either, the `domain` will be set to the default domain for the provided scale. 
+If `domain` is not explicitly specified, it will be calculated from `data`, `x`, or `y`.  If these values are not specified either, the `domain` will be set to the default domain for the provided scale.
 
 #### `range`
 
@@ -149,7 +149,7 @@ take the name of any valid interpolation as a string.
 
 **Defaults to:** "basis"
 
-### containerElement
+#### `containerElement`
 
 This prop determines whether to render Victory Scatter in a `<g>` or `<svg>` element. It is useful to set this prop to "g" if you are composing Victory Scatter with other victory components.
 
@@ -157,13 +157,21 @@ This prop determines whether to render Victory Scatter in a `<g>` or `<svg>` ele
 
 **Default** `containerElement: "svg"`
 
-#### animate
+#### `animate`
 
 This prop determines whether or not to animate transitions as data changes.  Animation is handled by [Victory Animation](https://github.com/FormidableLabs/victory-animation)
 
 **PropTypes** bool
 
 **Default** `animate: false`
+
+#### `velocity`
+
+This value controls the speed of your animation transitions. It only applies if the `animate` prop is set to `true`.
+
+**PropTypes** number
+
+**Default** `velocity: 0.02`
 
 ## Development
 

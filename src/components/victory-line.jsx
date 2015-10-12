@@ -189,7 +189,7 @@ class VictoryLine extends React.Component {
       // dont interpolate y if it is a function!
       const yFunc = _.isFunction(this.props.y) ? this.props.y : undefined;
       return (
-        <VictoryAnimation data={this.props}>
+        <VictoryAnimation data={this.props} velocity={this.props.velocity}>
           {(props) => {
             return (
               <VLine
@@ -326,7 +326,12 @@ const propTypes = {
    * compose line with other chart components, the containerElement prop should
    * be "g", and will need to be rendered within an svg tag.
    */
-  containerElement: React.PropTypes.oneOf(["svg", "g"])
+  containerElement: React.PropTypes.oneOf(["svg", "g"]),
+  /**
+   * The velocity prop controls the speed of your animation transitions. It only applies
+   * if the `animate` prop is set to `true`.
+   */
+  velocity: React.PropTypes.number
 };
 
 const defaultProps = {
@@ -335,6 +340,7 @@ const defaultProps = {
   scale: () => d3.scale.linear(),
   y: (x) => x,
   animate: false,
+  velocity: 0.02,
   containerElement: "svg"
 };
 
