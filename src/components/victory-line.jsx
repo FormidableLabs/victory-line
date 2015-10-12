@@ -41,7 +41,7 @@ class VLine extends React.Component {
       margin: 5,
       width: 500,
       height: 200
-    }, this.props.style);
+    }, props.style);
   }
 
   getScale(props, axis) {
@@ -209,18 +209,56 @@ class VictoryLine extends React.Component {
 }
 
 const propTypes = {
+  /**
+   * The style prop specifies styles for your chart. VictoryLine relies on Radium,
+   * so valid Radium style objects should work for this prop, however height, width, and margin
+   * are used to calculate range, and need to be expressed as a number of pixels
+   * @example {stroke: "blue", width: 500, height: 300}
+   */
   style: React.PropTypes.node,
+  /**
+   * The data prop specifies the data to be plotted. Data should be in the form of an array
+   * of data points where each data point should be an object with x and y properties.
+   * Other properties may be added to the data point object, such as stroke or strokeWidth.
+   * These properties will be interpreted and applied to the individual lines
+   * @exampes [
+   *   {x: 1, y: 125, stroke: "red"},
+   *   {x: 10, y: 257, stroke: "blue"},
+   *   {x: 100, y: 345, stroke: "green"},
+   * ]
+   */
   data: React.PropTypes.arrayOf(
     React.PropTypes.shape({
       x: React.PropTypes.any,
       y: React.PropTypes.any
     })
   ),
+  /**
+   * The x props provides another way to supply data for line to plot. This prop can be given
+   * as an array of values, and it will be plotted against whatever y prop is provided. If no
+   * props are provided for y, the values in x will be plotted as the identity function (x) => x.
+   * @examples [1, 2, 3]
+   */
   x: React.PropTypes.array,
+  /**
+   * The y props provides another way to supply data for line to plot. This prop can be given
+   * as a function of x, or an array of values. If x props are given, they will be used
+   * in plotting (x, y) data points. If x props are not provided, a set of x values
+   * evenly spaced across the x domain will be calculated, and used for plotting data points.
+   * @examples (x) => Math.sin(x), [1, 2, 3]
+   */
   y: React.PropTypes.oneOfType([
     React.PropTypes.array,
     React.PropTypes.func
   ]),
+  /**
+   * The domain prop describes the range of values your chart will include. This prop can be
+   * given as a array of the minimum and maximum expected values for your chart,
+   * or as an object that specifies separate arrays for x and y.
+   * If this prop is not provided, a domain will be calculated from data, or other
+   * available information.
+   * @exampes [-1, 1], {x: [0, 100], y: [0, 1]}
+   */
   domain: React.PropTypes.oneOfType([
     React.PropTypes.array,
     React.PropTypes.shape({
@@ -228,6 +266,15 @@ const propTypes = {
       y: React.PropTypes.array
     })
   ]),
+  /**
+   * The range prop describes the range of pixels your chart will cover. This prop can be
+   * given as a array of the minimum and maximum expected values for your chart,
+   * or as an object that specifies separate arrays for x and y.
+   * If this prop is not provided, a range will be calculated based on the height,
+   * width, and margin provided in the style prop, or in default styles. It is usually
+   * a good idea to let the chart component calculate its own range.
+   * @exampes [0, 500], {x: [0, 500], y: [500, 300]}
+   */
   range: React.PropTypes.oneOfType([
     React.PropTypes.array,
     React.PropTypes.shape({
@@ -235,6 +282,11 @@ const propTypes = {
       y: React.PropTypes.array
     })
   ]),
+  /**
+   * The scale prop determines which scales your chart should use. This prop can be
+   * given as a function, or as an object that specifies separate functions for x and y.
+   * @exampes () => d3.time.scale(), {x: () => d3.scale.linear(), y: () => d3.scale.log()}
+   */
   scale: React.PropTypes.oneOfType([
     React.PropTypes.func,
     React.PropTypes.shape({
@@ -242,7 +294,15 @@ const propTypes = {
       y: React.PropTypes.func
     })
   ]),
+  /**
+   * The samples prop specifies how many individual points to plot when plotting
+   * y as a function of x. Samples is ignored if x props are provided instead.
+   */
   samples: React.PropTypes.number,
+  /**
+   * The interpolation prop determines how data points should be connected
+   * when plotting a line
+   */
   interpolation: React.PropTypes.oneOf([
     "linear",
     "linear-closed",
@@ -258,7 +318,16 @@ const propTypes = {
     "cardinal-closed",
     "monotone"
   ]),
+  /**
+   * The animate prop determines whether lines should animate with changing data.
+   */
   animate: React.PropTypes.bool,
+  /**
+   * The containerElement prop specifies which element the compnent will render.
+   * For standalone lines, the containerElement prop should be "svg". If you need to
+   * compose line with other chart components, the containerElement prop should
+   * be "g", and will need to be rendered within an svg tag.
+   */
   containerElement: React.PropTypes.oneOf(["svg", "g"])
 };
 
