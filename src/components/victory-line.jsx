@@ -9,9 +9,31 @@ import {VictoryAnimation} from "victory-animation";
 class VLine extends React.Component {
   constructor(props) {
     super(props);
+    this.getCalculatedValues(props);
   }
 
-  getStyles() {
+  componentWillReceiveProps(nextProps) {
+    this.getCalculatedValues(nextProps);
+  }
+
+  getCalculatedValues(props) {
+    this.style = this.getStyles(props);
+    this.range = {
+      x: this.getRange(props, "x"),
+      y: this.getRange(props, "y")
+    };
+    this.domain = {
+      x: this.getDomain(props, "x"),
+      y: this.getDomain(props, "y")
+    };
+    this.scale = {
+      x: this.getScale(props, "x"),
+      y: this.getScale(props, "y")
+    };
+    this.dataset = this.getData(props);
+  }
+
+  getStyles(props) {
     return _.merge({
       fill: "none",
       stroke: "darkgrey",
@@ -19,14 +41,14 @@ class VLine extends React.Component {
       margin: 5,
       width: 500,
       height: 200
-    }, this.props.style);
+    }, props.style);
   }
 
-  getScale(type) {
-    const scale = this.props.scale[type] ? this.props.scale[type]().copy() :
-      this.props.scale().copy();
-    const range = this.getRange(type);
-    const domain = this.getDomain(type);
+  getScale(props, axis) {
+    const scale = props.scale[axis] ? props.scale[axis]().copy() :
+      props.scale().copy();
+    const range = this.range[axis];
+    const domain = this.domain[axis];
     scale.range(range);
     scale.domain(domain);
     // hacky check for identity scale
@@ -40,33 +62,33 @@ class VLine extends React.Component {
     return scale;
   }
 
-  getDomain(type) {
-    if (this.props.domain) {
-      return this.props.domain[type] || this.props.domain;
-    } else if (this.props.data || _.isArray(this.props[type])) {
-      return this._getDomainFromData(type);
+  getDomain(props, axis) {
+    if (props.domain) {
+      return props.domain[axis] || props.domain;
+    } else if (props.data || _.isArray(props[axis])) {
+      return this._getDomainFromData(props, axis);
     } else {
-      return this._getDomainFromScale(type);
+      return this._getDomainFromScale(props, axis);
     }
   }
 
 
   // helper method for getDomain
-  _getDomainFromData(type) {
+  _getDomainFromData(props, axis) {
     // if data is given, return the max/min of the data
-    if (this.props.data) {
-      return [_.min(_.pluck(this.props.data, type)), _.max(_.pluck(this.props.data, type))];
+    if (props.data) {
+      return [_.min(_.pluck(props.data, axis)), _.max(_.pluck(props.data, axis))];
     } else {
-      // return the max / min of the array specified by this.props[type]
-      return [_.min(this.props[type]), _.max(this.props[type])];
+      // return the max / min of the array specified by props[axis]
+      return [_.min(props[axis]), _.max(props[axis])];
     }
   }
 
   // helper method for getDomain
-  _getDomainFromScale(type) {
+  _getDomainFromScale(props, axis) {
     // The scale will never be undefined due to default props
-    const scaleDomain = this.props.scale[type] ? this.props.scale[type]().domain() :
-      this.props.scale().domain();
+    const scaleDomain = props.scale[axis] ? props.scale[axis]().domain() :
+      props.scale().domain();
 
     // Warn when particular types of scales need more information to produce meaningful lines
     if (_.isDate(scaleDomain[0])) {
@@ -80,50 +102,22 @@ class VLine extends React.Component {
     return scaleDomain;
   }
 
-  getRange(type) {
-    if (this.props.range) {
-      return this.props.range[type] ? this.props.range[type] : this.props.range;
+  getRange(props, axis) {
+    if (props.range) {
+      return props.range[axis] ? props.range[axis] : props.range;
     }
     // if the range is not given in props, calculate it from width, height and margin
-    const style = this.getStyles();
-    return type === "x" ?
-      [style.margin, style.width - style.margin] :
-      [style.height - style.margin, style.margin];
+    return axis === "x" ?
+      [this.style.margin, this.style.width - this.style.margin] :
+      [this.style.height - this.style.margin, this.style.margin];
   }
 
-  returnOrGenerateX() {
-    if (this.props.x) {
-      return this.props.x;
+  getData(props) {
+    if (props.data) {
+      return props.data;
     }
-    // if x is not given in props, create an array of values evenly
-    // spaced across the x domain
-    const domain = this.getDomain("x");
-    const samples = _.isArray(this.props.y) ? this.props.y.length : this.props.samples;
-    const step = _.max(domain) / samples;
-    // return an array of x values spaced across the domain,
-    // include the maximum of the domain
-    return _.union(_.range(_.min(domain), _.max(domain), step), [_.max(domain)]);
-  }
-
-  returnOrGenerateY() {
-    const y = this.props.y;
-    if (_.isFunction(y)) {
-      const x = this.returnOrGenerateX();
-      // if y is a function, apply the function y to to each value of the array x,
-      // and return the results as an array
-      return _.map(x, (datum) => y(datum));
-    }
-    // y is either a function or an array, and is never undefined
-    // if it isn't a function, just return it.
-    return y;
-  }
-
-  getData() {
-    if (this.props.data) {
-      return this.props.data;
-    }
-    const x = this.returnOrGenerateX();
-    const y = this.returnOrGenerateY();
+    const x = this.returnOrGenerateX(props);
+    const y = this.returnOrGenerateY(props, x);
     const n = _.min([x.length, y.length]);
     // create a dataset from x and y with n points
     const dataset = _.zip(_.take(x, n), _.take(y, n));
@@ -133,30 +127,51 @@ class VLine extends React.Component {
     });
   }
 
+  returnOrGenerateX(props) {
+    if (props.x) {
+      return props.x;
+    }
+    // if x is not given in props, create an array of values evenly
+    // spaced across the x domain
+    const domain = this.domain.x;
+    const samples = _.isArray(props.y) ? props.y.length : props.samples;
+    const step = _.max(domain) / samples;
+    // return an array of x values spaced across the domain,
+    // include the maximum of the domain
+    return _.union(_.range(_.min(domain), _.max(domain), step), [_.max(domain)]);
+  }
+
+  returnOrGenerateY(props, x) {
+    if (_.isFunction(props.y)) {
+      // if y is a function, apply the function y to to each value of the array x,
+      // and return the results as an array
+      return _.map(x, (datum) => props.y(datum));
+    }
+    // y is either a function or an array, and is never undefined
+    // if it isn't a function, just return it.
+    return props.y;
+  }
+
   drawLine() {
-    const style = this.getStyles();
-    const data = this.getData();
-    const xScale = this.getScale("x");
-    const yScale = this.getScale("y");
+    const xScale = this.scale.x;
+    const yScale = this.scale.y;
     const lineFunction = d3.svg.line()
       .interpolate(this.props.interpolation)
-      .x((datum) => xScale(datum.x))
-      .y((datum) => yScale(datum.y));
-    const path = lineFunction(data);
-    return <path style={style} d={lineFunction(data)}/>;
+      .x((data) => xScale(data.x))
+      .y((data) => yScale(data.y));
+    return <path style={this.style} d={lineFunction(this.dataset)}/>;
   }
 
   render() {
-    const style = this.getStyles();
     if (this.props.containerElement === "svg") {
       return (
-        <svg style={style}>
+        <svg style={this.style}>
           {this.drawLine()}
         </svg>
       );
     }
     return (
-      <g style={style}>
+      <g style={this.style}>
         {this.drawLine()}
       </g>
     );
@@ -194,18 +209,54 @@ class VictoryLine extends React.Component {
 }
 
 const propTypes = {
+  /**
+   * The style prop specifies styles for your chart. VictoryLine relies on Radium,
+   * so valid Radium style objects should work for this prop, however height, width, and margin
+   * are used to calculate range, and need to be expressed as a number of pixels
+   * @example {stroke: "blue", width: 500, height: 300}
+   */
   style: React.PropTypes.node,
+  /**
+   * The data prop specifies the data to be plotted. Data should be in the form of an array
+   * of data points where each data point should be an object with x and y properties.
+   * @exampes [
+   *   {x: 1, y: 125},
+   *   {x: 10, y: 257},
+   *   {x: 100, y: 345},
+   * ]
+   */
   data: React.PropTypes.arrayOf(
     React.PropTypes.shape({
       x: React.PropTypes.any,
       y: React.PropTypes.any
     })
   ),
+  /**
+   * The x props provides another way to supply data for line to plot. This prop can be given
+   * as an array of values, and it will be plotted against whatever y prop is provided. If no
+   * props are provided for y, the values in x will be plotted as the identity function (x) => x.
+   * @examples [1, 2, 3]
+   */
   x: React.PropTypes.array,
+  /**
+   * The y props provides another way to supply data for line to plot. This prop can be given
+   * as a function of x, or an array of values. If x props are given, they will be used
+   * in plotting (x, y) data points. If x props are not provided, a set of x values
+   * evenly spaced across the x domain will be calculated, and used for plotting data points.
+   * @examples (x) => Math.sin(x), [1, 2, 3]
+   */
   y: React.PropTypes.oneOfType([
     React.PropTypes.array,
     React.PropTypes.func
   ]),
+  /**
+   * The domain prop describes the range of values your chart will include. This prop can be
+   * given as a array of the minimum and maximum expected values for your chart,
+   * or as an object that specifies separate arrays for x and y.
+   * If this prop is not provided, a domain will be calculated from data, or other
+   * available information.
+   * @exampes [-1, 1], {x: [0, 100], y: [0, 1]}
+   */
   domain: React.PropTypes.oneOfType([
     React.PropTypes.array,
     React.PropTypes.shape({
@@ -213,6 +264,15 @@ const propTypes = {
       y: React.PropTypes.array
     })
   ]),
+  /**
+   * The range prop describes the range of pixels your chart will cover. This prop can be
+   * given as a array of the minimum and maximum expected values for your chart,
+   * or as an object that specifies separate arrays for x and y.
+   * If this prop is not provided, a range will be calculated based on the height,
+   * width, and margin provided in the style prop, or in default styles. It is usually
+   * a good idea to let the chart component calculate its own range.
+   * @exampes [0, 500], {x: [0, 500], y: [500, 300]}
+   */
   range: React.PropTypes.oneOfType([
     React.PropTypes.array,
     React.PropTypes.shape({
@@ -220,6 +280,11 @@ const propTypes = {
       y: React.PropTypes.array
     })
   ]),
+  /**
+   * The scale prop determines which scales your chart should use. This prop can be
+   * given as a function, or as an object that specifies separate functions for x and y.
+   * @exampes () => d3.time.scale(), {x: () => d3.scale.linear(), y: () => d3.scale.log()}
+   */
   scale: React.PropTypes.oneOfType([
     React.PropTypes.func,
     React.PropTypes.shape({
@@ -227,7 +292,15 @@ const propTypes = {
       y: React.PropTypes.func
     })
   ]),
+  /**
+   * The samples prop specifies how many individual points to plot when plotting
+   * y as a function of x. Samples is ignored if x props are provided instead.
+   */
   samples: React.PropTypes.number,
+  /**
+   * The interpolation prop determines how data points should be connected
+   * when plotting a line
+   */
   interpolation: React.PropTypes.oneOf([
     "linear",
     "linear-closed",
@@ -243,9 +316,22 @@ const propTypes = {
     "cardinal-closed",
     "monotone"
   ]),
+  /**
+   * The animate prop determines whether lines should animate with changing data.
+   */
   animate: React.PropTypes.bool,
-  velocity: React.PropTypes.number,
-  containerElement: React.PropTypes.oneOf(["svg", "g"])
+  /**
+   * The containerElement prop specifies which element the compnent will render.
+   * For standalone lines, the containerElement prop should be "svg". If you need to
+   * compose line with other chart components, the containerElement prop should
+   * be "g", and will need to be rendered within an svg tag.
+   */
+  containerElement: React.PropTypes.oneOf(["svg", "g"]),
+  /**
+   * The velocity prop controls the speed of your animation transitions. It only applies
+   * if the `animate` prop is set to `true`.
+   */
+  velocity: React.PropTypes.number
 };
 
 const defaultProps = {
