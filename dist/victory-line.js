@@ -111,11 +111,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _classCallCheck(this, VLine);
 	
 	    _get(Object.getPrototypeOf(VLine.prototype), "constructor", this).call(this, props);
+	    this.getCalculatedValues(props);
 	  }
 	
 	  _createClass(VLine, [{
+	    key: "componentWillReceiveProps",
+	    value: function componentWillReceiveProps(nextProps) {
+	      this.getCalculatedValues(nextProps);
+	    }
+	  }, {
+	    key: "getCalculatedValues",
+	    value: function getCalculatedValues(props) {
+	      this.style = this.getStyles(props);
+	      this.range = {
+	        x: this.getRange(props, "x"),
+	        y: this.getRange(props, "y")
+	      };
+	      this.domain = {
+	        x: this.getDomain(props, "x"),
+	        y: this.getDomain(props, "y")
+	      };
+	      this.scale = {
+	        x: this.getScale(props, "x"),
+	        y: this.getScale(props, "y")
+	      };
+	      this.dataset = this.getData(props);
+	    }
+	  }, {
 	    key: "getStyles",
-	    value: function getStyles() {
+	    value: function getStyles(props) {
 	      return _lodash2["default"].merge({
 	        fill: "none",
 	        stroke: "darkgrey",
@@ -123,14 +147,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        margin: 5,
 	        width: 500,
 	        height: 200
-	      }, this.props.style);
+	      }, props.style);
 	    }
 	  }, {
 	    key: "getScale",
-	    value: function getScale(type) {
-	      var scale = this.props.scale[type] ? this.props.scale[type]().copy() : this.props.scale().copy();
-	      var range = this.getRange(type);
-	      var domain = this.getDomain(type);
+	    value: function getScale(props, axis) {
+	      var scale = props.scale[axis] ? props.scale[axis]().copy() : props.scale().copy();
+	      var range = this.range[axis];
+	      var domain = this.domain[axis];
 	      scale.range(range);
 	      scale.domain(domain);
 	      // hacky check for identity scale
@@ -144,35 +168,35 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: "getDomain",
-	    value: function getDomain(type) {
-	      if (this.props.domain) {
-	        return this.props.domain[type] || this.props.domain;
-	      } else if (this.props.data || _lodash2["default"].isArray(this.props[type])) {
-	        return this._getDomainFromData(type);
+	    value: function getDomain(props, axis) {
+	      if (props.domain) {
+	        return props.domain[axis] || props.domain;
+	      } else if (props.data || _lodash2["default"].isArray(props[axis])) {
+	        return this._getDomainFromData(props, axis);
 	      } else {
-	        return this._getDomainFromScale(type);
+	        return this._getDomainFromScale(props, axis);
 	      }
 	    }
 	
 	    // helper method for getDomain
 	  }, {
 	    key: "_getDomainFromData",
-	    value: function _getDomainFromData(type) {
+	    value: function _getDomainFromData(props, axis) {
 	      // if data is given, return the max/min of the data
-	      if (this.props.data) {
-	        return [_lodash2["default"].min(_lodash2["default"].pluck(this.props.data, type)), _lodash2["default"].max(_lodash2["default"].pluck(this.props.data, type))];
+	      if (props.data) {
+	        return [_lodash2["default"].min(_lodash2["default"].pluck(props.data, axis)), _lodash2["default"].max(_lodash2["default"].pluck(props.data, axis))];
 	      } else {
-	        // return the max / min of the array specified by this.props[type]
-	        return [_lodash2["default"].min(this.props[type]), _lodash2["default"].max(this.props[type])];
+	        // return the max / min of the array specified by props[axis]
+	        return [_lodash2["default"].min(props[axis]), _lodash2["default"].max(props[axis])];
 	      }
 	    }
 	
 	    // helper method for getDomain
 	  }, {
 	    key: "_getDomainFromScale",
-	    value: function _getDomainFromScale(type) {
+	    value: function _getDomainFromScale(props, axis) {
 	      // The scale will never be undefined due to default props
-	      var scaleDomain = this.props.scale[type] ? this.props.scale[type]().domain() : this.props.scale().domain();
+	      var scaleDomain = props.scale[axis] ? props.scale[axis]().domain() : props.scale().domain();
 	
 	      // Warn when particular types of scales need more information to produce meaningful lines
 	      if (_lodash2["default"].isDate(scaleDomain[0])) {
@@ -187,53 +211,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }, {
 	    key: "getRange",
-	    value: function getRange(type) {
-	      if (this.props.range) {
-	        return this.props.range[type] ? this.props.range[type] : this.props.range;
+	    value: function getRange(props, axis) {
+	      if (props.range) {
+	        return props.range[axis] ? props.range[axis] : props.range;
 	      }
 	      // if the range is not given in props, calculate it from width, height and margin
-	      var style = this.getStyles();
-	      return type === "x" ? [style.margin, style.width - style.margin] : [style.height - style.margin, style.margin];
-	    }
-	  }, {
-	    key: "returnOrGenerateX",
-	    value: function returnOrGenerateX() {
-	      if (this.props.x) {
-	        return this.props.x;
-	      }
-	      // if x is not given in props, create an array of values evenly
-	      // spaced across the x domain
-	      var domain = this.getDomain("x");
-	      var samples = _lodash2["default"].isArray(this.props.y) ? this.props.y.length : this.props.samples;
-	      var step = _lodash2["default"].max(domain) / samples;
-	      // return an array of x values spaced across the domain,
-	      // include the maximum of the domain
-	      return _lodash2["default"].union(_lodash2["default"].range(_lodash2["default"].min(domain), _lodash2["default"].max(domain), step), [_lodash2["default"].max(domain)]);
-	    }
-	  }, {
-	    key: "returnOrGenerateY",
-	    value: function returnOrGenerateY() {
-	      var y = this.props.y;
-	      if (_lodash2["default"].isFunction(y)) {
-	        var x = this.returnOrGenerateX();
-	        // if y is a function, apply the function y to to each value of the array x,
-	        // and return the results as an array
-	        return _lodash2["default"].map(x, function (datum) {
-	          return y(datum);
-	        });
-	      }
-	      // y is either a function or an array, and is never undefined
-	      // if it isn't a function, just return it.
-	      return y;
+	      return axis === "x" ? [this.style.margin, this.style.width - this.style.margin] : [this.style.height - this.style.margin, this.style.margin];
 	    }
 	  }, {
 	    key: "getData",
-	    value: function getData() {
-	      if (this.props.data) {
-	        return this.props.data;
+	    value: function getData(props) {
+	      if (props.data) {
+	        return props.data;
 	      }
-	      var x = this.returnOrGenerateX();
-	      var y = this.returnOrGenerateY();
+	      var x = this.returnOrGenerateX(props);
+	      var y = this.returnOrGenerateY(props, x);
 	      var n = _lodash2["default"].min([x.length, y.length]);
 	      // create a dataset from x and y with n points
 	      var dataset = _lodash2["default"].zip(_lodash2["default"].take(x, n), _lodash2["default"].take(y, n));
@@ -243,34 +235,59 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 	    }
 	  }, {
+	    key: "returnOrGenerateX",
+	    value: function returnOrGenerateX(props) {
+	      if (props.x) {
+	        return props.x;
+	      }
+	      // if x is not given in props, create an array of values evenly
+	      // spaced across the x domain
+	      var domain = this.domain.x;
+	      var samples = _lodash2["default"].isArray(props.y) ? props.y.length : props.samples;
+	      var step = _lodash2["default"].max(domain) / samples;
+	      // return an array of x values spaced across the domain,
+	      // include the maximum of the domain
+	      return _lodash2["default"].union(_lodash2["default"].range(_lodash2["default"].min(domain), _lodash2["default"].max(domain), step), [_lodash2["default"].max(domain)]);
+	    }
+	  }, {
+	    key: "returnOrGenerateY",
+	    value: function returnOrGenerateY(props, x) {
+	      if (_lodash2["default"].isFunction(props.y)) {
+	        // if y is a function, apply the function y to to each value of the array x,
+	        // and return the results as an array
+	        return _lodash2["default"].map(x, function (datum) {
+	          return props.y(datum);
+	        });
+	      }
+	      // y is either a function or an array, and is never undefined
+	      // if it isn't a function, just return it.
+	      return props.y;
+	    }
+	  }, {
 	    key: "drawLine",
 	    value: function drawLine() {
-	      var style = this.getStyles();
-	      var data = this.getData();
-	      var xScale = this.getScale("x");
-	      var yScale = this.getScale("y");
-	      var lineFunction = _d32["default"].svg.line().interpolate(this.props.interpolation).x(function (datum) {
-	        return xScale(datum.x);
-	      }).y(function (datum) {
-	        return yScale(datum.y);
+	      var xScale = this.scale.x;
+	      var yScale = this.scale.y;
+	      var lineFunction = _d32["default"].svg.line().interpolate(this.props.interpolation).x(function (data) {
+	        return xScale(data.x);
+	      }).y(function (data) {
+	        return yScale(data.y);
 	      });
-	      var path = lineFunction(data);
-	      return _react2["default"].createElement("path", { style: style, d: lineFunction(data) });
+	      return _react2["default"].createElement("path", { style: this.style, d: lineFunction(this.dataset) });
 	    }
 	  }, {
 	    key: "render",
 	    value: function render() {
-	      var style = this.getStyles();
 	      if (this.props.containerElement === "svg") {
 	        return _react2["default"].createElement(
 	          "svg",
-	          { style: style },
+	          { style: this.style },
 	          this.drawLine()
 	        );
 	      }
 	      return _react2["default"].createElement(
 	        "g",
-	        { style: style },
+	        { style: this.style },
 	        this.drawLine()
 	      );
 	    }
@@ -300,7 +317,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return {
 	            v: _react2["default"].createElement(
 	              _victoryAnimation.VictoryAnimation,
-	              { data: _this.props },
+	              { data: _this.props, velocity: _this.props.velocity },
 	              function (props) {
 	                return _react2["default"].createElement(VLine, _extends({}, props, {
 	                  animate: _this.props.animate,
@@ -325,29 +342,101 @@ return /******/ (function(modules) { // webpackBootstrap
 	})(_react2["default"].Component);
 	
 	var propTypes = {
+	  /**
+	   * The style prop specifies styles for your chart. VictoryLine relies on Radium,
+	   * so valid Radium style objects should work for this prop, however height, width, and margin
+	   * are used to calculate range, and need to be expressed as a number of pixels
+	   * @example {stroke: "blue", width: 500, height: 300}
+	   */
 	  style: _react2["default"].PropTypes.node,
+	  /**
+	   * The data prop specifies the data to be plotted. Data should be in the form of an array
+	   * of data points where each data point should be an object with x and y properties.
+	   * @exampes [
+	   *   {x: 1, y: 125},
+	   *   {x: 10, y: 257},
+	   *   {x: 100, y: 345},
+	   * ]
+	   */
 	  data: _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.shape({
 	    x: _react2["default"].PropTypes.any,
 	    y: _react2["default"].PropTypes.any
 	  })),
+	  /**
+	   * The x props provides another way to supply data for line to plot. This prop can be given
+	   * as an array of values, and it will be plotted against whatever y prop is provided. If no
+	   * props are provided for y, the values in x will be plotted as the identity function (x) => x.
+	   * @examples [1, 2, 3]
+	   */
 	  x: _react2["default"].PropTypes.array,
+	  /**
+	   * The y props provides another way to supply data for line to plot. This prop can be given
+	   * as a function of x, or an array of values. If x props are given, they will be used
+	   * in plotting (x, y) data points. If x props are not provided, a set of x values
+	   * evenly spaced across the x domain will be calculated, and used for plotting data points.
+	   * @examples (x) => Math.sin(x), [1, 2, 3]
+	   */
 	  y: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.array, _react2["default"].PropTypes.func]),
+	  /**
+	   * The domain prop describes the range of values your chart will include. This prop can be
+	   * given as a array of the minimum and maximum expected values for your chart,
+	   * or as an object that specifies separate arrays for x and y.
+	   * If this prop is not provided, a domain will be calculated from data, or other
+	   * available information.
+	   * @exampes [-1, 1], {x: [0, 100], y: [0, 1]}
+	   */
 	  domain: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.array, _react2["default"].PropTypes.shape({
 	    x: _react2["default"].PropTypes.array,
 	    y: _react2["default"].PropTypes.array
 	  })]),
+	  /**
+	   * The range prop describes the range of pixels your chart will cover. This prop can be
+	   * given as a array of the minimum and maximum expected values for your chart,
+	   * or as an object that specifies separate arrays for x and y.
+	   * If this prop is not provided, a range will be calculated based on the height,
+	   * width, and margin provided in the style prop, or in default styles. It is usually
+	   * a good idea to let the chart component calculate its own range.
+	   * @exampes [0, 500], {x: [0, 500], y: [500, 300]}
+	   */
 	  range: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.array, _react2["default"].PropTypes.shape({
 	    x: _react2["default"].PropTypes.array,
 	    y: _react2["default"].PropTypes.array
 	  })]),
+	  /**
+	   * The scale prop determines which scales your chart should use. This prop can be
+	   * given as a function, or as an object that specifies separate functions for x and y.
+	   * @exampes () => d3.time.scale(), {x: () => d3.scale.linear(), y: () => d3.scale.log()}
+	   */
 	  scale: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.func, _react2["default"].PropTypes.shape({
 	    x: _react2["default"].PropTypes.func,
 	    y: _react2["default"].PropTypes.func
 	  })]),
+	  /**
+	   * The samples prop specifies how many individual points to plot when plotting
+	   * y as a function of x. Samples is ignored if x props are provided instead.
+	   */
 	  samples: _react2["default"].PropTypes.number,
+	  /**
+	   * The interpolation prop determines how data points should be connected
+	   * when plotting a line
+	   */
 	  interpolation: _react2["default"].PropTypes.oneOf(["linear", "linear-closed", "step", "step-before", "step-after", "basis", "basis-open", "basis-closed", "bundle", "cardinal", "cardinal-open", "cardinal-closed", "monotone"]),
+	  /**
+	   * The animate prop determines whether lines should animate with changing data.
+	   */
 	  animate: _react2["default"].PropTypes.bool,
-	  containerElement: _react2["default"].PropTypes.oneOf(["svg", "g"])
+	  /**
+	   * The containerElement prop specifies which element the compnent will render.
+	   * For standalone lines, the containerElement prop should be "svg". If you need to
+	   * compose line with other chart components, the containerElement prop should
+	   * be "g", and will need to be rendered within an svg tag.
+	   */
+	  containerElement: _react2["default"].PropTypes.oneOf(["svg", "g"]),
+	  /**
+	   * The velocity prop controls the speed of your animation transitions. It only applies
+	   * if the `animate` prop is set to `true`.
+	   */
+	  velocity: _react2["default"].PropTypes.number
 	};
 	
 	var defaultProps = {
@@ -360,6 +449,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return x;
 	  },
 	  animate: false,
+	  velocity: 0.02,
 	  containerElement: "svg"
 	};
 	
