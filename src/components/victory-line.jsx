@@ -219,12 +219,10 @@ const propTypes = {
   /**
    * The data prop specifies the data to be plotted. Data should be in the form of an array
    * of data points where each data point should be an object with x and y properties.
-   * Other properties may be added to the data point object, such as stroke or strokeWidth.
-   * These properties will be interpreted and applied to the individual lines
    * @exampes [
-   *   {x: 1, y: 125, stroke: "red"},
-   *   {x: 10, y: 257, stroke: "blue"},
-   *   {x: 100, y: 345, stroke: "green"},
+   *   {x: 1, y: 125},
+   *   {x: 10, y: 257},
+   *   {x: 100, y: 345},
    * ]
    */
   data: React.PropTypes.arrayOf(
