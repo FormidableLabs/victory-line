@@ -152,7 +152,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "getScale",
 	    value: function getScale(props, axis) {
-	      var scale = props.scale[axis] ? props.scale[axis]().copy() : props.scale().copy();
+	      var scale = props.scale[axis] ? props.scale[axis].copy() : props.scale.copy();
 	      var range = this.range[axis];
 	      var domain = this.domain[axis];
 	      scale.range(range);
@@ -196,7 +196,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: "_getDomainFromScale",
 	    value: function _getDomainFromScale(props, axis) {
 	      // The scale will never be undefined due to default props
-	      var scaleDomain = props.scale[axis] ? props.scale[axis]().domain() : props.scale().domain();
+	      var scaleDomain = props.scale[axis] ? props.scale[axis].domain() : props.scale.domain();
 	
 	      // Warn when particular types of scales need more information to produce meaningful lines
 	      if (_lodash2["default"].isDate(scaleDomain[0])) {
@@ -317,7 +317,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          return {
 	            v: _react2["default"].createElement(
 	              _victoryAnimation.VictoryAnimation,
-	              { data: _this.props, velocity: _this.props.velocity },
+	              _extends({}, _this.props.animate, { data: _this.props }),
 	              function (props) {
 	                return _react2["default"].createElement(VLine, _extends({}, props, {
 	                  animate: _this.props.animate,
@@ -405,7 +405,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  /**
 	   * The scale prop determines which scales your chart should use. This prop can be
 	   * given as a function, or as an object that specifies separate functions for x and y.
-	   * @exampes () => d3.time.scale(), {x: () => d3.scale.linear(), y: () => d3.scale.log()}
+	   * @exampes d3.time.scale(), {x: d3.scale.linear(), y: d3.scale.log()}
 	   */
 	  scale: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.func, _react2["default"].PropTypes.shape({
 	    x: _react2["default"].PropTypes.func,
@@ -422,34 +422,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	   */
 	  interpolation: _react2["default"].PropTypes.oneOf(["linear", "linear-closed", "step", "step-before", "step-after", "basis", "basis-open", "basis-closed", "bundle", "cardinal", "cardinal-open", "cardinal-closed", "monotone"]),
 	  /**
-	   * The animate prop determines whether lines should animate with changing data.
+	   * The animate prop specifies props for victory-animation to use. It this prop is
+	   * not given, the line will not tween between changing data / style props.
+	   * Large datasets might animate slowly due to the inherent limits of svg rendering.
+	   * @examples {line: {delay: 5, velocity: 10, onEnd: () => alert("woo!")}}
 	   */
-	  animate: _react2["default"].PropTypes.bool,
+	  animate: _react2["default"].PropTypes.object,
 	  /**
 	   * The containerElement prop specifies which element the compnent will render.
 	   * For standalone lines, the containerElement prop should be "svg". If you need to
 	   * compose line with other chart components, the containerElement prop should
 	   * be "g", and will need to be rendered within an svg tag.
 	   */
-	  containerElement: _react2["default"].PropTypes.oneOf(["svg", "g"]),
-	  /**
-	   * The velocity prop controls the speed of your animation transitions. It only applies
-	   * if the `animate` prop is set to `true`.
-	   */
-	  velocity: _react2["default"].PropTypes.number
+	  containerElement: _react2["default"].PropTypes.oneOf(["svg", "g"])
 	};
 	
 	var defaultProps = {
 	  interpolation: "basis",
 	  samples: 50,
-	  scale: function scale() {
-	    return _d32["default"].scale.linear();
-	  },
+	  scale: _d32["default"].scale.linear(),
 	  y: function y(x) {
 	    return x;
 	  },
-	  animate: false,
-	  velocity: 0.02,
 	  containerElement: "svg"
 	};
 	
