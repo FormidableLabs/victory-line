@@ -8,7 +8,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [{x: 1, y: 2}, {x: 2, y: 3}],
+      data: this.getData(),
       style: {
         stroke: "blue",
         strokeWidth: 2
@@ -48,7 +48,7 @@ class App extends React.Component {
         <VictoryLine
           style={_.merge({border: "2px solid black"}, this.state.style)}
           data={this.state.data}
-          animate={true}/>
+          animate={{velocity: 0.03}}/>
 
         <VictoryLine style={{stroke: "blue", border: "2px solid black"}}
           y={(x) => Math.sin(x)}
