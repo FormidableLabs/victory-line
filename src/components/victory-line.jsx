@@ -45,8 +45,8 @@ class VLine extends React.Component {
   }
 
   getScale(props, axis) {
-    const scale = props.scale[axis] ? props.scale[axis]().copy() :
-      props.scale().copy();
+    const scale = props.scale[axis] ? props.scale[axis].copy() :
+      props.scale.copy();
     const range = this.range[axis];
     const domain = this.domain[axis];
     scale.range(range);
@@ -87,8 +87,8 @@ class VLine extends React.Component {
   // helper method for getDomain
   _getDomainFromScale(props, axis) {
     // The scale will never be undefined due to default props
-    const scaleDomain = props.scale[axis] ? props.scale[axis]().domain() :
-      props.scale().domain();
+    const scaleDomain = props.scale[axis] ? props.scale[axis].domain() :
+      props.scale.domain();
 
     // Warn when particular types of scales need more information to produce meaningful lines
     if (_.isDate(scaleDomain[0])) {
@@ -189,7 +189,7 @@ class VictoryLine extends React.Component {
       // dont interpolate y if it is a function!
       const yFunc = _.isFunction(this.props.y) ? this.props.y : undefined;
       return (
-        <VictoryAnimation data={this.props} velocity={this.props.velocity}>
+        <VictoryAnimation {...this.props.animate} data={this.props}>
           {(props) => {
             return (
               <VLine
@@ -283,7 +283,7 @@ const propTypes = {
   /**
    * The scale prop determines which scales your chart should use. This prop can be
    * given as a function, or as an object that specifies separate functions for x and y.
-   * @exampes () => d3.time.scale(), {x: () => d3.scale.linear(), y: () => d3.scale.log()}
+   * @exampes d3.time.scale(), {x: d3.scale.linear(), y: d3.scale.log()}
    */
   scale: React.PropTypes.oneOfType([
     React.PropTypes.func,
@@ -317,30 +317,26 @@ const propTypes = {
     "monotone"
   ]),
   /**
-   * The animate prop determines whether lines should animate with changing data.
+   * The animate prop specifies props for victory-animation to use. It this prop is
+   * not given, the line will not tween between changing data / style props.
+   * Large datasets might animate slowly due to the inherent limits of svg rendering.
+   * @examples {line: {delay: 5, velocity: 10, onEnd: () => alert("woo!")}}
    */
-  animate: React.PropTypes.bool,
+  animate: React.PropTypes.object,
   /**
    * The containerElement prop specifies which element the compnent will render.
    * For standalone lines, the containerElement prop should be "svg". If you need to
    * compose line with other chart components, the containerElement prop should
    * be "g", and will need to be rendered within an svg tag.
    */
-  containerElement: React.PropTypes.oneOf(["svg", "g"]),
-  /**
-   * The velocity prop controls the speed of your animation transitions. It only applies
-   * if the `animate` prop is set to `true`.
-   */
-  velocity: React.PropTypes.number
+  containerElement: React.PropTypes.oneOf(["svg", "g"])
 };
 
 const defaultProps = {
   interpolation: "basis",
   samples: 50,
-  scale: () => d3.scale.linear(),
+  scale: d3.scale.linear(),
   y: (x) => x,
-  animate: false,
-  velocity: 0.02,
   containerElement: "svg"
 };
 
