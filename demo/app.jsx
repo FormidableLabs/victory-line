@@ -46,15 +46,15 @@ class App extends React.Component {
     return (
       <div className="demo">
         <VictoryLine
-          style={_.merge({border: "2px solid black"}, this.state.style)}
+          style={{border: "2px solid black", line: this.state.style}}
           data={this.state.data}
           animate={{velocity: 0.03}}/>
 
-        <VictoryLine style={{stroke: "blue", border: "2px solid black"}}
+        <VictoryLine style={{border: "2px solid black", line: {stroke: "blue"}}}
           y={(x) => Math.sin(x)}
           sample={25}/>
 
-        <VictoryLine style={{stroke: "green", border: "2px solid black"}}
+        <VictoryLine style={{border: "2px solid black", line: {stroke: "red"}}}
           y={(x) => x * x} />
 
         <VictoryLine style={{border: "2px solid black"}}

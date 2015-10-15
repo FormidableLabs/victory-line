@@ -5,6 +5,19 @@ import _ from "lodash";
 import log from "../log";
 import {VictoryAnimation} from "victory-animation";
 
+const styles = {
+  base: {
+    width: 500,
+    height: 300,
+    margin: 50
+  },
+  line: {
+    strokeWidth: 2,
+    fill: "none",
+    stroke: "#756f6a",
+    opacity: 1
+  }
+};
 
 class VLine extends React.Component {
   constructor(props) {
@@ -34,14 +47,14 @@ class VLine extends React.Component {
   }
 
   getStyles(props) {
-    return _.merge({
-      fill: "none",
-      stroke: "darkgrey",
-      strokeWidth: 2,
-      margin: 5,
-      width: 500,
-      height: 200
-    }, props.style);
+    if (!props.style) {
+      return styles;
+    }
+    const {line, ...base} = props.style;
+    return {
+      base: _.merge({}, styles.base, base),
+      line: _.merge({}, styles.line, line)
+    };
   }
 
   getScale(props, axis) {
@@ -107,9 +120,10 @@ class VLine extends React.Component {
       return props.range[axis] ? props.range[axis] : props.range;
     }
     // if the range is not given in props, calculate it from width, height and margin
+    const style = this.style.base;
     return axis === "x" ?
-      [this.style.margin, this.style.width - this.style.margin] :
-      [this.style.height - this.style.margin, this.style.margin];
+      [style.margin, style.width - style.margin] :
+      [style.height - style.margin, style.margin];
   }
 
   getData(props) {
@@ -159,19 +173,19 @@ class VLine extends React.Component {
       .interpolate(this.props.interpolation)
       .x((data) => xScale(data.x))
       .y((data) => yScale(data.y));
-    return <path style={this.style} d={lineFunction(this.dataset)}/>;
+    return <path style={this.style.line} d={lineFunction(this.dataset)}/>;
   }
 
   render() {
     if (this.props.containerElement === "svg") {
       return (
-        <svg style={this.style}>
+        <svg style={this.style.base}>
           {this.drawLine()}
         </svg>
       );
     }
     return (
-      <g style={this.style}>
+      <g style={this.style.base}>
         {this.drawLine()}
       </g>
     );
