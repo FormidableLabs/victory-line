@@ -229,7 +229,7 @@ const propTypes = {
    * The style prop specifies styles for your chart. VictoryLine relies on Radium,
    * so valid Radium style objects should work for this prop, however height, width, and margin
    * are used to calculate range, and need to be expressed as a number of pixels
-   * @example {width: 300, margin: 50, data: {stroke: red, opacity, 0.8}}
+   * @example {width: 300, margin: 50, data: {stroke: "red", opacity, 0.8}}
    */
   style: React.PropTypes.object,
   /**
