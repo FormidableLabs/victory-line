@@ -229,9 +229,9 @@ const propTypes = {
    * The style prop specifies styles for your chart. VictoryLine relies on Radium,
    * so valid Radium style objects should work for this prop, however height, width, and margin
    * are used to calculate range, and need to be expressed as a number of pixels
-   * @example {stroke: "blue", width: 500, height: 300}
+   * @example {width: 300, margin: 50, data: {stroke: red, opacity, 0.8}}
    */
-  style: React.PropTypes.node,
+  style: React.PropTypes.object,
   /**
    * The data prop specifies the data to be plotted. Data should be in the form of an array
    * of data points where each data point should be an object with x and y properties.

@@ -1,6 +1,7 @@
 /*global document:false*/
 /*global window:false */
 import React from "react";
+import ReactDOM from "react-dom";
 import {VictoryLine} from "../src/index";
 import _ from "lodash";
 
@@ -79,4 +80,4 @@ class App extends React.Component {
 
 const content = document.getElementById("content");
 
-React.render(<App />, content);
+ReactDOM.render(<App />, content);
