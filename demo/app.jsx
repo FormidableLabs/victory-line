@@ -46,15 +46,15 @@ class App extends React.Component {
     return (
       <div className="demo">
         <VictoryLine
-          style={{border: "2px solid black", line: this.state.style}}
+          style={{border: "2px solid black", data: this.state.style}}
           data={this.state.data}
           animate={{velocity: 0.03}}/>
 
-        <VictoryLine style={{border: "2px solid black", line: {stroke: "blue"}}}
+        <VictoryLine style={{border: "2px solid black", data: {stroke: "blue"}}}
           y={(x) => Math.sin(x)}
           sample={25}/>
 
-        <VictoryLine style={{border: "2px solid black", line: {stroke: "red"}}}
+        <VictoryLine style={{border: "2px solid black", data: {stroke: "red"}}}
           y={(x) => x * x} />
 
         <VictoryLine style={{border: "2px solid black"}}

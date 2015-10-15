@@ -11,12 +11,13 @@ const styles = {
     height: 300,
     margin: 50
   },
-  line: {
+  data: {
     strokeWidth: 2,
     fill: "none",
     stroke: "#756f6a",
     opacity: 1
-  }
+  },
+  labels: {}
 };
 
 class VLine extends React.Component {
@@ -50,10 +51,11 @@ class VLine extends React.Component {
     if (!props.style) {
       return styles;
     }
-    const {line, ...base} = props.style;
+    const {data, labels, ...base} = props.style;
     return {
       base: _.merge({}, styles.base, base),
-      line: _.merge({}, styles.line, line)
+      data: _.merge({}, styles.data, data),
+      labels: _.merge({}, styles.labels, labels)
     };
   }
 
@@ -173,7 +175,7 @@ class VLine extends React.Component {
       .interpolate(this.props.interpolation)
       .x((data) => xScale(data.x))
       .y((data) => yScale(data.y));
-    return <path style={this.style.line} d={lineFunction(this.dataset)}/>;
+    return <path style={this.style.data} d={lineFunction(this.dataset)}/>;
   }
 
   render() {
