@@ -78,6 +78,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 	
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -90,7 +92,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _radium2 = _interopRequireDefault(_radium);
 	
-	var _d3 = __webpack_require__(19);
+	var _d3 = __webpack_require__(29);
 	
 	var _d32 = _interopRequireDefault(_d3);
 	
@@ -98,11 +100,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _lodash2 = _interopRequireDefault(_lodash);
 	
-	var _log = __webpack_require__(20);
+	var _log = __webpack_require__(30);
 	
 	var _log2 = _interopRequireDefault(_log);
 	
-	var _victoryAnimation = __webpack_require__(21);
+	var _victoryAnimation = __webpack_require__(31);
+	
+	var styles = {
+	  base: {
+	    width: 500,
+	    height: 300,
+	    margin: 50
+	  },
+	  data: {
+	    strokeWidth: 2,
+	    fill: "none",
+	    stroke: "#756f6a",
+	    opacity: 1
+	  },
+	  labels: {}
+	};
 	
 	var VLine = (function (_React$Component) {
 	  _inherits(VLine, _React$Component);
@@ -140,14 +157,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "getStyles",
 	    value: function getStyles(props) {
-	      return _lodash2["default"].merge({
-	        fill: "none",
-	        stroke: "darkgrey",
-	        strokeWidth: 2,
-	        margin: 5,
-	        width: 500,
-	        height: 200
-	      }, props.style);
+	      if (!props.style) {
+	        return styles;
+	      }
+	      var _props$style = props.style;
+	      var data = _props$style.data;
+	      var labels = _props$style.labels;
+	
+	      var base = _objectWithoutProperties(_props$style, ["data", "labels"]);
+	
+	      return {
+	        base: _lodash2["default"].merge({}, styles.base, base),
+	        data: _lodash2["default"].merge({}, styles.data, data),
+	        labels: _lodash2["default"].merge({}, styles.labels, labels)
+	      };
 	    }
 	  }, {
 	    key: "getScale",
@@ -216,7 +239,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return props.range[axis] ? props.range[axis] : props.range;
 	      }
 	      // if the range is not given in props, calculate it from width, height and margin
-	      return axis === "x" ? [this.style.margin, this.style.width - this.style.margin] : [this.style.height - this.style.margin, this.style.margin];
+	      var style = this.style.base;
+	      return axis === "x" ? [style.margin, style.width - style.margin] : [style.height - style.margin, style.margin];
 	    }
 	  }, {
 	    key: "getData",
@@ -273,7 +297,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }).y(function (data) {
 	        return yScale(data.y);
 	      });
-	      return _react2["default"].createElement("path", { style: this.style, d: lineFunction(this.dataset) });
+	      return _react2["default"].createElement("path", { style: this.style.data, d: lineFunction(this.dataset) });
 	    }
 	  }, {
 	    key: "render",
@@ -281,13 +305,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.props.containerElement === "svg") {
 	        return _react2["default"].createElement(
 	          "svg",
-	          { style: this.style },
+	          { style: this.style.base },
 	          this.drawLine()
 	        );
 	      }
 	      return _react2["default"].createElement(
 	        "g",
-	        { style: this.style },
+	        { style: this.style.base },
 	        this.drawLine()
 	      );
 	    }
@@ -346,9 +370,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * The style prop specifies styles for your chart. VictoryLine relies on Radium,
 	   * so valid Radium style objects should work for this prop, however height, width, and margin
 	   * are used to calculate range, and need to be expressed as a number of pixels
-	   * @example {stroke: "blue", width: 500, height: 300}
+	   * @example {width: 300, margin: 50, data: {stroke: "red", opacity, 0.8}}
 	   */
-	  style: _react2["default"].PropTypes.node,
+	  style: _react2["default"].PropTypes.object,
 	  /**
 	   * The data prop specifies the data to be plotted. Data should be in the form of an array
 	   * of data points where each data point should be an object with x and y properties.
@@ -12841,647 +12865,144 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 	
-	var Enhancer = __webpack_require__(6);
+	var Enhancer = __webpack_require__(12);
 	
-	module.exports = function (ComposedComponent) {
+	module.exports = function (ComposedComponent /*: constructor*/) {
 	  return Enhancer(ComposedComponent);
 	};
-	module.exports.Style = __webpack_require__(16);
-	module.exports.getState = __webpack_require__(10);
-	module.exports.keyframes = __webpack_require__(18);
-	module.exports.Config = __webpack_require__(15);
+	module.exports.Plugins = __webpack_require__(14);
+	module.exports.PrintStyleSheet = __webpack_require__(27);
+	module.exports.Style = __webpack_require__(6);
+	module.exports.getState = __webpack_require__(21);
+	module.exports.keyframes = __webpack_require__(28);
 
 /***/ },
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {/* @flow */
-	
 	'use strict';
 	
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var createMarkupForStyles = __webpack_require__(7);
+	var Prefixer = __webpack_require__(8);
 	
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	var React = __webpack_require__(4);
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
-	
-	var resolveStyles = __webpack_require__(8);
-	
-	var enhanceWithRadium = function enhanceWithRadium(ComposedComponent) {
-	  var RadiumEnhancer = (function (_ComposedComponent) {
-	    function RadiumEnhancer() {
-	      _classCallCheck(this, RadiumEnhancer);
-	
-	      _get(Object.getPrototypeOf(RadiumEnhancer.prototype), 'constructor', this).apply(this, arguments);
-	
-	      this.state = this.state || {};
-	      this.state._radiumStyleState = {};
-	    }
-	
-	    _inherits(RadiumEnhancer, _ComposedComponent);
-	
-	    _createClass(RadiumEnhancer, [{
-	      key: 'render',
-	      value: function render() {
-	        var renderedElement = _get(Object.getPrototypeOf(RadiumEnhancer.prototype), 'render', this).call(this);
-	        return resolveStyles(this, renderedElement);
-	      }
-	    }, {
-	      key: 'componentWillUnmount',
-	      value: function componentWillUnmount() {
-	        if (_get(Object.getPrototypeOf(RadiumEnhancer.prototype), 'componentWillUnmount', this)) {
-	          _get(Object.getPrototypeOf(RadiumEnhancer.prototype), 'componentWillUnmount', this).call(this);
-	        }
-	
-	        if (this._radiumMouseUpListener) {
-	          this._radiumMouseUpListener.remove();
-	        }
-	
-	        if (this._radiumMediaQueryListenersByQuery) {
-	          Object.keys(this._radiumMediaQueryListenersByQuery).forEach(function (query) {
-	            this._radiumMediaQueryListenersByQuery[query].remove();
-	          }, this);
-	        }
-	      }
-	    }]);
-	
-	    return RadiumEnhancer;
-	  })(ComposedComponent);
-	
-	  // Class inheritance uses Object.create and because of __proto__ issues
-	  // with IE <10 any static properties of the superclass aren't inherited and
-	  // so need to be manually populated
-	  // See http://babeljs.io/docs/advanced/caveats/#classes-10-and-below-
-	  var staticKeys = ['defaultProps', 'propTypes', 'contextTypes', 'childContextTypes'];
-	
-	  staticKeys.forEach(function (key) {
-	    if (ComposedComponent.hasOwnProperty(key)) {
-	      RadiumEnhancer[key] = ComposedComponent[key];
-	    }
-	  });
-	
-	  if (process.env.NODE_ENV !== 'production') {
-	    // This fixes React Hot Loader by exposing the original components top level
-	    // prototype methods on the Radium enhanced prototype as discussed in #219.
-	    Object.keys(ComposedComponent.prototype).forEach(function (key) {
-	      if (!RadiumEnhancer.prototype.hasOwnProperty(key)) {
-	        RadiumEnhancer.prototype[key] = ComposedComponent.prototype[key];
-	      }
-	    });
+	var buildCssString = function buildCssString(component, selector, rules) {
+	  if (!selector || !rules) {
+	    return;
 	  }
 	
-	  RadiumEnhancer.displayName = ComposedComponent.displayName || ComposedComponent.name || 'Component';
+	  var prefixedRules = Prefixer.getPrefixedStyle(component, rules, 'css');
+	  var serializedRules = createMarkupForStyles(prefixedRules);
 	
-	  return RadiumEnhancer;
+	  return selector + '{' + serializedRules + '}';
 	};
 	
-	module.exports = enhanceWithRadium;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+	var Style = React.createClass({
+	  displayName: 'Style',
+	
+	  propTypes: {
+	    rules: React.PropTypes.object,
+	    scopeSelector: React.PropTypes.string
+	  },
+	
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      scopeSelector: ''
+	    };
+	  },
+	
+	  _buildStyles: function _buildStyles(styles) {
+	    var _this = this;
+	
+	    return Object.keys(styles).reduce(function (accumulator, selector) {
+	      var rules = styles[selector];
+	
+	      if (selector === 'mediaQueries') {
+	        accumulator += _this._buildMediaQueryString(rules);
+	      } else {
+	        var completeSelector = (_this.props.scopeSelector ? _this.props.scopeSelector + ' ' : '') + selector;
+	        accumulator += buildCssString(_this, completeSelector, rules);
+	      }
+	
+	      return accumulator;
+	    }, '');
+	  },
+	
+	  _buildMediaQueryString: function _buildMediaQueryString(mediaQueryObj) {
+	    var _this2 = this;
+	
+	    var contextMediaQueries = this._getContextMediaQueries();
+	    var mediaQueryString = '';
+	
+	    Object.keys(mediaQueryObj).forEach(function (query) {
+	      var completeQuery = contextMediaQueries[query] ? contextMediaQueries[query] : query;
+	      mediaQueryString += '@media ' + completeQuery + '{' + _this2._buildStyles(mediaQueryObj[query]) + '}';
+	    });
+	
+	    return mediaQueryString;
+	  },
+	
+	  _getContextMediaQueries: function _getContextMediaQueries() {
+	    var contextMediaQueries = {};
+	    if (this.context && this.context.mediaQueries) {
+	      Object.keys(this.context.mediaQueries).forEach((function (query) {
+	        contextMediaQueries[query] = this.context.mediaQueries[query].media;
+	      }).bind(this));
+	    }
+	
+	    return contextMediaQueries;
+	  },
+	
+	  render: function render() {
+	    if (!this.props.rules) {
+	      return null;
+	    }
+	
+	    var styles = this._buildStyles(this.props.rules);
+	
+	    return React.createElement('style', { dangerouslySetInnerHTML: { __html: styles } });
+	  }
+	});
+	
+	module.exports = Style;
 
 /***/ },
 /* 7 */
 /***/ function(module, exports) {
 
-	// shim for using process in browser
+	/* @flow */
 	
-	var process = module.exports = {};
-	var queue = [];
-	var draining = false;
-	var currentQueue;
-	var queueIndex = -1;
+	'use strict';
 	
-	function cleanUpNextTick() {
-	    draining = false;
-	    if (currentQueue.length) {
-	        queue = currentQueue.concat(queue);
-	    } else {
-	        queueIndex = -1;
-	    }
-	    if (queue.length) {
-	        drainQueue();
-	    }
-	}
-	
-	function drainQueue() {
-	    if (draining) {
-	        return;
-	    }
-	    var timeout = setTimeout(cleanUpNextTick);
-	    draining = true;
-	
-	    var len = queue.length;
-	    while(len) {
-	        currentQueue = queue;
-	        queue = [];
-	        while (++queueIndex < len) {
-	            currentQueue[queueIndex].run();
-	        }
-	        queueIndex = -1;
-	        len = queue.length;
-	    }
-	    currentQueue = null;
-	    draining = false;
-	    clearTimeout(timeout);
-	}
-	
-	process.nextTick = function (fun) {
-	    var args = new Array(arguments.length - 1);
-	    if (arguments.length > 1) {
-	        for (var i = 1; i < arguments.length; i++) {
-	            args[i - 1] = arguments[i];
-	        }
-	    }
-	    queue.push(new Item(fun, args));
-	    if (queue.length === 1 && !draining) {
-	        setTimeout(drainQueue, 0);
-	    }
+	var createMarkupForStyles = function createMarkupForStyles(style /*: Object*/, spaces /*: string*/) /*: string*/ {
+	  spaces = spaces || '';
+	  return Object.keys(style).map(function (property) {
+	    return spaces + property + ': ' + style[property] + ';';
+	  }).join('\n');
 	};
 	
-	// v8 likes predictible objects
-	function Item(fun, array) {
-	    this.fun = fun;
-	    this.array = array;
-	}
-	Item.prototype.run = function () {
-	    this.fun.apply(null, this.array);
-	};
-	process.title = 'browser';
-	process.browser = true;
-	process.env = {};
-	process.argv = [];
-	process.version = ''; // empty string to avoid regexp issues
-	process.versions = {};
-	
-	function noop() {}
-	
-	process.on = noop;
-	process.addListener = noop;
-	process.once = noop;
-	process.off = noop;
-	process.removeListener = noop;
-	process.removeAllListeners = noop;
-	process.emit = noop;
-	
-	process.binding = function (name) {
-	    throw new Error('process.binding is not supported');
-	};
-	
-	// TODO(shtylman)
-	process.cwd = function () { return '/' };
-	process.chdir = function (dir) {
-	    throw new Error('process.chdir is not supported');
-	};
-	process.umask = function() { return 0; };
-
+	module.exports = createMarkupForStyles;
 
 /***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {/* @flow */
-	
-	'use strict';
-	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
-	var MouseUpListener = __webpack_require__(9);
-	var getState = __webpack_require__(10);
-	var getStateKey = __webpack_require__(11);
-	var Prefixer = __webpack_require__(12);
-	var Config = __webpack_require__(15);
-	
-	var ExecutionEnvironment = __webpack_require__(13);
-	var React = __webpack_require__(4);
-	
-	// babel-eslint 3.1.7 fails here for some reason, error:
-	//   0:0  error  Cannot call method 'isSequenceExpression' of undefined
-	//
-	// declare class RadiumComponent extends ReactComponent {
-	//   _lastMouseDown: number,
-	//   _radiumMediaQueryListenersByQuery: Object<string, {remove: () => void}>,
-	//   _radiumMouseUpListener: {remove: () => void},
-	// }
-	
-	var mediaQueryListByQueryString = {};
-	
-	var _isSpecialKey = function _isSpecialKey(key) {
-	  return key[0] === ':' || key[0] === '@';
-	};
-	
-	var _getStyleState = function _getStyleState(component, key, value) {
-	  return getState(component.state, key, value);
-	};
-	
-	var _setStyleState = function _setStyleState(component, key, newState) {
-	  var existing = component._lastRadiumState || component.state && component.state._radiumStyleState || {};
-	
-	  var state = { _radiumStyleState: _extends({}, existing) };
-	  state._radiumStyleState[key] = _extends({}, state._radiumStyleState[key], newState);
-	
-	  component._lastRadiumState = state._radiumStyleState;
-	  component.setState(state);
-	};
-	
-	// Merge style objects. Special casing for props starting with ';'; the values
-	// should be objects, and are merged with others of the same name (instead of
-	// overwriting).
-	var _mergeStyles = function _mergeStyles(styles) {
-	  var result = {};
-	
-	  styles.forEach(function (style) {
-	    if (!style || typeof style !== 'object' || Array.isArray(style)) {
-	      return;
-	    }
-	
-	    Object.keys(style).forEach(function (key) {
-	      if (_isSpecialKey(key) && result[key]) {
-	        result[key] = _mergeStyles([result[key], style[key]]);
-	      } else {
-	        result[key] = style[key];
-	      }
-	    });
-	  });
-	
-	  return result;
-	};
-	
-	var _mouseUp = function _mouseUp(component) {
-	  Object.keys(component.state._radiumStyleState).forEach(function (key) {
-	    if (_getStyleState(component, key, ':active')) {
-	      _setStyleState(component, key, { ':active': false });
-	    }
-	  });
-	};
-	
-	var _onMediaQueryChange = function _onMediaQueryChange(component, query, mediaQueryList) {
-	  var state = {};
-	  state[query] = mediaQueryList.matches;
-	  _setStyleState(component, '_all', state);
-	};
-	
-	var _resolveMediaQueryStyles = function _resolveMediaQueryStyles(component, style) {
-	  if (!Config.canMatchMedia()) {
-	    return style;
-	  }
-	
-	  Object.keys(style).filter(function (name) {
-	    return name[0] === '@';
-	  }).map(function (query) {
-	    var mediaQueryStyles = style[query];
-	    query = query.replace('@media ', '');
-	
-	    // Create a global MediaQueryList if one doesn't already exist
-	    var mql = mediaQueryListByQueryString[query];
-	    if (!mql) {
-	      mediaQueryListByQueryString[query] = mql = Config.matchMedia(query);
-	    }
-	
-	    // Keep track of which keys already have listeners
-	    if (!component._radiumMediaQueryListenersByQuery) {
-	      component._radiumMediaQueryListenersByQuery = {};
-	    }
-	
-	    if (!component._radiumMediaQueryListenersByQuery[query]) {
-	      var listener = _onMediaQueryChange.bind(null, component, query);
-	      mql.addListener(listener);
-	      component._radiumMediaQueryListenersByQuery[query] = {
-	        remove: function remove() {
-	          mql.removeListener(listener);
-	        }
-	      };
-	    }
-	
-	    // Apply media query states
-	    if (mql.matches) {
-	      style = _mergeStyles([style, mediaQueryStyles]);
-	    }
-	  });
-	
-	  return style;
-	};
-	
-	// Wrapper around React.cloneElement. To avoid processing the same element
-	// twice, whenever we clone an element add a special non-enumerable prop to
-	// make sure we don't process this element again.
-	var _cloneElement = function _cloneElement(renderedElement, newProps, newChildren) {
-	  var clone = React.cloneElement(renderedElement, newProps, newChildren);
-	
-	  Object.defineProperty(clone.props, '_radiumDidResolveStyles', { value: true, enumerable: false });
-	
-	  return clone;
-	};
-	
-	//
-	// The nucleus of Radium. resolveStyles is called on the rendered elements
-	// before they are returned in render. It iterates over the elements and
-	// children, rewriting props to add event handlers required to capture user
-	// interactions (e.g. mouse over). It also replaces the style prop because it
-	// adds in the various interaction styles (e.g. :hover).
-	//
-	var resolveStyles = function resolveStyles(component, // ReactComponent, flow+eslint complaining
-	renderedElement, // ReactElement
-	existingKeyMap) {
-	  // ReactElement
-	  existingKeyMap = existingKeyMap || {};
-	
-	  if (!renderedElement || renderedElement.props && renderedElement.props._radiumDidResolveStyles) {
-	    return renderedElement;
-	  }
-	
-	  // Recurse over children first in case we bail early. Note that children only
-	  // include those rendered in `this` component. Child nodes in other components
-	  // will not be here, so each component needs to use Radium.
-	  var newChildren;
-	  var oldChildren = renderedElement.props.children;
-	  if (oldChildren) {
-	    var childrenType = typeof oldChildren;
-	    if (childrenType === 'string' || childrenType === 'number' || childrenType === 'function') {
-	      // Don't do anything with a single primitive child or functions
-	      newChildren = oldChildren;
-	    } else if (React.Children.count(oldChildren) === 1 && oldChildren.type) {
-	      // If a React Element is an only child, don't wrap it in an array for
-	      // React.Children.map() for React.Children.only() compatibility.
-	      var onlyChild = React.Children.only(oldChildren);
-	      newChildren = resolveStyles(component, onlyChild, existingKeyMap);
-	    } else {
-	      newChildren = React.Children.map(oldChildren, function (child) {
-	        if (React.isValidElement(child)) {
-	          return resolveStyles(component, child, existingKeyMap);
-	        }
-	
-	        return child;
-	      });
-	    }
-	  }
-	
-	  // Bail early if element is not a simple ReactDOMElement.
-	  if (!React.isValidElement(renderedElement) || typeof renderedElement.type !== 'string') {
-	    if (oldChildren === newChildren) {
-	      return renderedElement;
-	    }
-	
-	    return _cloneElement(renderedElement, renderedElement.props, newChildren);
-	  }
-	
-	  var props = renderedElement.props;
-	  var style = props.style;
-	  var newProps = {};
-	
-	  // Convenient syntax for multiple styles: `style={[style1, style2, etc]}`
-	  // Ignores non-objects, so you can do `this.state.isCool && styles.cool`.
-	  if (Array.isArray(style)) {
-	    style = _mergeStyles(style);
-	  }
-	
-	  if (process.env.NODE_ENV !== 'production') {
-	    // Warn if you use longhand and shorthand properties in the same style
-	    // object.
-	    // https://developer.mozilla.org/en-US/docs/Web/CSS/Shorthand_properties
-	
-	    var shorthandPropertyExpansions = {
-	      'background': ['backgroundAttachment', 'backgroundBlendMode', 'backgroundClip', 'backgroundColor', 'backgroundImage', 'backgroundOrigin', 'backgroundPosition', 'backgroundPositionX', 'backgroundPositionY', 'backgroundRepeat', 'backgroundRepeatX', 'backgroundRepeatY', 'backgroundSize'],
-	      'border': ['borderBottom', 'borderBottomColor', 'borderBottomStyle', 'borderBottomWidth', 'borderColor', 'borderLeft', 'borderLeftColor', 'borderLeftStyle', 'borderLeftWidth', 'borderRight', 'borderRightColor', 'borderRightStyle', 'borderRightWidth', 'borderStyle', 'borderTop', 'borderTopColor', 'borderTopStyle', 'borderTopWidth', 'borderWidth'],
-	      'borderImage': ['borderImageOutset', 'borderImageRepeat', 'borderImageSlice', 'borderImageSource', 'borderImageWidth'],
-	      'borderRadius': ['borderBottomLeftRadius', 'borderBottomRightRadius', 'borderTopLeftRadius', 'borderTopRightRadius'],
-	      'font': ['fontFamily', 'fontKerning', 'fontSize', 'fontStretch', 'fontStyle', 'fontVariant', 'fontVariantLigatures', 'fontWeight', 'lineHeight'],
-	      'listStyle': ['listStyleImage', 'listStylePosition', 'listStyleType'],
-	      'margin': ['marginBottom', 'marginLeft', 'marginRight', 'marginTop'],
-	      'padding': ['paddingBottom', 'paddingLeft', 'paddingRight', 'paddingTop'],
-	      'transition': ['transitionDelay', 'transitionDuration', 'transitionProperty', 'transitionTimingFunction']
-	    };
-	
-	    var checkProps = function checkProps(s) {
-	      if (typeof s !== 'object' || !s) {
-	        return;
-	      }
-	
-	      var styleKeys = Object.keys(s);
-	      styleKeys.forEach(function (styleKey) {
-	        if (shorthandPropertyExpansions[styleKey] && shorthandPropertyExpansions[styleKey].some(function (sp) {
-	          return styleKeys.indexOf(sp) !== -1;
-	        })) {
-	          /* eslint-disable no-console */
-	          console.warn('Radium: property "' + styleKey + '" in style object', style, ': do not mix longhand and ' + 'shorthand properties in the same style object. Check the render ' + 'method of ' + component.constructor.displayName + '.', 'See https://github.com/FormidableLabs/radium/issues/95 for more ' + 'information.');
-	          /* eslint-enable no-console */
-	        }
-	      });
-	
-	      styleKeys.forEach(function (k) {
-	        return checkProps(s[k]);
-	      });
-	    };
-	    checkProps(style);
-	  }
-	
-	  // Bail early if no interactive styles.
-	  if (!style || !Object.keys(style).some(_isSpecialKey)) {
-	    if (style) {
-	      // Still perform vendor prefixing, though.
-	      newProps.style = Prefixer.getPrefixedStyle(style);
-	      return _cloneElement(renderedElement, newProps, newChildren);
-	    } else if (newChildren) {
-	      return _cloneElement(renderedElement, {}, newChildren);
-	    }
-	
-	    return renderedElement;
-	  }
-	
-	  // We need a unique key to correlate state changes due to user interaction
-	  // with the rendered element, so we know to apply the proper interactive
-	  // styles.
-	  var originalKey = renderedElement.ref || renderedElement.key;
-	  var key = getStateKey(originalKey);
-	
-	  if (existingKeyMap[key]) {
-	    throw new Error('Radium requires each element with interactive styles to have a unique ' + 'key, set using either the ref or key prop. ' + (originalKey ? 'Key "' + originalKey + '" is a duplicate.' : 'Multiple elements have no key specified.'));
-	  }
-	
-	  existingKeyMap[key] = true;
-	
-	  // Media queries can contain pseudo styles, like :hover
-	  style = _resolveMediaQueryStyles(component, style);
-	
-	  var newStyle = {};
-	  Object.keys(style).forEach(function (styleKey) {
-	    if (!_isSpecialKey(styleKey)) {
-	      newStyle[styleKey] = style[styleKey];
-	    }
-	  });
-	
-	  // Only add handlers if necessary
-	  if (style[':hover'] || style[':active']) {
-	    // Always call the existing handler if one is already defined.
-	    // This code, and the very similar ones below, could be abstracted a bit
-	    // more, but it hurts readability IMO.
-	    var existingOnMouseEnter = props.onMouseEnter;
-	    newProps.onMouseEnter = function (e) {
-	      existingOnMouseEnter && existingOnMouseEnter(e);
-	      _setStyleState(component, key, { ':hover': true });
-	    };
-	
-	    var existingOnMouseLeave = props.onMouseLeave;
-	    newProps.onMouseLeave = function (e) {
-	      existingOnMouseLeave && existingOnMouseLeave(e);
-	      _setStyleState(component, key, { ':hover': false });
-	    };
-	  }
-	
-	  if (style[':active']) {
-	    var existingOnMouseDown = props.onMouseDown;
-	    newProps.onMouseDown = function (e) {
-	      existingOnMouseDown && existingOnMouseDown(e);
-	      component._lastMouseDown = Date.now();
-	      _setStyleState(component, key, { ':active': true });
-	    };
-	  }
-	
-	  if (style[':focus']) {
-	    var existingOnFocus = props.onFocus;
-	    newProps.onFocus = function (e) {
-	      existingOnFocus && existingOnFocus(e);
-	      _setStyleState(component, key, { ':focus': true });
-	    };
-	
-	    var existingOnBlur = props.onBlur;
-	    newProps.onBlur = function (e) {
-	      existingOnBlur && existingOnBlur(e);
-	      _setStyleState(component, key, { ':focus': false });
-	    };
-	  }
-	
-	  // Merge the styles in the order they were defined
-	  var interactionStyles = Object.keys(style).filter(function (name) {
-	    return name === ':active' && _getStyleState(component, key, ':active') || name === ':hover' && _getStyleState(component, key, ':hover') || name === ':focus' && _getStyleState(component, key, ':focus');
-	  }).map(function (name) {
-	    return style[name];
-	  });
-	
-	  if (interactionStyles.length) {
-	    newStyle = _mergeStyles([newStyle].concat(interactionStyles));
-	  }
-	
-	  if (style[':active'] && !component._radiumMouseUpListener && ExecutionEnvironment.canUseEventListeners) {
-	    component._radiumMouseUpListener = MouseUpListener.subscribe(_mouseUp.bind(null, component));
-	  }
-	
-	  newProps.style = Prefixer.getPrefixedStyle(newStyle);
-	
-	  return _cloneElement(renderedElement, newProps, newChildren);
-	};
-	
-	// Exposing methods for tests is ugly, but the alternative, re-requiring the
-	// module each time, is too slow
-	resolveStyles.__clearStateForTests = function () {
-	  mediaQueryListByQueryString = {};
-	};
-	
-	module.exports = resolveStyles;
-	
-	// Bail if we've already processed this element. This ensures that only the
-	// owner of an element processes that element, since the owner's render
-	// function will be called first (which will always be the case, since you
-	// can't know what else to render until you render the parent component).
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	/* @flow */
-	
-	'use strict';
-	
-	var _callbacks = [];
-	var _mouseUpListenerIsActive = false;
-	
-	var _handleMouseUp = function _handleMouseUp(ev) {
-	  _callbacks.forEach(function (callback) {
-	    callback(ev);
-	  });
-	};
-	
-	var subscribe = function subscribe(callback) {
-	  if (_callbacks.indexOf(callback) === -1) {
-	    _callbacks.push(callback);
-	  }
-	
-	  if (!_mouseUpListenerIsActive) {
-	    window.addEventListener('mouseup', _handleMouseUp);
-	    _mouseUpListenerIsActive = true;
-	  }
-	
-	  return {
-	    remove: function remove() {
-	      var index = _callbacks.indexOf(callback);
-	      _callbacks.splice(index, 1);
-	
-	      if (_callbacks.length === 0 && _mouseUpListenerIsActive) {
-	        window.removeEventListener('mouseup', _handleMouseUp);
-	        _mouseUpListenerIsActive = false;
-	      }
-	    }
-	  };
-	};
-	
-	module.exports = {
-	  subscribe: subscribe
-	};
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* @flow */
-	
-	'use strict';
-	
-	var getStateKey = __webpack_require__(11);
-	
-	var VALID_KEYS = [':active', ':focus', ':hover'];
-	
-	var getState = function getState(state, elementKey, value) {
-	  if (VALID_KEYS.indexOf(value) === -1) {
-	    throw new Error('Radium.getState invalid value param: `' + value + '`');
-	  }
-	
-	  var key = getStateKey(elementKey);
-	
-	  return !!(state && state._radiumStyleState && state._radiumStyleState[key] && state._radiumStyleState[key][value]) || false;
-	};
-	
-	module.exports = getState;
-
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-	/* @flow */
-	
-	'use strict';
-	
-	var getStateKey = function getStateKey(elementKey) {
-	  return elementKey === null || elementKey === undefined ? 'main' : elementKey.toString();
-	};
-	
-	module.exports = getStateKey;
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/* WEBPACK VAR INJECTION */(function(process) {/**
 	 * Based on https://github.com/jsstyles/css-vendor, but without having to
 	 * convert between different cases all the time.
+	 *
+	 * @flow
 	 */
 	
 	'use strict';
 	
-	var ExecutionEnvironment = __webpack_require__(13);
-	var arrayFind = __webpack_require__(14);
+	var ExecutionEnvironment = __webpack_require__(10);
+	var arrayFind = __webpack_require__(11);
 	
 	var VENDOR_PREFIX_REGEX = /-(moz|webkit|ms|o)-/;
+	
+	var vendorPrefixes = ['Webkit', 'ms', 'Moz', 'O'];
 	
 	var infoByCssPrefix = {
 	  '-moz-': {
@@ -13634,7 +13155,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	if (ExecutionEnvironment.canUseDOM) {
-	  domStyle = document.createElement('p').style;
+	  domStyle = (document /*: any*/).createElement('p').style;
 	
 	  // older Firefox versions may have no float property in style object
 	  // so we need to add it manually
@@ -13643,7 +13164,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	
 	  // Based on http://davidwalsh.name/vendor-prefix
-	  var cssVendorPrefix;
 	  var prefixMatch;
 	  var windowStyles = window.getComputedStyle(document.documentElement, '');
 	
@@ -13658,9 +13178,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }
 	
-	  cssVendorPrefix = prefixMatch && prefixMatch[0];
+	  var cssVendorPrefix = prefixMatch && prefixMatch[0];
 	
-	  prefixInfo = infoByCssPrefix[cssVendorPrefix] || prefixInfo;
+	  prefixInfo = cssVendorPrefix && infoByCssPrefix[cssVendorPrefix] ? infoByCssPrefix[cssVendorPrefix] : prefixInfo;
 	}
 	
 	var _camelCaseRegex = /([a-z])?([A-Z])/g;
@@ -13671,7 +13191,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return s.replace(_camelCaseRegex, _camelCaseReplacer);
 	};
 	
-	var getPrefixedPropertyName = function getPrefixedPropertyName(property) {
+	var getPrefixedPropertyName = function getPrefixedPropertyName(property /*: string*/) /*: {css: string, js: string}*/ {
 	  if (prefixedPropertyCache.hasOwnProperty(property)) {
 	    return prefixedPropertyCache[property];
 	  }
@@ -13706,18 +13226,46 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return prefixedPropertyCache[property] = workingProperty;
 	};
 	
+	// We are un-prefixing values before checking for isUnitlessNumber,
+	// otherwise we are at risk of being in a situation where someone
+	// explicitly passes something like `MozBoxFlex: 1` and that will
+	// in turn get transformed into `MozBoxFlex: 1px`.
+	var _getUnprefixedProperty = function _getUnprefixedProperty(property) {
+	  var noPrefixProperty = property;
+	
+	  vendorPrefixes.some(function (prefix) {
+	    // Let's check if the property starts with a vendor prefix
+	    if (property.indexOf(prefix) === 0) {
+	      noPrefixProperty = noPrefixProperty.replace(prefix, '');
+	
+	      // We have removed the vendor prefix, however the first
+	      // character is going to be uppercase hence won't match
+	      // any of the `isUnitlessNumber` keys as they all start
+	      // with lower case. Let's ensure that the first char is
+	      // lower case.
+	      noPrefixProperty = noPrefixProperty.charAt(0).toLowerCase() + noPrefixProperty.slice(1);
+	
+	      return true;
+	    }
+	  });
+	
+	  return noPrefixProperty;
+	};
+	
 	// React is planning to deprecate adding px automatically
 	// (https://github.com/facebook/react/issues/1873), and if they do, this
 	// should change to a warning or be removed in favor of React's warning.
 	// Same goes for below.
 	var _addPixelSuffixToValueIfNeeded = function _addPixelSuffixToValueIfNeeded(originalProperty, value) {
-	  if (value !== 0 && !isNaN(value) && !isUnitlessNumber[originalProperty]) {
+	  var unPrefixedProperty = _getUnprefixedProperty(originalProperty);
+	
+	  if (value !== 0 && !isNaN(value) && !isUnitlessNumber[unPrefixedProperty]) {
 	    return value + 'px';
 	  }
 	  return value;
 	};
 	
-	var _getPrefixedValue = function _getPrefixedValue(property, value, originalProperty) {
+	var _getPrefixedValue = function _getPrefixedValue(componentName, property, value, originalProperty) {
 	  if (!Array.isArray(value)) {
 	    // don't test numbers (pure or stringy), but do add 'px' prefix if needed
 	    if (!isNaN(value) && value !== null) {
@@ -13738,12 +13286,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }
 	
-	  var cacheKey = Array.isArray(value) ? value.join(' || ')
-	  /* babel-eslint bug: https://github.com/babel/babel-eslint/issues/149 */
-	  /* eslint-disable space-infix-ops */
-	  :
-	  /* eslint-enable space-infix-ops */
-	  property + value;
+	  var cacheKey = Array.isArray(value) ? value.join(' || ') : property + value;
 	
 	  if (prefixedValueCache.hasOwnProperty(cacheKey)) {
 	    return prefixedValueCache[cacheKey];
@@ -13799,7 +13342,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (process.env.NODE_ENV !== 'production') {
 	      /* eslint-disable no-console */
 	      if (console && console.warn) {
-	        console.warn('Unsupported CSS value "' + value + '" for property "' + property + '"');
+	        var componentContext = componentName ? ' in component "' + componentName + '"' : '';
+	
+	        console.warn('Unsupported CSS value "' + value + '" for property "' + property + '"' + componentContext);
 	      }
 	      /* eslint-enable no-console */
 	    }
@@ -13810,8 +13355,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	// Returns a new style object with vendor prefixes added to property names
 	// and values.
-	var getPrefixedStyle = function getPrefixedStyle(style, mode /* 'css' or 'js' */) {
-	  mode = mode || 'js';
+	var getPrefixedStyle = function getPrefixedStyle(componentName /*: any*/, // ReactComponent
+	style /*: Object*/) /*: Object*/ {
+	  var mode /*: 'css' | 'js'*/ = arguments.length <= 2 || arguments[2] === undefined ? 'js' : arguments[2];
 	
 	  if (!ExecutionEnvironment.canUseDOM) {
 	    return Object.keys(style).reduce(function (newStyle, key) {
@@ -13830,15 +13376,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var newProperty = getPrefixedPropertyName(property);
 	    if (newProperty === false) {
 	      // Ignore unsupported properties
-	      /* eslint-disable no-console */
-	      if (console && console.warn) {
-	        console.warn('Unsupported CSS property "' + property + '"');
+	      if (process.env.NODE_ENV !== 'production') {
+	        /* eslint-disable no-console */
+	        if (console && console.warn) {
+	          var componentContext = componentName ? ' in component "' + componentName + '"' : '';
+	
+	          console.warn('Unsupported CSS property "' + property + '$"' + componentContext);
+	        }
+	        /* eslint-enable no-console */
+	        return;
 	      }
-	      /* eslint-enable no-console */
-	      return;
 	    }
 	
-	    var newValue = _getPrefixedValue(newProperty.js, value, property);
+	    var newValue = _getPrefixedValue(componentName, newProperty.js, value, property);
 	
 	    prefixedStyle[newProperty[mode]] = newValue;
 	  });
@@ -13851,10 +13401,106 @@ return /******/ (function(modules) { // webpackBootstrap
 	  cssPrefix: prefixInfo.cssPrefix,
 	  jsPrefix: prefixInfo.jsPrefix
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 13 */
+/* 9 */
+/***/ function(module, exports) {
+
+	// shim for using process in browser
+	
+	var process = module.exports = {};
+	var queue = [];
+	var draining = false;
+	var currentQueue;
+	var queueIndex = -1;
+	
+	function cleanUpNextTick() {
+	    draining = false;
+	    if (currentQueue.length) {
+	        queue = currentQueue.concat(queue);
+	    } else {
+	        queueIndex = -1;
+	    }
+	    if (queue.length) {
+	        drainQueue();
+	    }
+	}
+	
+	function drainQueue() {
+	    if (draining) {
+	        return;
+	    }
+	    var timeout = setTimeout(cleanUpNextTick);
+	    draining = true;
+	
+	    var len = queue.length;
+	    while(len) {
+	        currentQueue = queue;
+	        queue = [];
+	        while (++queueIndex < len) {
+	            currentQueue[queueIndex].run();
+	        }
+	        queueIndex = -1;
+	        len = queue.length;
+	    }
+	    currentQueue = null;
+	    draining = false;
+	    clearTimeout(timeout);
+	}
+	
+	process.nextTick = function (fun) {
+	    var args = new Array(arguments.length - 1);
+	    if (arguments.length > 1) {
+	        for (var i = 1; i < arguments.length; i++) {
+	            args[i - 1] = arguments[i];
+	        }
+	    }
+	    queue.push(new Item(fun, args));
+	    if (queue.length === 1 && !draining) {
+	        setTimeout(drainQueue, 0);
+	    }
+	};
+	
+	// v8 likes predictible objects
+	function Item(fun, array) {
+	    this.fun = fun;
+	    this.array = array;
+	}
+	Item.prototype.run = function () {
+	    this.fun.apply(null, this.array);
+	};
+	process.title = 'browser';
+	process.browser = true;
+	process.env = {};
+	process.argv = [];
+	process.version = ''; // empty string to avoid regexp issues
+	process.versions = {};
+	
+	function noop() {}
+	
+	process.on = noop;
+	process.addListener = noop;
+	process.once = noop;
+	process.off = noop;
+	process.removeListener = noop;
+	process.removeAllListeners = noop;
+	process.emit = noop;
+	
+	process.binding = function (name) {
+	    throw new Error('process.binding is not supported');
+	};
+	
+	// TODO(shtylman)
+	process.cwd = function () { return '/' };
+	process.chdir = function (dir) {
+	    throw new Error('process.chdir is not supported');
+	};
+	process.umask = function() { return 0; };
+
+
+/***/ },
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -13899,7 +13545,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 14 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -13928,166 +13574,1157 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 15 */
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/* @flow */
+	
+	'use strict';
+	
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	
+	var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var resolveStyles = __webpack_require__(13);
+	var printStyles = __webpack_require__(26);
+	
+	var KEYS_TO_IGNORE_WHEN_COPYING_PROPERTIES = ['arguments', 'callee', 'caller', 'length', 'name', 'prototype', 'type'];
+	
+	var copyProperties = function copyProperties(source, target) {
+	  Object.getOwnPropertyNames(source).forEach(function (key) {
+	    if (KEYS_TO_IGNORE_WHEN_COPYING_PROPERTIES.indexOf(key) < 0 && !target.hasOwnProperty(key)) {
+	      var descriptor = Object.getOwnPropertyDescriptor(source, key);
+	      Object.defineProperty(target, key, descriptor);
+	    }
+	  });
+	};
+	
+	var enhanceWithRadium = function enhanceWithRadium(configOrComposedComponent /*: constructor | Object*/) /*: constructor*/ {
+	  var config /*:: ?: Object*/ = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	
+	  if (typeof configOrComposedComponent !== 'function') {
+	    var newConfig = _extends({}, config, configOrComposedComponent);
+	    return function (configOrComponent) {
+	      return enhanceWithRadium(configOrComponent, newConfig);
+	    };
+	  }
+	
+	  var ComposedComponent = configOrComposedComponent;
+	
+	  var RadiumEnhancer = (function (_ComposedComponent) {
+	    _inherits(RadiumEnhancer, _ComposedComponent);
+	
+	    function RadiumEnhancer() {
+	      _classCallCheck(this, RadiumEnhancer);
+	
+	      _get(Object.getPrototypeOf(RadiumEnhancer.prototype), 'constructor', this).apply(this, arguments);
+	
+	      this.state = this.state || {};
+	      this.state._radiumStyleState = {};
+	
+	      if (RadiumEnhancer.printStyleClass) {
+	        this.printStyleClass = RadiumEnhancer.printStyleClass;
+	      }
+	    }
+	
+	    // Class inheritance uses Object.create and because of __proto__ issues
+	    // with IE <10 any static properties of the superclass aren't inherited and
+	    // so need to be manually populated.
+	    // See http://babeljs.io/docs/advanced/caveats/#classes-10-and-below-
+	
+	    _createClass(RadiumEnhancer, [{
+	      key: 'render',
+	      value: function render() {
+	        var renderedElement = _get(Object.getPrototypeOf(RadiumEnhancer.prototype), 'render', this).call(this);
+	        return resolveStyles(this, renderedElement, config);
+	      }
+	    }, {
+	      key: 'componentWillUnmount',
+	      value: function componentWillUnmount() {
+	        if (_get(Object.getPrototypeOf(RadiumEnhancer.prototype), 'componentWillUnmount', this)) {
+	          _get(Object.getPrototypeOf(RadiumEnhancer.prototype), 'componentWillUnmount', this).call(this);
+	        }
+	
+	        if (this._radiumMouseUpListener) {
+	          this._radiumMouseUpListener.remove();
+	        }
+	
+	        if (this._radiumMediaQueryListenersByQuery) {
+	          Object.keys(this._radiumMediaQueryListenersByQuery).forEach(function (query) {
+	            this._radiumMediaQueryListenersByQuery[query].remove();
+	          }, this);
+	        }
+	      }
+	    }]);
+	
+	    return RadiumEnhancer;
+	  })(ComposedComponent);
+	
+	  copyProperties(ComposedComponent, RadiumEnhancer);
+	
+	  if (process.env.NODE_ENV !== 'production') {
+	    // This also fixes React Hot Loader by exposing the original components top
+	    // level prototype methods on the Radium enhanced prototype as discussed in
+	    // https://github.com/FormidableLabs/radium/issues/219.
+	    copyProperties(ComposedComponent.prototype, RadiumEnhancer.prototype);
+	  }
+	
+	  RadiumEnhancer.displayName = ComposedComponent.displayName || ComposedComponent.name || 'Component';
+	
+	  RadiumEnhancer.printStyleClass = printStyles.addPrintStyles(RadiumEnhancer);
+	
+	  return RadiumEnhancer;
+	};
+	
+	module.exports = enhanceWithRadium;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
+
+/***/ },
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* @flow */
 	
 	'use strict';
 	
-	var ExecutionEnvironment = __webpack_require__(13);
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _matchMediaFunction = ExecutionEnvironment.canUseDOM && window && window.matchMedia && function (mediaQueryString) {
-	  return window.matchMedia(mediaQueryString);
+	/*:: import type {Config} from './config';*/
+	
+	var _getState = __webpack_require__(21);
+	var getStateKey = __webpack_require__(22);
+	var mergeStyles = __webpack_require__(23);
+	var Plugins = __webpack_require__(14);
+	
+	var ExecutionEnvironment = __webpack_require__(10);
+	var React = __webpack_require__(4);
+	
+	var DEFAULT_CONFIG = {
+	  plugins: [Plugins.mergeStyleArray, Plugins.checkProps, Plugins.resolveMediaQueries, Plugins.resolveInteractionStyles, Plugins.prefix, Plugins.checkProps]
 	};
+	
+	// Gross
+	var globalState = {};
+	
+	// Declare early for recursive helpers.
+	var resolveStyles = ((null /*: any*/) /*: (
+	                                        component: any, // ReactComponent, flow+eslint complaining
+	                                        renderedElement: any,
+	                                        config: Config,
+	                                        existingKeyMap?: {[key: string]: bool}
+	                                      ) => any*/);
+	
+	var _resolveChildren = function _resolveChildren(_ref) {
+	  var children = _ref.children;
+	  var component = _ref.component;
+	  var config = _ref.config;
+	  var existingKeyMap = _ref.existingKeyMap;
+	
+	  if (!children) {
+	    return children;
+	  }
+	
+	  var childrenType = typeof children;
+	
+	  if (childrenType === 'string' || childrenType === 'number') {
+	    // Don't do anything with a single primitive child
+	    return children;
+	  }
+	
+	  if (childrenType === 'function') {
+	    // Wrap the function, resolving styles on the result
+	    return function () {
+	      var result = children.apply(this, arguments);
+	      if (React.isValidElement(result)) {
+	        return resolveStyles(component, result, config, existingKeyMap);
+	      }
+	      return result;
+	    };
+	  }
+	
+	  if (React.Children.count(children) === 1 && children.type) {
+	    // If a React Element is an only child, don't wrap it in an array for
+	    // React.Children.map() for React.Children.only() compatibility.
+	    var onlyChild = React.Children.only(children);
+	    return resolveStyles(component, onlyChild, config, existingKeyMap);
+	  }
+	
+	  return React.Children.map(children, function (child) {
+	    if (React.isValidElement(child)) {
+	      return resolveStyles(component, child, config, existingKeyMap);
+	    }
+	
+	    return child;
+	  });
+	};
+	
+	// Recurse over props, just like children
+	var _resolveProps = function _resolveProps(_ref2) {
+	  var component = _ref2.component;
+	  var config = _ref2.config;
+	  var existingKeyMap = _ref2.existingKeyMap;
+	  var props = _ref2.props;
+	
+	  var newProps = props;
+	
+	  Object.keys(props).forEach(function (prop) {
+	    // We already recurse over children above
+	    if (prop === 'children') {
+	      return;
+	    }
+	
+	    var propValue = props[prop];
+	    if (React.isValidElement(propValue)) {
+	      newProps = _extends({}, newProps);
+	      newProps[prop] = resolveStyles(component, propValue, config, existingKeyMap);
+	    }
+	  });
+	
+	  return newProps;
+	};
+	
+	var _buildGetKey = function _buildGetKey(renderedElement, existingKeyMap) {
+	  // We need a unique key to correlate state changes due to user interaction
+	  // with the rendered element, so we know to apply the proper interactive
+	  // styles.
+	  var originalKey = renderedElement.ref || renderedElement.key;
+	  var key = getStateKey(originalKey);
+	
+	  var alreadyGotKey = false;
+	  var getKey = function getKey() {
+	    if (alreadyGotKey) {
+	      return key;
+	    }
+	
+	    alreadyGotKey = true;
+	
+	    if (existingKeyMap[key]) {
+	      throw new Error('Radium requires each element with interactive styles to have a unique ' + 'key, set using either the ref or key prop. ' + (originalKey ? 'Key "' + originalKey + '" is a duplicate.' : 'Multiple elements have no key specified.'));
+	    }
+	
+	    existingKeyMap[key] = true;
+	
+	    return key;
+	  };
+	
+	  return getKey;
+	};
+	
+	var _setStyleState = function _setStyleState(component, key, stateKey, value) {
+	  var existing = component._lastRadiumState || component.state && component.state._radiumStyleState || {};
+	
+	  var state = { _radiumStyleState: _extends({}, existing) };
+	  state._radiumStyleState[key] = _extends({}, state._radiumStyleState[key]);
+	  state._radiumStyleState[key][stateKey] = value;
+	
+	  component._lastRadiumState = state._radiumStyleState;
+	  component.setState(state);
+	};
+	
+	var _runPlugins = function _runPlugins(_ref3) {
+	  var component = _ref3.component;
+	  var config = _ref3.config;
+	  var existingKeyMap = _ref3.existingKeyMap;
+	  var props = _ref3.props;
+	  var renderedElement = _ref3.renderedElement;
+	
+	  // Don't run plugins if renderedElement is not a simple ReactDOMElement or has
+	  // no style.
+	  if (!React.isValidElement(renderedElement) || typeof renderedElement.type !== 'string' || !props.style) {
+	    return props;
+	  }
+	
+	  var newProps = props;
+	
+	  var plugins = config.plugins || DEFAULT_CONFIG.plugins;
+	
+	  var getKey = _buildGetKey(renderedElement, existingKeyMap);
+	
+	  var newStyle = props.style;
+	  plugins.forEach(function (plugin) {
+	    var result = plugin({
+	      ExecutionEnvironment: ExecutionEnvironment,
+	      componentName: component.constructor.displayName || component.constructor.name,
+	      getComponentField: function getComponentField(key) {
+	        return component[key];
+	      },
+	      getGlobalState: function getGlobalState(key) {
+	        return globalState[key];
+	      },
+	      config: config,
+	      getState: function getState(stateKey, elementKey) {
+	        return _getState(component.state, elementKey || getKey(), stateKey);
+	      },
+	      mergeStyles: mergeStyles,
+	      props: newProps,
+	      setState: function setState(stateKey, value, elementKey) {
+	        return _setStyleState(component, elementKey || getKey(), stateKey, value);
+	      },
+	      style: newStyle
+	    }) || {};
+	
+	    newStyle = result.style || newStyle;
+	
+	    newProps = result.props && Object.keys(result.props).length ? _extends({}, newProps, result.props) : newProps;
+	
+	    var newComponentFields = result.componentFields || {};
+	    Object.keys(newComponentFields).forEach(function (fieldName) {
+	      component[fieldName] = newComponentFields[fieldName];
+	    });
+	
+	    var newGlobalState = result.globalState || {};
+	    Object.keys(newGlobalState).forEach(function (key) {
+	      globalState[key] = newGlobalState[key];
+	    });
+	  });
+	
+	  if (newStyle !== props.style) {
+	    newProps = _extends({}, newProps, { style: newStyle });
+	  }
+	
+	  return newProps;
+	};
+	
+	// Wrapper around React.cloneElement. To avoid processing the same element
+	// twice, whenever we clone an element add a special prop to make sure we don't
+	// process this element again.
+	var _cloneElement = function _cloneElement(renderedElement, newProps, newChildren) {
+	  // Only add flag if this is a normal DOM element
+	  if (typeof renderedElement.type === 'string') {
+	    newProps = _extends({}, newProps, { _radiumDidResolveStyles: true });
+	  }
+	
+	  return React.cloneElement(renderedElement, newProps, newChildren);
+	};
+	
+	//
+	// The nucleus of Radium. resolveStyles is called on the rendered elements
+	// before they are returned in render. It iterates over the elements and
+	// children, rewriting props to add event handlers required to capture user
+	// interactions (e.g. mouse over). It also replaces the style prop because it
+	// adds in the various interaction styles (e.g. :hover).
+	//
+	resolveStyles = function (component /*: any*/, // ReactComponent, flow+eslint complaining
+	renderedElement /*: any*/, // ReactElement
+	config /*: Config*/, existingKeyMap /*:: ?: {[key: string]: boolean}*/) /*: any*/ {
+	  if (config === undefined) config = DEFAULT_CONFIG;
+	  // ReactElement
+	  existingKeyMap = existingKeyMap || {};
+	
+	  if (!renderedElement ||
+	  // Bail if we've already processed this element. This ensures that only the
+	  // owner of an element processes that element, since the owner's render
+	  // function will be called first (which will always be the case, since you
+	  // can't know what else to render until you render the parent component).
+	  renderedElement.props && renderedElement.props._radiumDidResolveStyles) {
+	    return renderedElement;
+	  }
+	
+	  var newChildren = _resolveChildren({
+	    children: renderedElement.props.children,
+	    component: component,
+	    config: config,
+	    existingKeyMap: existingKeyMap
+	  });
+	
+	  var newProps = _resolveProps({
+	    component: component,
+	    config: config,
+	    existingKeyMap: existingKeyMap,
+	    props: renderedElement.props
+	  });
+	
+	  newProps = _runPlugins({
+	    component: component,
+	    config: config,
+	    existingKeyMap: existingKeyMap,
+	    props: newProps,
+	    renderedElement: renderedElement
+	  });
+	
+	  // If nothing changed, don't bother cloning the element. Might be a bit
+	  // wasteful, as we add the sentinal to stop double-processing when we clone.
+	  // Assume benign double-processing is better than unneeded cloning.
+	  if (newChildren === renderedElement.props.children && newProps === renderedElement.props) {
+	    return renderedElement;
+	  }
+	
+	  return _cloneElement(renderedElement, newProps !== renderedElement.props ? newProps : {}, newChildren);
+	};
+	
+	// Only for use by tests
+	resolveStyles.__clearStateForTests = function () {
+	  globalState = {};
+	};
+	
+	module.exports = resolveStyles;
+	// ReactComponent, flow+eslint complaining
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @flow */
+	/* eslint-disable block-scoped-var */
+	
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	/*:: import type {Config} from '../config';*/
+	
+	var checkPropsPlugin = __webpack_require__(15);
+	var mergeStyleArrayPlugin = __webpack_require__(16);
+	var prefixPlugin = __webpack_require__(17);
+	var resolveInteractionStylesPlugin = __webpack_require__(18);
+	var resolveMediaQueriesPlugin = __webpack_require__(20);
+	
+	/*:: export type PluginConfig = {
+	  // May not be readable if code has been minified
+	  componentName: string,
+	
+	  // The Radium configuration
+	  config: Config,
+	
+	  // Retrieve the value of a field on the component
+	  getComponentField: (key: string) => any,
+	
+	  // Retrieve the value of a field global to the Radium module
+	  // Used so that tests can easily clear global state.
+	  getGlobalState: (key: string) => any,
+	
+	  // Retrieve the value of some state specific to the rendered element.
+	  // Requires the element to have a unique key or ref or for an element key
+	  // to be passed in.
+	  getState: (stateKey: string, elementKey?: string) => any,
+	
+	  // Access to the mergeStyles utility
+	  mergeStyles: (styles: Array<Object>) => Object,
+	
+	  // The props of the rendered element. This can be changed by each plugin,
+	  // and successive plugins will see the result of previous plugins.
+	  props: Object,
+	
+	  // Calls setState on the component with the given key and value.
+	  // By default this is specific to the rendered element, but you can override
+	  // by passing in the `elementKey` parameter.
+	  setState: (stateKey: string, value: any, elementKey?: string) => void,
+	
+	  // The style prop of the rendered element. This can be changed by each plugin,
+	  // and successive plugins will see the result of previous plugins. Kept
+	  // separate from `props` for ease of use.
+	  style: Object,
+	
+	  // uses the exenv npm module
+	  ExecutionEnvironment: {
+	    canUseEventListeners: bool,
+	    canUseDOM: bool,
+	  }
+	};*/
+	/*:: export type PluginResult = ?{
+	  // Merged into the component directly. Useful for storing things for which you
+	  // don't need to re-render, event subscriptions, for instance.
+	  componentFields?: Object,
+	
+	  // Merged into a Radium controlled global state object. Use this instead of
+	  // module level state for ease of clearing state between tests.
+	  globalState?: Object,
+	
+	  // Merged into the rendered element's props.
+	  props?: Object,
+	
+	  // Replaces (not merged into) the rendered element's style property.
+	  style?: Object,
+	};*/
 	
 	module.exports = {
-	  canMatchMedia: function canMatchMedia() {
-	    return typeof _matchMediaFunction === 'function';
-	  },
-	
-	  matchMedia: function matchMedia(query) {
-	    return _matchMediaFunction(query);
-	  },
-	
-	  setMatchMedia: function setMatchMedia(nextMatchMediaFunction) {
-	    _matchMediaFunction = nextMatchMediaFunction;
-	  }
+	  checkProps: checkPropsPlugin,
+	  mergeStyleArray: mergeStyleArrayPlugin,
+	  prefix: prefixPlugin,
+	  resolveInteractionStyles: resolveInteractionStylesPlugin,
+	  resolveMediaQueries: resolveMediaQueriesPlugin
 	};
+	
+	// May not be readable if code has been minified
+	
+	// The Radium configuration
+	
+	// Retrieve the value of a field on the component
+	
+	// Retrieve the value of a field global to the Radium module
+	// Used so that tests can easily clear global state.
+	
+	// Retrieve the value of some state specific to the rendered element.
+	// Requires the element to have a unique key or ref or for an element key
+	// to be passed in.
+	
+	// Access to the mergeStyles utility
+	
+	// The props of the rendered element. This can be changed by each plugin,
+	// and successive plugins will see the result of previous plugins.
+	
+	// Calls setState on the component with the given key and value.
+	// By default this is specific to the rendered element, but you can override
+	// by passing in the `elementKey` parameter.
+	
+	// The style prop of the rendered element. This can be changed by each plugin,
+	// and successive plugins will see the result of previous plugins. Kept
+	// separate from `props` for ease of use.
+	
+	// uses the exenv npm module
+	
+	// Merged into the component directly. Useful for storing things for which you
+	// don't need to re-render, event subscriptions, for instance.
+	
+	// Merged into a Radium controlled global state object. Use this instead of
+	// module level state for ease of clearing state between tests.
+	
+	// Merged into the rendered element's props.
+	
+	// Replaces (not merged into) the rendered element's style property.
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/* @flow */
+	
+	'use strict';
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	/*:: import type {PluginConfig, PluginResult} from '.';*/
+	
+	var checkProps = (function () {} /*: any*/);
+	
+	if (process.env.NODE_ENV !== 'production') {
+	  // Warn if you use longhand and shorthand properties in the same style
+	  // object.
+	  // https://developer.mozilla.org/en-US/docs/Web/CSS/Shorthand_properties
+	
+	  var shorthandPropertyExpansions = {
+	    'background': ['backgroundAttachment', 'backgroundBlendMode', 'backgroundClip', 'backgroundColor', 'backgroundImage', 'backgroundOrigin', 'backgroundPosition', 'backgroundPositionX', 'backgroundPositionY', 'backgroundRepeat', 'backgroundRepeatX', 'backgroundRepeatY', 'backgroundSize'],
+	    'border': ['borderBottom', 'borderBottomColor', 'borderBottomStyle', 'borderBottomWidth', 'borderColor', 'borderLeft', 'borderLeftColor', 'borderLeftStyle', 'borderLeftWidth', 'borderRight', 'borderRightColor', 'borderRightStyle', 'borderRightWidth', 'borderStyle', 'borderTop', 'borderTopColor', 'borderTopStyle', 'borderTopWidth', 'borderWidth'],
+	    'borderImage': ['borderImageOutset', 'borderImageRepeat', 'borderImageSlice', 'borderImageSource', 'borderImageWidth'],
+	    'borderRadius': ['borderBottomLeftRadius', 'borderBottomRightRadius', 'borderTopLeftRadius', 'borderTopRightRadius'],
+	    'font': ['fontFamily', 'fontKerning', 'fontSize', 'fontStretch', 'fontStyle', 'fontVariant', 'fontVariantLigatures', 'fontWeight', 'lineHeight'],
+	    'listStyle': ['listStyleImage', 'listStylePosition', 'listStyleType'],
+	    'margin': ['marginBottom', 'marginLeft', 'marginRight', 'marginTop'],
+	    'padding': ['paddingBottom', 'paddingLeft', 'paddingRight', 'paddingTop'],
+	    'transition': ['transitionDelay', 'transitionDuration', 'transitionProperty', 'transitionTimingFunction']
+	  };
+	
+	  checkProps = function (config /*: PluginConfig*/) /*: PluginResult*/ {
+	    var componentName = config.componentName;
+	    var style = config.style;
+	
+	    if (typeof style !== 'object' || !style) {
+	      return;
+	    }
+	
+	    var styleKeys = Object.keys(style);
+	    styleKeys.forEach(function (styleKey) {
+	      if (shorthandPropertyExpansions[styleKey] && shorthandPropertyExpansions[styleKey].some(function (sp) {
+	        return styleKeys.indexOf(sp) !== -1;
+	      })) {
+	        if (process.env.NODE_ENV !== 'production') {
+	          /* eslint-disable no-console */
+	          console.warn('Radium: property "' + styleKey + '" in style object', style, ': do not mix longhand and ' + 'shorthand properties in the same style object. Check the render ' + 'method of ' + componentName + '.', 'See https://github.com/FormidableLabs/radium/issues/95 for more ' + 'information.');
+	          /* eslint-enable no-console */
+	        }
+	      }
+	    });
+	
+	    styleKeys.forEach(function (k) {
+	      return checkProps(_extends({}, config, { style: style[k] }));
+	    });
+	    return;
+	  };
+	}
+	
+	module.exports = checkProps;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
 /* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var createMarkupForStyles = __webpack_require__(17);
-	var Prefixer = __webpack_require__(12);
-	
-	var React = __webpack_require__(4);
-	
-	var buildCssString = function buildCssString(selector, rules) {
-	  if (!selector || !rules) {
-	    return;
-	  }
-	
-	  var prefixedRules = Prefixer.getPrefixedStyle(rules, 'css');
-	  var serializedRules = createMarkupForStyles(prefixedRules);
-	
-	  return selector + '{' + serializedRules + '}';
-	};
-	
-	var Style = React.createClass({
-	  displayName: 'Style',
-	
-	  propTypes: {
-	    rules: React.PropTypes.object,
-	    scopeSelector: React.PropTypes.string
-	  },
-	
-	  getDefaultProps: function getDefaultProps() {
-	    return {
-	      scopeSelector: ''
-	    };
-	  },
-	
-	  _buildStyles: function _buildStyles(styles) {
-	    var _this = this;
-	
-	    return Object.keys(styles).reduce(function (accumulator, selector) {
-	      var rules = styles[selector];
-	
-	      if (selector === 'mediaQueries') {
-	        accumulator += _this._buildMediaQueryString(rules);
-	      } else {
-	        var completeSelector = (_this.props.scopeSelector ? _this.props.scopeSelector + ' ' : '') + selector;
-	        accumulator += buildCssString(completeSelector, rules);
-	      }
-	
-	      return accumulator;
-	    }, '');
-	  },
-	
-	  _buildMediaQueryString: function _buildMediaQueryString(mediaQueryObj) {
-	    var _this2 = this;
-	
-	    var contextMediaQueries = this._getContextMediaQueries();
-	    var mediaQueryString = '';
-	
-	    Object.keys(mediaQueryObj).forEach(function (query) {
-	      var completeQuery = contextMediaQueries[query] ? contextMediaQueries[query] : query;
-	      mediaQueryString += '@media ' + completeQuery + '{' + _this2._buildStyles(mediaQueryObj[query]) + '}';
-	    });
-	
-	    return mediaQueryString;
-	  },
-	
-	  _getContextMediaQueries: function _getContextMediaQueries() {
-	    var contextMediaQueries = {};
-	    if (this.context && this.context.mediaQueries) {
-	      Object.keys(this.context.mediaQueries).forEach((function (query) {
-	        contextMediaQueries[query] = this.context.mediaQueries[query].media;
-	      }).bind(this));
-	    }
-	
-	    return contextMediaQueries;
-	  },
-	
-	  render: function render() {
-	    if (!this.props.rules) {
-	      return null;
-	    }
-	
-	    var styles = this._buildStyles(this.props.rules);
-	
-	    return React.createElement('style', { dangerouslySetInnerHTML: { __html: styles } });
-	  }
-	});
-	
-	module.exports = Style;
-
-/***/ },
-/* 17 */
 /***/ function(module, exports) {
 
 	/* @flow */
 	
 	'use strict';
 	
-	var createMarkupForStyles = function createMarkupForStyles(style, spaces) {
-	  spaces = spaces || '';
-	  return Object.keys(style).map(function (property) {
-	    return spaces + property + ': ' + style[property] + ';';
-	  }).join('\n');
+	// Convenient syntax for multiple styles: `style={[style1, style2, etc]}`
+	// Ignores non-objects, so you can do `this.state.isCool && styles.cool`.
+	/*:: import type {PluginConfig, PluginResult} from '.';*/var mergeStyleArrayPlugin = function mergeStyleArrayPlugin(_ref /*: PluginConfig*/) /*: PluginResult*/ {
+	  var style = _ref.style;
+	  var mergeStyles = _ref.mergeStyles;
+	
+	  var newStyle = Array.isArray(style) ? mergeStyles(style) : style;
+	  return { style: newStyle };
 	};
 	
-	module.exports = createMarkupForStyles;
+	module.exports = mergeStyleArrayPlugin;
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* @flow */
 	
 	'use strict';
 	
-	var createMarkupForStyles = __webpack_require__(17);
-	var Prefixer = __webpack_require__(12);
+	/*:: import type {PluginConfig, PluginResult} from '.';*/
 	
-	var ExecutionEnvironment = __webpack_require__(13);
+	var Prefixer = __webpack_require__(8);
+	
+	var prefixPlugin = function prefixPlugin(_ref /*: PluginConfig*/) /*: PluginResult*/ {
+	  var componentName = _ref.componentName;
+	  var style = _ref.style;
+	
+	  var newStyle = Prefixer.getPrefixedStyle(componentName, style);
+	  return { style: newStyle };
+	};
+	
+	module.exports = prefixPlugin;
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @flow */
+	
+	'use strict';
+	
+	/*:: import type {PluginConfig, PluginResult} from '.';*/
+	
+	var MouseUpListener = __webpack_require__(19);
+	
+	var _isInteractiveStyleField = function _isInteractiveStyleField(styleFieldName) {
+	  return styleFieldName === ':hover' || styleFieldName === ':active' || styleFieldName === ':focus';
+	};
+	
+	var resolveInteractionStyles = function resolveInteractionStyles(config /*: PluginConfig*/) /*: PluginResult*/ {
+	  var ExecutionEnvironment = config.ExecutionEnvironment;
+	  var getComponentField = config.getComponentField;
+	  var getState = config.getState;
+	  var mergeStyles = config.mergeStyles;
+	  var props = config.props;
+	  var setState = config.setState;
+	  var style = config.style;
+	
+	  var newComponentFields = {};
+	  var newProps = {};
+	
+	  // Only add handlers if necessary
+	  if (style[':hover'] || style[':active']) {
+	    // Always call the existing handler if one is already defined.
+	    // This code, and the very similar ones below, could be abstracted a bit
+	    // more, but it hurts readability IMO.
+	    var existingOnMouseEnter = props.onMouseEnter;
+	    newProps.onMouseEnter = function (e) {
+	      existingOnMouseEnter && existingOnMouseEnter(e);
+	      setState(':hover', true);
+	    };
+	
+	    var existingOnMouseLeave = props.onMouseLeave;
+	    newProps.onMouseLeave = function (e) {
+	      existingOnMouseLeave && existingOnMouseLeave(e);
+	      setState(':hover', false);
+	    };
+	  }
+	
+	  if (style[':active']) {
+	    var existingOnMouseDown = props.onMouseDown;
+	    newProps.onMouseDown = function (e) {
+	      existingOnMouseDown && existingOnMouseDown(e);
+	      newComponentFields._lastMouseDown = Date.now();
+	      setState(':active', true);
+	    };
+	  }
+	
+	  if (style[':focus']) {
+	    var existingOnFocus = props.onFocus;
+	    newProps.onFocus = function (e) {
+	      existingOnFocus && existingOnFocus(e);
+	      setState(':focus', true);
+	    };
+	
+	    var existingOnBlur = props.onBlur;
+	    newProps.onBlur = function (e) {
+	      existingOnBlur && existingOnBlur(e);
+	      setState(':focus', false);
+	    };
+	  }
+	
+	  if (style[':active'] && !getComponentField('_radiumMouseUpListener') && ExecutionEnvironment.canUseEventListeners) {
+	    newComponentFields._radiumMouseUpListener = MouseUpListener.subscribe(function () {
+	      Object.keys(getComponentField('state')._radiumStyleState).forEach(function (key) {
+	        if (getState(':active')) {
+	          setState(':active', false, key);
+	        }
+	      });
+	    });
+	  }
+	
+	  // Merge the styles in the order they were defined
+	  var interactionStyles = Object.keys(style).filter(function (name) {
+	    return _isInteractiveStyleField(name) && getState(name);
+	  }).map(function (name) {
+	    return style[name];
+	  });
+	
+	  var newStyle = mergeStyles([style].concat(interactionStyles));
+	
+	  // Remove interactive styles
+	  newStyle = Object.keys(newStyle).reduce(function (styleWithoutInteractions, name) {
+	    if (!_isInteractiveStyleField(name)) {
+	      styleWithoutInteractions[name] = newStyle[name];
+	    }
+	    return styleWithoutInteractions;
+	  }, {});
+	
+	  return {
+	    componentFields: newComponentFields,
+	    props: newProps,
+	    style: newStyle
+	  };
+	};
+	
+	module.exports = resolveInteractionStyles;
+
+/***/ },
+/* 19 */
+/***/ function(module, exports) {
+
+	/* @flow */
+	
+	'use strict';
+	
+	var _callbacks = [];
+	var _mouseUpListenerIsActive = false;
+	
+	var _handleMouseUp = function _handleMouseUp(ev) {
+	  _callbacks.forEach(function (callback) {
+	    callback(ev);
+	  });
+	};
+	
+	var subscribe = function subscribe(callback /*: () => void*/) /*: {remove: () => void}*/ {
+	  if (_callbacks.indexOf(callback) === -1) {
+	    _callbacks.push(callback);
+	  }
+	
+	  if (!_mouseUpListenerIsActive) {
+	    window.addEventListener('mouseup', _handleMouseUp);
+	    _mouseUpListenerIsActive = true;
+	  }
+	
+	  return {
+	    remove: function remove() {
+	      var index = _callbacks.indexOf(callback);
+	      _callbacks.splice(index, 1);
+	
+	      if (_callbacks.length === 0 && _mouseUpListenerIsActive) {
+	        window.removeEventListener('mouseup', _handleMouseUp);
+	        _mouseUpListenerIsActive = false;
+	      }
+	    }
+	  };
+	};
+	
+	module.exports = {
+	  subscribe: subscribe
+	};
+
+/***/ },
+/* 20 */
+/***/ function(module, exports) {
+
+	/** @flow */
+	
+	'use strict';
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	/*:: import type {MatchMediaType} from '../config';*/
+	/*:: import type {PluginConfig, PluginResult} from '.';*/
+	
+	var _windowMatchMedia;
+	var _getWindowMatchMedia = function _getWindowMatchMedia(ExecutionEnvironment) {
+	  if (_windowMatchMedia === undefined) {
+	    _windowMatchMedia = !!ExecutionEnvironment.canUseDOM && !!window && !!window.matchMedia && function (mediaQueryString) {
+	      return window.matchMedia(mediaQueryString);
+	    } || null;
+	  }
+	  return _windowMatchMedia;
+	};
+	
+	var resolveMediaQueries = function resolveMediaQueries(_ref /*: PluginConfig*/) /*: PluginResult*/ {
+	  var ExecutionEnvironment = _ref.ExecutionEnvironment;
+	  var getComponentField = _ref.getComponentField;
+	  var getGlobalState = _ref.getGlobalState;
+	  var config = _ref.config;
+	  var mergeStyles = _ref.mergeStyles;
+	  var setState = _ref.setState;
+	  var style = _ref.style;
+	
+	  var newComponentFields = {};
+	  var newStyle = style;
+	  var matchMedia /*: ?MatchMediaType*/ = config.matchMedia || _getWindowMatchMedia(ExecutionEnvironment);
+	  if (!matchMedia) {
+	    return newStyle;
+	  }
+	
+	  var mediaQueryListByQueryString = getGlobalState('mediaQueryListByQueryString') || {};
+	
+	  Object.keys(style).filter(function (name) {
+	    return name.indexOf('@media') === 0;
+	  }).map(function (query) {
+	    var mediaQueryStyles = style[query];
+	    query = query.replace('@media ', '');
+	
+	    // Create a global MediaQueryList if one doesn't already exist
+	    var mql = mediaQueryListByQueryString[query];
+	    if (!mql && matchMedia) {
+	      mediaQueryListByQueryString[query] = mql = matchMedia(query);
+	    }
+	
+	    var listenersByQuery = getComponentField('_radiumMediaQueryListenersByQuery');
+	
+	    if (!listenersByQuery || !listenersByQuery[query]) {
+	      var listener = function listener() {
+	        return setState(query, mql.matches, '_all');
+	      };
+	      mql.addListener(listener);
+	      newComponentFields._radiumMediaQueryListenersByQuery = _extends({}, listenersByQuery);
+	      newComponentFields._radiumMediaQueryListenersByQuery[query] = {
+	        remove: function remove() {
+	          mql.removeListener(listener);
+	        }
+	      };
+	    }
+	
+	    // Apply media query states
+	    if (mql.matches) {
+	      newStyle = mergeStyles([newStyle, mediaQueryStyles]);
+	    }
+	  });
+	
+	  // Remove media queries
+	  newStyle = Object.keys(newStyle).reduce(function (styleWithoutMedia, key) {
+	    if (key.indexOf('@media') !== 0) {
+	      styleWithoutMedia[key] = newStyle[key];
+	    }
+	    return styleWithoutMedia;
+	  }, {});
+	
+	  return {
+	    componentFields: newComponentFields,
+	    globalState: { mediaQueryListByQueryString: mediaQueryListByQueryString },
+	    style: newStyle
+	  };
+	};
+	
+	module.exports = resolveMediaQueries;
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* @flow */
+	
+	'use strict';
+	
+	var getStateKey = __webpack_require__(22);
+	
+	var VALID_KEYS = [':active', ':focus', ':hover'];
+	
+	var getState = function getState(state /*: {_radiumStyleState: {[key: string]: {[value: string]: boolean}}}*/, elementKey /*: string*/, value /*: string*/) /*: boolean*/ {
+	  if (VALID_KEYS.indexOf(value) === -1) {
+	    throw new Error('Radium.getState invalid value param: `' + value + '`');
+	  }
+	
+	  var key = getStateKey(elementKey);
+	
+	  return !!(state && state._radiumStyleState && state._radiumStyleState[key] && state._radiumStyleState[key][value]);
+	};
+	
+	module.exports = getState;
+
+/***/ },
+/* 22 */
+/***/ function(module, exports) {
+
+	/* @flow */
+	
+	'use strict';
+	
+	var getStateKey = function getStateKey(elementKey /*: ?string*/) /*: string*/ {
+	  return elementKey === null || elementKey === undefined ? 'main' : elementKey.toString();
+	};
+	
+	module.exports = getStateKey;
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var isPlainObject = __webpack_require__(24);
+	
+	var shouldMerge = function shouldMerge(value) {
+	  // Don't merge objects overriding toString, since they should be converted
+	  // to string values.
+	  return isPlainObject(value) && value.toString === Object.prototype.toString;
+	};
+	
+	// Merge style objects. Deep merge plain object values.
+	var mergeStyles = function mergeStyles(styles) {
+	  var result = {};
+	
+	  styles.forEach(function (style) {
+	    if (!style || typeof style !== 'object') {
+	      return;
+	    }
+	
+	    if (Array.isArray(style)) {
+	      style = mergeStyles(style);
+	    }
+	
+	    Object.keys(style).forEach(function (key) {
+	      if (shouldMerge(style[key]) && shouldMerge(result[key])) {
+	        result[key] = mergeStyles([result[key], style[key]]);
+	      } else {
+	        result[key] = style[key];
+	      }
+	    });
+	  });
+	
+	  return result;
+	};
+	
+	module.exports = mergeStyles;
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*!
+	 * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
+	 *
+	 * Copyright (c) 2014-2015, Jon Schlinkert.
+	 * Licensed under the MIT License.
+	 */
+	
+	'use strict';
+	
+	var isObject = __webpack_require__(25);
+	
+	function isObjectObject(o) {
+	  return isObject(o) === true
+	    && Object.prototype.toString.call(o) === '[object Object]';
+	}
+	
+	module.exports = function isPlainObject(o) {
+	  var ctor,prot;
+	  
+	  if (isObjectObject(o) === false) return false;
+	  
+	  // If has modified constructor
+	  ctor = o.constructor;
+	  if (typeof ctor !== 'function') return false;
+	  
+	  // If has modified prototype
+	  prot = ctor.prototype;
+	  if (isObjectObject(prot) === false) return false;
+	  
+	  // If constructor does not have an Object-specific method
+	  if (prot.hasOwnProperty('isPrototypeOf') === false) {
+	    return false;
+	  }
+	  
+	  // Most likely a plain Object
+	  return true;
+	};
+
+
+/***/ },
+/* 25 */
+/***/ function(module, exports) {
+
+	/*!
+	 * isobject <https://github.com/jonschlinkert/isobject>
+	 *
+	 * Copyright (c) 2014-2015, Jon Schlinkert.
+	 * Licensed under the MIT License.
+	 */
+	
+	'use strict';
+	
+	module.exports = function isObject(val) {
+	  return val != null && typeof val === 'object'
+	    && !Array.isArray(val);
+	};
+
+
+/***/ },
+/* 26 */
+/***/ function(module, exports) {
+
+	/* @flow */
+	
+	"use strict";
+	
+	var allPrintStyles = {};
+	var listeners = [];
+	
+	var subscribe = function subscribe(listener /*: () => void*/) /*: {remove: () => void}*/ {
+	  if (listeners.indexOf(listener) === -1) {
+	    listeners.push(listener);
+	  }
+	
+	  return {
+	    remove: function remove() {
+	      var listenerIndex = listeners.indexOf(listener);
+	
+	      if (listenerIndex > -1) {
+	        listeners.splice(listenerIndex, 1);
+	      }
+	    }
+	  };
+	};
+	
+	var _emitChange = function _emitChange() {
+	  listeners.forEach(function (listener) {
+	    return listener();
+	  });
+	};
+	
+	var _appendImportantToEachValue = function _appendImportantToEachValue(styleObj) {
+	  var importantStyleObj = {};
+	
+	  Object.keys(styleObj).forEach(function (key) {
+	    var value = styleObj[key];
+	
+	    // This breaks unitless values but they'll be deprecated soon anyway
+	    // https://github.com/facebook/react/issues/1873
+	    value = value + " !important";
+	    importantStyleObj[key] = value;
+	  });
+	
+	  return importantStyleObj;
+	};
+	
+	var addPrintStyles = function addPrintStyles(Component /*: constructor*/) {
+	  if (!Component.printStyles) {
+	    return;
+	  }
+	
+	  var printStyleClass = {};
+	
+	  Object.keys(Component.printStyles).forEach(function (key) {
+	    var styles = Component.printStyles[key];
+	    var className = "Radium-" + Component.displayName + "-" + key;
+	    allPrintStyles["." + className] = _appendImportantToEachValue(styles);
+	    printStyleClass[key] = className;
+	  });
+	
+	  // Allows for lazy loading of JS that then calls Radium to update the
+	  // print styles
+	  _emitChange();
+	  return printStyleClass;
+	};
+	
+	var getPrintStyles = function getPrintStyles() /*: Object*/ {
+	  return allPrintStyles;
+	};
+	
+	module.exports = {
+	  addPrintStyles: addPrintStyles,
+	  getPrintStyles: getPrintStyles,
+	  subscribe: subscribe
+	};
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var React = __webpack_require__(4);
+	
+	var Style = __webpack_require__(6);
+	var printStyles = __webpack_require__(26);
+	
+	var PrintStyle = React.createClass({
+	  displayName: 'PrintStyle',
+	
+	  getInitialState: function getInitialState() {
+	    return this._getStylesState();
+	  },
+	
+	  componentDidMount: function componentDidMount() {
+	    this.subscription = printStyles.subscribe(this._onChange);
+	  },
+	
+	  componentWillUnmount: function componentWillUnmount() {
+	    this.subscription.remove();
+	  },
+	
+	  _onChange: function _onChange() {
+	    this.setState(this._getStylesState());
+	  },
+	
+	  _getStylesState: function _getStylesState() {
+	    return {
+	      styles: printStyles.getPrintStyles()
+	    };
+	  },
+	
+	  render: function render() {
+	    return React.createElement(Style, { rules: {
+	        mediaQueries: {
+	          print: this.state.styles
+	        }
+	      } });
+	  }
+	});
+	
+	module.exports = PrintStyle;
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* @flow */
+	
+	'use strict';
+	
+	var createMarkupForStyles = __webpack_require__(7);
+	var Prefixer = __webpack_require__(8);
+	
+	var ExecutionEnvironment = __webpack_require__(10);
 	
 	var isAnimationSupported = ExecutionEnvironment.canUseDOM && Prefixer.getPrefixedPropertyName('animation') !== false;
 	
 	var animationIndex = 1;
 	var animationStyleSheet = null;
-	var keyframesPrefixed = null;
+	var keyframesPrefixed = 'keyframes';
 	
 	if (isAnimationSupported) {
-	  animationStyleSheet = document.createElement('style');
+	  animationStyleSheet = (document.createElement('style') /*: any*/);
 	  document.head.appendChild(animationStyleSheet);
 	
 	  // Test if prefix needed for keyframes (copied from PrefixFree)
-	  keyframesPrefixed = 'keyframes';
 	  animationStyleSheet.textContent = '@keyframes {}';
 	  if (!animationStyleSheet.sheet.cssRules.length) {
 	    keyframesPrefixed = Prefixer.cssPrefix + 'keyframes';
@@ -14096,7 +14733,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	// Simple animation helper that injects CSS into a style object containing the
 	// keyframes, and returns a string with the generated animation name.
-	var keyframes = function keyframes(keyframeRules) {
+	var keyframes = function keyframes(keyframeRules /*: {[percentage: string]: {[key: string]: string|number}}*/, componentName /*:: ?: string*/) /*: string*/ {
 	  var name = 'Animation' + animationIndex;
 	  animationIndex += 1;
 	
@@ -14106,7 +14743,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	  var rule = '@' + keyframesPrefixed + ' ' + name + ' {\n' + Object.keys(keyframeRules).map(function (percentage) {
 	    var props = keyframeRules[percentage];
-	    var prefixedProps = Prefixer.getPrefixedStyle(props, 'css');
+	    var prefixedProps = Prefixer.getPrefixedStyle(componentName, props, 'css');
 	    var serializedProps = createMarkupForStyles(prefixedProps, '  ');
 	    return '  ' + percentage + ' {\n  ' + serializedProps + '\n  }';
 	  }).join('\n') + '\n}\n';
@@ -14124,7 +14761,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = keyframes;
 
 /***/ },
-/* 19 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;!function() {
@@ -23633,7 +24270,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 20 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/* eslint-disable*/
@@ -23648,20 +24285,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	  }
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ },
-/* 21 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	module.exports = {
-	  VictoryAnimation: __webpack_require__(22)
+	  VictoryAnimation: __webpack_require__(32)
 	};
 
 /***/ },
-/* 22 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*global requestAnimationFrame, cancelAnimationFrame, setTimeout*/
@@ -23686,7 +24323,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _d3 = __webpack_require__(19);
+	var _d3 = __webpack_require__(29);
 	
 	var _d32 = _interopRequireDefault(_d3);
 	
@@ -23759,6 +24396,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        setTimeout(function () {
 	          _this2.raf = _this2.functionToBeRunEachFrame();
 	        }, this.props.delay);
+	      } else if (this.props.onEnd) {
+	        this.props.onEnd();
 	      }
 	    }
 	
@@ -23777,6 +24416,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	          cancelAnimationFrame(this.raf);
 	          this.queue.shift();
 	          this.traverseQueue();
+	        } else if (this.props.onEnd) {
+	          this.props.onEnd();
 	        }
 	        return;
 	      }
@@ -23808,6 +24449,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  velocity: _react2["default"].PropTypes.number,
 	  easing: _react2["default"].PropTypes.string,
 	  delay: _react2["default"].PropTypes.number,
+	  onEnd: _react2["default"].PropTypes.func,
 	  data: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.object, _react2["default"].PropTypes.array])
 	};
 	
