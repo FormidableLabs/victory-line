@@ -5,6 +5,20 @@ import _ from "lodash";
 import log from "../log";
 import {VictoryAnimation} from "victory-animation";
 
+const styles = {
+  base: {
+    width: 500,
+    height: 300,
+    margin: 50
+  },
+  data: {
+    strokeWidth: 2,
+    fill: "none",
+    stroke: "#756f6a",
+    opacity: 1
+  },
+  labels: {}
+};
 
 class VLine extends React.Component {
   constructor(props) {
@@ -34,14 +48,15 @@ class VLine extends React.Component {
   }
 
   getStyles(props) {
-    return _.merge({
-      fill: "none",
-      stroke: "darkgrey",
-      strokeWidth: 2,
-      margin: 5,
-      width: 500,
-      height: 200
-    }, props.style);
+    if (!props.style) {
+      return styles;
+    }
+    const {data, labels, ...base} = props.style;
+    return {
+      base: _.merge({}, styles.base, base),
+      data: _.merge({}, styles.data, data),
+      labels: _.merge({}, styles.labels, labels)
+    };
   }
 
   getScale(props, axis) {
@@ -107,9 +122,10 @@ class VLine extends React.Component {
       return props.range[axis] ? props.range[axis] : props.range;
     }
     // if the range is not given in props, calculate it from width, height and margin
+    const style = this.style.base;
     return axis === "x" ?
-      [this.style.margin, this.style.width - this.style.margin] :
-      [this.style.height - this.style.margin, this.style.margin];
+      [style.margin, style.width - style.margin] :
+      [style.height - style.margin, style.margin];
   }
 
   getData(props) {
@@ -159,19 +175,19 @@ class VLine extends React.Component {
       .interpolate(this.props.interpolation)
       .x((data) => xScale(data.x))
       .y((data) => yScale(data.y));
-    return <path style={this.style} d={lineFunction(this.dataset)}/>;
+    return <path style={this.style.data} d={lineFunction(this.dataset)}/>;
   }
 
   render() {
     if (this.props.containerElement === "svg") {
       return (
-        <svg style={this.style}>
+        <svg style={this.style.base}>
           {this.drawLine()}
         </svg>
       );
     }
     return (
-      <g style={this.style}>
+      <g style={this.style.base}>
         {this.drawLine()}
       </g>
     );
@@ -213,9 +229,9 @@ const propTypes = {
    * The style prop specifies styles for your chart. VictoryLine relies on Radium,
    * so valid Radium style objects should work for this prop, however height, width, and margin
    * are used to calculate range, and need to be expressed as a number of pixels
-   * @example {stroke: "blue", width: 500, height: 300}
+   * @example {width: 300, margin: 50, data: {stroke: "red", opacity, 0.8}}
    */
-  style: React.PropTypes.node,
+  style: React.PropTypes.object,
   /**
    * The data prop specifies the data to be plotted. Data should be in the form of an array
    * of data points where each data point should be an object with x and y properties.
