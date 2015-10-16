@@ -49,6 +49,7 @@ class App extends React.Component {
         <VictoryLine
           style={{border: "2px solid black", data: this.state.style}}
           data={this.state.data}
+          label="label"
           animate={{velocity: 0.03}}/>
 
         <VictoryLine style={{border: "2px solid black", data: {stroke: "blue"}}}
