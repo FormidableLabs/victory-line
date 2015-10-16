@@ -17,7 +17,12 @@ const styles = {
     stroke: "#756f6a",
     opacity: 1
   },
-  labels: {}
+  labels: {
+    padding: 5,
+    fontFamily: "Helvetica",
+    fontSize: 10,
+    strokeWidth: 1
+  }
 };
 
 class VLine extends React.Component {
@@ -175,6 +180,22 @@ class VLine extends React.Component {
       .interpolate(this.props.interpolation)
       .x((data) => xScale(data.x))
       .y((data) => yScale(data.y));
+    if (this.props.label) {
+      const x = xScale.call(this, _.last(this.dataset).x);
+      const y = yScale.call(this, _.last(this.dataset).y);
+      return (
+        <g>
+          <path style={this.style.data} d={lineFunction(this.dataset)}/>
+          <text
+            x={x}
+            y={y}
+            dx={this.style.labels.padding}
+            style={_.merge({}, this.style.data, this.style.labels)}>
+            {this.props.label}
+          </text>
+        </g>
+      );
+    }
     return <path style={this.style.data} d={lineFunction(this.dataset)}/>;
   }
 
@@ -345,7 +366,8 @@ const propTypes = {
    * compose line with other chart components, the containerElement prop should
    * be "g", and will need to be rendered within an svg tag.
    */
-  containerElement: React.PropTypes.oneOf(["svg", "g"])
+  containerElement: React.PropTypes.oneOf(["svg", "g"]),
+  label: React.PropTypes.string
 };
 
 const defaultProps = {
