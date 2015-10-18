@@ -122,12 +122,127 @@ return /******/ (function(modules) { // webpackBootstrap
 	    padding: 5,
 	    fontFamily: "Helvetica",
 	    fontSize: 10,
-	    strokeWidth: 1
+	    strokeWidth: 0,
+	    stroke: "transparent",
+	    textAnchor: "start"
 	  }
 	};
 	
 	var VLine = (function (_React$Component) {
 	  _inherits(VLine, _React$Component);
+	
+	  _createClass(VLine, null, [{
+	    key: "propTypes",
+	    value: {
+	      /**
+	       * The style prop specifies styles for your chart. VictoryLine relies on Radium,
+	       * so valid Radium style objects should work for this prop, however height, width, and margin
+	       * are used to calculate range, and need to be expressed as a number of pixels
+	       * @example {width: 300, margin: 50, data: {stroke: "red", opacity, 0.8}}
+	       */
+	      style: _react2["default"].PropTypes.object,
+	      /**
+	       * The data prop specifies the data to be plotted. Data should be in the form of an array
+	       * of data points where each data point should be an object with x and y properties.
+	       * @exampes [
+	       *   {x: 1, y: 125},
+	       *   {x: 10, y: 257},
+	       *   {x: 100, y: 345},
+	       * ]
+	       */
+	      data: _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.shape({
+	        x: _react2["default"].PropTypes.any,
+	        y: _react2["default"].PropTypes.any
+	      })),
+	      /**
+	       * The x props provides another way to supply data for line to plot. This prop can be given
+	       * as an array of values, and it will be plotted against whatever y prop is provided. If no
+	       * props are provided for y, the values in x will be plotted as the identity function (x) => x.
+	       * @examples [1, 2, 3]
+	       */
+	      x: _react2["default"].PropTypes.array,
+	      /**
+	       * The y props provides another way to supply data for line to plot. This prop can be given
+	       * as a function of x, or an array of values. If x props are given, they will be used
+	       * in plotting (x, y) data points. If x props are not provided, a set of x values
+	       * evenly spaced across the x domain will be calculated, and used for plotting data points.
+	       * @examples (x) => Math.sin(x), [1, 2, 3]
+	       */
+	      y: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.array, _react2["default"].PropTypes.func]),
+	      /**
+	       * The domain prop describes the range of values your chart will include. This prop can be
+	       * given as a array of the minimum and maximum expected values for your chart,
+	       * or as an object that specifies separate arrays for x and y.
+	       * If this prop is not provided, a domain will be calculated from data, or other
+	       * available information.
+	       * @exampes [-1, 1], {x: [0, 100], y: [0, 1]}
+	       */
+	      domain: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.array, _react2["default"].PropTypes.shape({
+	        x: _react2["default"].PropTypes.array,
+	        y: _react2["default"].PropTypes.array
+	      })]),
+	      /**
+	       * The range prop describes the range of pixels your chart will cover. This prop can be
+	       * given as a array of the minimum and maximum expected values for your chart,
+	       * or as an object that specifies separate arrays for x and y.
+	       * If this prop is not provided, a range will be calculated based on the height,
+	       * width, and margin provided in the style prop, or in default styles. It is usually
+	       * a good idea to let the chart component calculate its own range.
+	       * @exampes [0, 500], {x: [0, 500], y: [500, 300]}
+	       */
+	      range: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.array, _react2["default"].PropTypes.shape({
+	        x: _react2["default"].PropTypes.array,
+	        y: _react2["default"].PropTypes.array
+	      })]),
+	      /**
+	       * The scale prop determines which scales your chart should use. This prop can be
+	       * given as a function, or as an object that specifies separate functions for x and y.
+	       * @exampes d3.time.scale(), {x: d3.scale.linear(), y: d3.scale.log()}
+	       */
+	      scale: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.func, _react2["default"].PropTypes.shape({
+	        x: _react2["default"].PropTypes.func,
+	        y: _react2["default"].PropTypes.func
+	      })]),
+	      /**
+	       * The samples prop specifies how many individual points to plot when plotting
+	       * y as a function of x. Samples is ignored if x props are provided instead.
+	       */
+	      samples: _react2["default"].PropTypes.number,
+	      /**
+	       * The interpolation prop determines how data points should be connected
+	       * when plotting a line
+	       */
+	      interpolation: _react2["default"].PropTypes.oneOf(["linear", "linear-closed", "step", "step-before", "step-after", "basis", "basis-open", "basis-closed", "bundle", "cardinal", "cardinal-open", "cardinal-closed", "monotone"]),
+	      /**
+	       * The animate prop specifies props for victory-animation to use. It this prop is
+	       * not given, the line will not tween between changing data / style props.
+	       * Large datasets might animate slowly due to the inherent limits of svg rendering.
+	       * @examples {line: {delay: 5, velocity: 10, onEnd: () => alert("woo!")}}
+	       */
+	      animate: _react2["default"].PropTypes.object,
+	      /**
+	       * The containerElement prop specifies which element the compnent will render.
+	       * For standalone lines, the containerElement prop should be "svg". If you need to
+	       * compose line with other chart components, the containerElement prop should
+	       * be "g", and will need to be rendered within an svg tag.
+	       */
+	      containerElement: _react2["default"].PropTypes.oneOf(["svg", "g"]),
+	      label: _react2["default"].PropTypes.string
+	    },
+	    enumerable: true
+	  }, {
+	    key: "defaultProps",
+	    value: {
+	      interpolation: "basis",
+	      samples: 50,
+	      scale: _d32["default"].scale.linear(),
+	      y: function y(x) {
+	        return x;
+	      },
+	      containerElement: "svg"
+	    },
+	    enumerable: true
+	  }]);
 	
 	  function VLine(props) {
 	    _classCallCheck(this, VLine);
@@ -293,6 +408,29 @@ return /******/ (function(modules) { // webpackBootstrap
 	      return props.y;
 	    }
 	  }, {
+	    key: "getTextLines",
+	    value: function getTextLines(text, x) {
+	      if (!text) {
+	        return "";
+	      }
+	      // TODO: split text to new lines based on font size, number of characters and total width
+	      // TODO: determine line height ("1.2em") based on font size
+	      var dx = this.style.labels.padding;
+	      var textString = "" + text;
+	      var textLines = textString.split("\n");
+	      return _lodash2["default"].map(textLines, function (line, index) {
+	        return index === 0 ? _react2["default"].createElement(
+	          "tspan",
+	          { x: x, dx: dx, key: "text-line-" + index },
+	          line
+	        ) : _react2["default"].createElement(
+	          "tspan",
+	          { x: x, dx: dx, dy: "1.2em", key: "text-line-" + index },
+	          line
+	        );
+	      });
+	    }
+	  }, {
 	    key: "drawLine",
 	    value: function drawLine() {
 	      var xScale = this.scale.x;
@@ -305,6 +443,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.props.label) {
 	        var x = xScale.call(this, _lodash2["default"].last(this.dataset).x);
 	        var y = yScale.call(this, _lodash2["default"].last(this.dataset).y);
+	
+	        // match labels styles to data style by default (fill, opacity, others?)
+	        var opacity = this.style.data.opacity;
+	        // match label color to data color if it is not given.
+	        // use fill instead of stroke for text
+	        var fill = this.style.data.stroke;
 	        return _react2["default"].createElement(
 	          "g",
 	          null,
@@ -314,9 +458,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            {
 	              x: x,
 	              y: y,
-	              dx: this.style.labels.padding,
-	              style: _lodash2["default"].merge({}, this.style.data, this.style.labels) },
-	            this.props.label
+	              style: _lodash2["default"].merge({}, { fill: fill, opacity: opacity }, this.style.labels) },
+	            this.getTextLines(this.props.label, x)
 	          )
 	        );
 	      }
@@ -346,6 +489,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	var VictoryLine = (function (_React$Component2) {
 	  _inherits(VictoryLine, _React$Component2);
 	
+	  _createClass(VictoryLine, null, [{
+	    key: "propTypes",
+	
+	    /* eslint-disable react/prop-types */
+	    // ^ see: https://github.com/yannickcr/eslint-plugin-react/issues/106
+	    value: _extends({}, VLine.propTypes),
+	    enumerable: true
+	  }, {
+	    key: "defaultProps",
+	    value: _extends({}, VLine.defaultProps),
+	    enumerable: true
+	  }]);
+	
 	  function VictoryLine(props) {
 	    _classCallCheck(this, _VictoryLine);
 	
@@ -358,26 +514,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this = this;
 	
 	      if (this.props.animate) {
-	        var _ret = (function () {
-	          // dont interpolate y if it is a function!
-	          var yFunc = _lodash2["default"].isFunction(_this.props.y) ? _this.props.y : undefined;
-	          return {
-	            v: _react2["default"].createElement(
-	              _victoryAnimation.VictoryAnimation,
-	              _extends({}, _this.props.animate, { data: _this.props }),
-	              function (props) {
-	                return _react2["default"].createElement(VLine, _extends({}, props, {
-	                  animate: _this.props.animate,
-	                  scale: _this.props.scale,
-	                  y: yFunc || props.y,
-	                  containerElement: _this.props.containerElement,
-	                  interpolation: _this.props.interpolation }));
-	              }
-	            )
-	          };
-	        })();
-	
-	        if (typeof _ret === "object") return _ret.v;
+	        // Do less work by having `VictoryAnimation` tween only values that
+	        // make sense to tween. In the future, allow customization of animated
+	        // prop whitelist/blacklist?
+	        var animateData = _lodash2["default"].omit(this.props, ["animate", "scale", "containerElement", "interpolation"]);
+	        return _react2["default"].createElement(
+	          _victoryAnimation.VictoryAnimation,
+	          _extends({}, this.props.animate, { data: animateData }),
+	          function (props) {
+	            return _react2["default"].createElement(VLine, _extends({}, _this.props, props));
+	          }
+	        );
 	      }
 	      return _react2["default"].createElement(VLine, this.props);
 	    }
@@ -387,118 +534,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  VictoryLine = (0, _radium2["default"])(VictoryLine) || VictoryLine;
 	  return VictoryLine;
 	})(_react2["default"].Component);
-	
-	var propTypes = {
-	  /**
-	   * The style prop specifies styles for your chart. VictoryLine relies on Radium,
-	   * so valid Radium style objects should work for this prop, however height, width, and margin
-	   * are used to calculate range, and need to be expressed as a number of pixels
-	   * @example {width: 300, margin: 50, data: {stroke: "red", opacity, 0.8}}
-	   */
-	  style: _react2["default"].PropTypes.object,
-	  /**
-	   * The data prop specifies the data to be plotted. Data should be in the form of an array
-	   * of data points where each data point should be an object with x and y properties.
-	   * @exampes [
-	   *   {x: 1, y: 125},
-	   *   {x: 10, y: 257},
-	   *   {x: 100, y: 345},
-	   * ]
-	   */
-	  data: _react2["default"].PropTypes.arrayOf(_react2["default"].PropTypes.shape({
-	    x: _react2["default"].PropTypes.any,
-	    y: _react2["default"].PropTypes.any
-	  })),
-	  /**
-	   * The x props provides another way to supply data for line to plot. This prop can be given
-	   * as an array of values, and it will be plotted against whatever y prop is provided. If no
-	   * props are provided for y, the values in x will be plotted as the identity function (x) => x.
-	   * @examples [1, 2, 3]
-	   */
-	  x: _react2["default"].PropTypes.array,
-	  /**
-	   * The y props provides another way to supply data for line to plot. This prop can be given
-	   * as a function of x, or an array of values. If x props are given, they will be used
-	   * in plotting (x, y) data points. If x props are not provided, a set of x values
-	   * evenly spaced across the x domain will be calculated, and used for plotting data points.
-	   * @examples (x) => Math.sin(x), [1, 2, 3]
-	   */
-	  y: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.array, _react2["default"].PropTypes.func]),
-	  /**
-	   * The domain prop describes the range of values your chart will include. This prop can be
-	   * given as a array of the minimum and maximum expected values for your chart,
-	   * or as an object that specifies separate arrays for x and y.
-	   * If this prop is not provided, a domain will be calculated from data, or other
-	   * available information.
-	   * @exampes [-1, 1], {x: [0, 100], y: [0, 1]}
-	   */
-	  domain: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.array, _react2["default"].PropTypes.shape({
-	    x: _react2["default"].PropTypes.array,
-	    y: _react2["default"].PropTypes.array
-	  })]),
-	  /**
-	   * The range prop describes the range of pixels your chart will cover. This prop can be
-	   * given as a array of the minimum and maximum expected values for your chart,
-	   * or as an object that specifies separate arrays for x and y.
-	   * If this prop is not provided, a range will be calculated based on the height,
-	   * width, and margin provided in the style prop, or in default styles. It is usually
-	   * a good idea to let the chart component calculate its own range.
-	   * @exampes [0, 500], {x: [0, 500], y: [500, 300]}
-	   */
-	  range: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.array, _react2["default"].PropTypes.shape({
-	    x: _react2["default"].PropTypes.array,
-	    y: _react2["default"].PropTypes.array
-	  })]),
-	  /**
-	   * The scale prop determines which scales your chart should use. This prop can be
-	   * given as a function, or as an object that specifies separate functions for x and y.
-	   * @exampes d3.time.scale(), {x: d3.scale.linear(), y: d3.scale.log()}
-	   */
-	  scale: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.func, _react2["default"].PropTypes.shape({
-	    x: _react2["default"].PropTypes.func,
-	    y: _react2["default"].PropTypes.func
-	  })]),
-	  /**
-	   * The samples prop specifies how many individual points to plot when plotting
-	   * y as a function of x. Samples is ignored if x props are provided instead.
-	   */
-	  samples: _react2["default"].PropTypes.number,
-	  /**
-	   * The interpolation prop determines how data points should be connected
-	   * when plotting a line
-	   */
-	  interpolation: _react2["default"].PropTypes.oneOf(["linear", "linear-closed", "step", "step-before", "step-after", "basis", "basis-open", "basis-closed", "bundle", "cardinal", "cardinal-open", "cardinal-closed", "monotone"]),
-	  /**
-	   * The animate prop specifies props for victory-animation to use. It this prop is
-	   * not given, the line will not tween between changing data / style props.
-	   * Large datasets might animate slowly due to the inherent limits of svg rendering.
-	   * @examples {line: {delay: 5, velocity: 10, onEnd: () => alert("woo!")}}
-	   */
-	  animate: _react2["default"].PropTypes.object,
-	  /**
-	   * The containerElement prop specifies which element the compnent will render.
-	   * For standalone lines, the containerElement prop should be "svg". If you need to
-	   * compose line with other chart components, the containerElement prop should
-	   * be "g", and will need to be rendered within an svg tag.
-	   */
-	  containerElement: _react2["default"].PropTypes.oneOf(["svg", "g"]),
-	  label: _react2["default"].PropTypes.string
-	};
-	
-	var defaultProps = {
-	  interpolation: "basis",
-	  samples: 50,
-	  scale: _d32["default"].scale.linear(),
-	  y: function y(x) {
-	    return x;
-	  },
-	  containerElement: "svg"
-	};
-	
-	VictoryLine.propTypes = propTypes;
-	VictoryLine.defaultProps = defaultProps;
-	VLine.propTypes = propTypes;
-	VLine.defaultProps = defaultProps;
 	
 	exports["default"] = VictoryLine;
 	module.exports = exports["default"];
