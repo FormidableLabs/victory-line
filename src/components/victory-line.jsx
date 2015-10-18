@@ -223,21 +223,15 @@ class VictoryLine extends React.Component {
 
   render() {
     if (this.props.animate) {
-      // dont interpolate y if it is a function!
-      const yFunc = _.isFunction(this.props.y) ? this.props.y : undefined;
+      // Do less work by having `VictoryAnimation` tween only values that
+      // make sense to tween. In the future, allow customization of animated
+      // prop whitelist/blacklist?
+      const animateData = _.omit(this.props, [
+        "animate", "scale", "containerElement", "interpolation"
+      ]);
       return (
-        <VictoryAnimation {...this.props.animate} data={this.props}>
-          {(props) => {
-            return (
-              <VLine
-                {...props}
-                animate={this.props.animate}
-                scale={this.props.scale}
-                y={yFunc || props.y}
-                containerElement={this.props.containerElement}
-                interpolation={this.props.interpolation}/>
-            );
-          }}
+        <VictoryAnimation {...this.props.animate} data={animateData}>
+          {props => <VLine {...this.props} {...props}/>}
         </VictoryAnimation>
       );
     }
