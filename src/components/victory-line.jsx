@@ -21,7 +21,9 @@ const styles = {
     padding: 5,
     fontFamily: "Helvetica",
     fontSize: 10,
-    strokeWidth: 1
+    strokeWidth: 0,
+    stroke: "transparent",
+    textAnchor: "start"
   }
 };
 
@@ -173,6 +175,22 @@ class VLine extends React.Component {
     return props.y;
   }
 
+  getTextLines(text, x) {
+    if (!text) {
+      return "";
+    }
+    const dx = this.style.labels.padding;
+    // TODO: split text to new lines based on font size, number of characters and total width
+    // TODO: determine line height ("1.2em") based on font size
+    const textString = "" + text;
+    const textLines = textString.split("\n");
+    return _.map(textLines, (line, index) => {
+      return index === 0 ?
+      (<tspan x={x} dx={dx} key={"text-line-" + index}>{line}</tspan>) :
+      (<tspan x={x} dx={dx} dy="1.2em" key={"text-line-" + index}>{line}</tspan>);
+    });
+  }
+
   drawLine() {
     const xScale = this.scale.x;
     const yScale = this.scale.y;
@@ -183,15 +201,17 @@ class VLine extends React.Component {
     if (this.props.label) {
       const x = xScale.call(this, _.last(this.dataset).x);
       const y = yScale.call(this, _.last(this.dataset).y);
+      // if label fill color is not given, the label text fill should match
+      // the data stroke color (fill looks much better for text)
+      const fill = this.style.data.stroke;
       return (
         <g>
           <path style={this.style.data} d={lineFunction(this.dataset)}/>
           <text
             x={x}
             y={y}
-            dx={this.style.labels.padding}
-            style={_.merge({}, this.style.data, this.style.labels)}>
-            {this.props.label}
+            style={_.merge({}, this.style.data, {fill}, this.style.labels)}>
+            {this.getTextLines(this.props.label, x)}
           </text>
         </g>
       );
