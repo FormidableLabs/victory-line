@@ -179,9 +179,9 @@ class VLine extends React.Component {
     if (!text) {
       return "";
     }
-    const dx = this.style.labels.padding;
     // TODO: split text to new lines based on font size, number of characters and total width
     // TODO: determine line height ("1.2em") based on font size
+    const dx = this.style.labels.padding;
     const textString = "" + text;
     const textLines = textString.split("\n");
     return _.map(textLines, (line, index) => {
@@ -201,8 +201,11 @@ class VLine extends React.Component {
     if (this.props.label) {
       const x = xScale.call(this, _.last(this.dataset).x);
       const y = yScale.call(this, _.last(this.dataset).y);
-      // if label fill color is not given, the label text fill should match
-      // the data stroke color (fill looks much better for text)
+
+      // match labels styles to data style by default (fill, opacity, others?)
+      const opacity = this.style.data.opacity;
+      // match label color to data color if it is not given.
+      // use fill instead of stroke for text
       const fill = this.style.data.stroke;
       return (
         <g>
@@ -210,7 +213,7 @@ class VLine extends React.Component {
           <text
             x={x}
             y={y}
-            style={_.merge({}, this.style.data, {fill}, this.style.labels)}>
+            style={_.merge({}, {fill, opacity}, this.style.labels)}>
             {this.getTextLines(this.props.label, x)}
           </text>
         </g>
