@@ -355,7 +355,7 @@ class VLine extends React.Component {
   }
 
   render() {
-    if (this.props.standalone) {
+    if (this.props.standalone === true) {
       return (
         <svg style={this.style.base}>
           {this.drawLine()}
