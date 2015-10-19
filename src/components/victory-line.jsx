@@ -144,12 +144,11 @@ class VLine extends React.Component {
      */
     animate: React.PropTypes.object,
     /**
-     * The containerElement prop specifies which element the compnent will render.
-     * For standalone lines, the containerElement prop should be "svg". If you need to
-     * compose line with other chart components, the containerElement prop should
-     * be "g", and will need to be rendered within an svg tag.
+     * The standalone prop determines whether the component will render a standalone svg
+     * or a <g> tag that will be included in an external svg. Set standalone to false to
+     * compose VictoryLine with other components within an enclosing <svg> tag.
      */
-    containerElement: React.PropTypes.oneOf(["svg", "g"]),
+    standalone: React.PropTypes.bool,
     label: React.PropTypes.string
   };
 
@@ -158,7 +157,7 @@ class VLine extends React.Component {
     samples: 50,
     scale: d3.scale.linear(),
     y: (x) => x,
-    containerElement: "svg"
+    standalone: true
   };
 
   constructor(props) {
@@ -356,7 +355,7 @@ class VLine extends React.Component {
   }
 
   render() {
-    if (this.props.containerElement === "svg") {
+    if (this.props.standalone === true) {
       return (
         <svg style={this.style.base}>
           {this.drawLine()}
@@ -388,7 +387,7 @@ export default class VictoryLine extends React.Component {
       // make sense to tween. In the future, allow customization of animated
       // prop whitelist/blacklist?
       const animateData = _.omit(this.props, [
-        "animate", "scale", "containerElement", "interpolation"
+        "animate", "scale", "standalone", "interpolation"
       ]);
       return (
         <VictoryAnimation {...this.props.animate} data={animateData}>
