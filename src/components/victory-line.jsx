@@ -387,7 +387,7 @@ export default class VictoryLine extends React.Component {
       // make sense to tween. In the future, allow customization of animated
       // prop whitelist/blacklist?
       const animateData = _.omit(this.props, [
-        "animate", "scale", "containerElement", "interpolation"
+        "animate", "scale", "standalone", "interpolation"
       ]);
       return (
         <VictoryAnimation {...this.props.animate} data={animateData}>
