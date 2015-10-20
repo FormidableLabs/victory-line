@@ -78,8 +78,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 	
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
-	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
@@ -107,7 +105,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _victoryAnimation = __webpack_require__(31);
 	
 	var styles = {
-	  base: {
+	  parent: {
 	    width: 500,
 	    height: 300,
 	    margin: 50
@@ -221,25 +219,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	       */
 	      animate: _react2["default"].PropTypes.object,
 	      /**
-	       * The containerElement prop specifies which element the compnent will render.
-	       * For standalone lines, the containerElement prop should be "svg". If you need to
-	       * compose line with other chart components, the containerElement prop should
-	       * be "g", and will need to be rendered within an svg tag.
+	       * The standalone prop determines whether the component will render a standalone svg
+	       * or a <g> tag that will be included in an external svg. Set standalone to false to
+	       * compose VictoryLine with other components within an enclosing <svg> tag.
 	       */
-	      containerElement: _react2["default"].PropTypes.oneOf(["svg", "g"]),
+	      standalone: _react2["default"].PropTypes.bool,
 	      label: _react2["default"].PropTypes.string
 	    },
 	    enumerable: true
 	  }, {
 	    key: "defaultProps",
 	    value: {
-	      interpolation: "basis",
+	      interpolation: "linear",
 	      samples: 50,
 	      scale: _d32["default"].scale.linear(),
 	      y: function y(x) {
 	        return x;
 	      },
-	      containerElement: "svg"
+	      standalone: true
 	    },
 	    enumerable: true
 	  }]);
@@ -283,11 +280,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _props$style = props.style;
 	      var data = _props$style.data;
 	      var labels = _props$style.labels;
-	
-	      var base = _objectWithoutProperties(_props$style, ["data", "labels"]);
+	      var parent = _props$style.parent;
 	
 	      return {
-	        base: _lodash2["default"].merge({}, styles.base, base),
+	        parent: _lodash2["default"].merge({}, styles.parent, parent),
 	        data: _lodash2["default"].merge({}, styles.data, data),
 	        labels: _lodash2["default"].merge({}, styles.labels, labels)
 	      };
@@ -359,7 +355,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return props.range[axis] ? props.range[axis] : props.range;
 	      }
 	      // if the range is not given in props, calculate it from width, height and margin
-	      var style = this.style.base;
+	      var style = this.style.parent;
 	      return axis === "x" ? [style.margin, style.width - style.margin] : [style.height - style.margin, style.margin];
 	    }
 	  }, {
@@ -468,16 +464,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }, {
 	    key: "render",
 	    value: function render() {
-	      if (this.props.containerElement === "svg") {
+	      if (this.props.standalone === true) {
 	        return _react2["default"].createElement(
 	          "svg",
-	          { style: this.style.base },
+	          { style: this.style.parent },
 	          this.drawLine()
 	        );
 	      }
 	      return _react2["default"].createElement(
 	        "g",
-	        { style: this.style.base },
+	        { style: this.style.parent },
 	        this.drawLine()
 	      );
 	    }
@@ -517,7 +513,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // Do less work by having `VictoryAnimation` tween only values that
 	        // make sense to tween. In the future, allow customization of animated
 	        // prop whitelist/blacklist?
-	        var animateData = _lodash2["default"].omit(this.props, ["animate", "scale", "containerElement", "interpolation"]);
+	        var animateData = _lodash2["default"].omit(this.props, ["animate", "scale", "standalone", "interpolation"]);
 	        return _react2["default"].createElement(
 	          _victoryAnimation.VictoryAnimation,
 	          _extends({}, this.props.animate, { data: animateData }),
