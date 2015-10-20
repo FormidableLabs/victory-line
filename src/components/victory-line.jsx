@@ -6,7 +6,7 @@ import log from "../log";
 import {VictoryAnimation} from "victory-animation";
 
 const styles = {
-  base: {
+  parent: {
     width: 500,
     height: 300,
     margin: 50
@@ -153,7 +153,7 @@ class VLine extends React.Component {
   };
 
   static defaultProps = {
-    interpolation: "basis",
+    interpolation: "linear",
     samples: 50,
     scale: d3.scale.linear(),
     y: (x) => x,
@@ -190,9 +190,9 @@ class VLine extends React.Component {
     if (!props.style) {
       return styles;
     }
-    const {data, labels, ...base} = props.style;
+    const {data, labels, parent} = props.style;
     return {
-      base: _.merge({}, styles.base, base),
+      parent: _.merge({}, styles.parent, parent),
       data: _.merge({}, styles.data, data),
       labels: _.merge({}, styles.labels, labels)
     };
@@ -261,7 +261,7 @@ class VLine extends React.Component {
       return props.range[axis] ? props.range[axis] : props.range;
     }
     // if the range is not given in props, calculate it from width, height and margin
-    const style = this.style.base;
+    const style = this.style.parent;
     return axis === "x" ?
       [style.margin, style.width - style.margin] :
       [style.height - style.margin, style.margin];
@@ -357,13 +357,13 @@ class VLine extends React.Component {
   render() {
     if (this.props.standalone === true) {
       return (
-        <svg style={this.style.base}>
+        <svg style={this.style.parent}>
           {this.drawLine()}
         </svg>
       );
     }
     return (
-      <g style={this.style.base}>
+      <g style={this.style.parent}>
         {this.drawLine()}
       </g>
     );
