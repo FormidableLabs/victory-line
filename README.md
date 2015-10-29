@@ -133,7 +133,7 @@ Controls the number of points generated when plotting a function.
 A `d3` scale. `scale` can be given as a function, or as an object specifying  a scale function each dimension, like so:
 
 ```
-scale: {{
+scale={{
   x: () => d3.scale.linear(),
   y: () => d3.scale.log()
 }}
