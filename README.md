@@ -101,10 +101,10 @@ An array of numbers OR a function in terms of `x` (i.e. `(x) => x * x`).
 `domain` can be passed in as a single array, or as an object with arrays corresponding to each dimension like so:
 
 ```
-domain={
+domain={{
   x: [0, 5],
   y: [5, 0]
-}
+}}
 ```
 
 If `domain` is not explicitly specified, it will be calculated from `data`, `x`, or `y`.  If these values are not specified either, the `domain` will be set to the default domain for the provided scale.
@@ -114,10 +114,10 @@ If `domain` is not explicitly specified, it will be calculated from `data`, `x`,
 `range` can be passed in as a single array, or as an object with arrays corresponding to each dimension like so:
 
 ```
-range={
+range={{
   x: [0, 5],
   y: [5, 0]
-}
+}}
 ```
 
 If `range` is not explicitly specified, it will be calculated from `height`, `width`, and `margin` properties of the styles for this component.
@@ -133,10 +133,10 @@ Controls the number of points generated when plotting a function.
 A `d3` scale. `scale` can be given as a function, or as an object specifying  a scale function each dimension, like so:
 
 ```
-scale: {
+scale: {{
   x: () => d3.scale.linear(),
   y: () => d3.scale.log()
-}
+}}
 ```
 
 **Defaults to:** `d3.scale.linear`
