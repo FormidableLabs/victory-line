@@ -27,7 +27,9 @@ const styles = {
   }
 };
 
-class VLine extends React.Component {
+@Radium
+export default class VictoryLine extends React.Component {
+  static role = "line";
   static propTypes = {
     /**
      * The style prop specifies styles for your chart. VictoryLine relies on Radium,
@@ -160,6 +162,26 @@ class VLine extends React.Component {
     standalone: true
   };
 
+  render() {
+    if (this.props.animate) {
+      // Do less work by having `VictoryAnimation` tween only values that
+      // make sense to tween. In the future, allow customization of animated
+      // prop whitelist/blacklist?
+      const animateData = _.omit(this.props, [
+        "animate", "scale", "standalone", "interpolation"
+      ]);
+      return (
+        <VictoryAnimation {...this.props.animate} data={animateData}>
+          {props => <VLine {...this.props} {...props}/>}
+        </VictoryAnimation>
+      );
+    }
+    return (<VLine {...this.props}/>);
+  }
+}
+
+class VLine extends React.Component {
+  /* eslint-disable react/prop-types */
   constructor(props) {
     super(props);
     this.getCalculatedValues(props);
@@ -225,7 +247,6 @@ class VLine extends React.Component {
       return this._getDomainFromScale(props, axis);
     }
   }
-
 
   // helper method for getDomain
   _getDomainFromData(props, axis) {
@@ -367,34 +388,5 @@ class VLine extends React.Component {
         {this.drawLine()}
       </g>
     );
-  }
-}
-
-@Radium
-export default class VictoryLine extends React.Component {
-  /* eslint-disable react/prop-types */
-  // ^ see: https://github.com/yannickcr/eslint-plugin-react/issues/106
-  static propTypes = {...VLine.propTypes};
-  static defaultProps = {...VLine.defaultProps};
-
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    if (this.props.animate) {
-      // Do less work by having `VictoryAnimation` tween only values that
-      // make sense to tween. In the future, allow customization of animated
-      // prop whitelist/blacklist?
-      const animateData = _.omit(this.props, [
-        "animate", "scale", "standalone", "interpolation"
-      ]);
-      return (
-        <VictoryAnimation {...this.props.animate} data={animateData}>
-          {props => <VLine {...this.props} {...props}/>}
-        </VictoryAnimation>
-      );
-    }
-    return (<VLine {...this.props}/>);
   }
 }
