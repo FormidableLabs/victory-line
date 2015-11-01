@@ -29,7 +29,6 @@ const styles = {
 
 @Radium
 export default class VictoryLine extends React.Component {
-  static role = "line";
   static propTypes = {
     /**
      * The style prop specifies styles for your chart. VictoryLine relies on Radium,
