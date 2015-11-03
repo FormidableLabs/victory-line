@@ -7,65 +7,10 @@ Victory Line
 functions or passed in data, from a clean `React` interface. Style, data,
 interpolate, scale -- all can be overridden by passing in new values.
 
-## Examples
+IMPORTANT
+=========
 
-The plain component comes with a random data generator, so rendering will
-produce *some* output.
-
-This:
-
-``` javascript
-<VictoryLine />
-```
-
-will produce a straight line.
-
-Styles can be overridden by passing them in as a map. Also, we can graph
-arbitrary equations.
-
-So this:
-
-``` javascript
-<VictoryLine style={{stroke: "blue"}}
-y={(x) => Math.sin(x)}
-sample={25}/>
-```
-
-Makes this:
-
-![Oooooh! Ahhhhh!](victory-line_sin.png)
-
-Likewise:
-
-``` javascript
-<VictoryLine style={{stroke: "green"}}
-y={(x) => x * x} />
-```
-
-Makes this:
-
-![V. Nice](victory-line_equation.png)
-
-Or you can pass in your own data:
-
-``` javascript
-<VictoryLine data={[
-  {x: 1, y: 1},
-  {x: 2, y: 4},
-  {x: 3, y: 5},
-  {x: 4, y: 2},
-  {x: 5, y: 11},
-  {x: 6, y: 7},
-  {x: 7, y: 6},
-  {x: 8, y: 7},
-  {x: 9, y: 8},
-  {x: 10, y: 12}
-]}/>
-```
-
-Makes:
-
-![Victory!](victory-line_data-passed-in.png)
+This project is in a pre-release state. We're hard at work fixing bugs and improving the API. Be prepared for breaking changes! 
 
 ## The API
 
