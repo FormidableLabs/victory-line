@@ -378,17 +378,16 @@ export default class VictoryLine extends React.Component {
       );
     }
 
-    if (this.props.standalone === true) {
-      return (
-        <svg style={this.style.parent}>
-          {this.drawLine()}
-        </svg>
-      );
-    }
-    return (
+    const group = (
       <g style={this.style.parent}>
         {this.drawLine()}
       </g>
     );
+
+    return this.props.standalone ? (
+      <svg style={this.style.parent}>
+        {group}
+      </svg>
+    ) : group;
   }
 }
