@@ -377,17 +377,9 @@ export default class VictoryLine extends React.Component {
         </VictoryAnimation>
       );
     }
+    const style = this.style.parent;
+    const group = <g style={style}>{this.drawLine()}</g>;
 
-    const group = (
-      <g style={this.style.parent}>
-        {this.drawLine()}
-      </g>
-    );
-
-    return this.props.standalone ? (
-      <svg style={this.style.parent}>
-        {group}
-      </svg>
-    ) : group;
+    return this.props.standalone ? <svg style={style}>{group}</svg> : group;
   }
 }
