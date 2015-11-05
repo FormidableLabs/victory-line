@@ -34,7 +34,7 @@ export default class VictoryLine extends React.Component {
      * The style prop specifies styles for your chart. VictoryLine relies on Radium,
      * so valid Radium style objects should work for this prop, however height, width, and margin
      * are used to calculate range, and need to be expressed as a number of pixels
-     * @example {width: 300, margin: 50, data: {stroke: "red", opacity, 0.8}}
+     * @example {parent: {width: 300, margin: 50}, data: {stroke: "red", opacity, 0.8}}
      */
     style: React.PropTypes.object,
     /**
@@ -53,14 +53,14 @@ export default class VictoryLine extends React.Component {
       })
     ),
     /**
-     * The x props provides another way to supply data for line to plot. This prop can be given
+     * The x prop provides another way to supply data for line to plot. This prop can be given
      * as an array of values, and it will be plotted against whatever y prop is provided. If no
      * props are provided for y, the values in x will be plotted as the identity function (x) => x.
      * @examples [1, 2, 3]
      */
     x: React.PropTypes.array,
     /**
-     * The y props provides another way to supply data for line to plot. This prop can be given
+     * The y prop provides another way to supply data for line to plot. This prop can be given
      * as a function of x, or an array of values. If x props are given, they will be used
      * in plotting (x, y) data points. If x props are not provided, a set of x values
      * evenly spaced across the x domain will be calculated, and used for plotting data points.
@@ -150,6 +150,9 @@ export default class VictoryLine extends React.Component {
      * compose VictoryLine with other components within an enclosing <svg> tag.
      */
     standalone: React.PropTypes.bool,
+    /**
+     * The label prop specifies a label to display at the end of a line component
+     */
     label: React.PropTypes.string
   };
 
@@ -161,29 +164,12 @@ export default class VictoryLine extends React.Component {
     standalone: true
   };
 
-  render() {
-    if (this.props.animate) {
-      // Do less work by having `VictoryAnimation` tween only values that
-      // make sense to tween. In the future, allow customization of animated
-      // prop whitelist/blacklist?
-      const animateData = _.omit(this.props, [
-        "animate", "scale", "standalone", "interpolation"
-      ]);
-      return (
-        <VictoryAnimation {...this.props.animate} data={animateData}>
-          {props => <VLine {...this.props} {...props}/>}
-        </VictoryAnimation>
-      );
+  componentWillMount() {
+    // If animating, the `VictoryLine` instance wrapped in `VictoryAnimation`
+    // will compute these values.
+    if (!this.props.animate) {
+      this.getCalculatedValues(this.props);
     }
-    return (<VLine {...this.props}/>);
-  }
-}
-
-class VLine extends React.Component {
-  /* eslint-disable react/prop-types */
-  constructor(props) {
-    super(props);
-    this.getCalculatedValues(props);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -375,17 +361,25 @@ class VLine extends React.Component {
   }
 
   render() {
-    if (this.props.standalone === true) {
+    // If animating, return a `VictoryAnimation` element that will create
+    // a new `VictoryLine` with nearly identical props, except (1) tweened
+    // and (2) `animate` set to null so we don't recurse forever.
+    if (this.props.animate) {
+      // Do less work by having `VictoryAnimation` tween only values that
+      // make sense to tween. In the future, allow customization of animated
+      // prop whitelist/blacklist?
+      const animateData = _.omit(this.props, [
+        "animate", "scale", "standalone", "interpolation"
+      ]);
       return (
-        <svg style={this.style.parent}>
-          {this.drawLine()}
-        </svg>
+        <VictoryAnimation {...this.props.animate} data={animateData}>
+          {props => <VictoryLine {...this.props} {...props} animate={null}/>}
+        </VictoryAnimation>
       );
     }
-    return (
-      <g style={this.style.parent}>
-        {this.drawLine()}
-      </g>
-    );
+    const style = this.style.parent;
+    const group = <g style={style}>{this.drawLine()}</g>;
+
+    return this.props.standalone ? <svg style={style}>{group}</svg> : group;
   }
 }
