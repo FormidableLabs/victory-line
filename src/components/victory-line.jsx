@@ -21,8 +21,6 @@ const defaultStyles = {
   }
 };
 
-const defaultPadding = 30;
-
 @Radium
 export default class VictoryLine extends React.Component {
   static propTypes = {
@@ -211,12 +209,13 @@ export default class VictoryLine extends React.Component {
   }
 
   getPadding(props) {
-    const padding = _.isNumber(props.padding) ? props.padding : defaultPadding;
+    const padding = _.isNumber(props.padding) ? props.padding : 0;
+    const paddingObj = _.isObject(props.padding) ? props.padding : {};
     return {
-      top: props.padding.top || padding,
-      bottom: props.padding.bottom || padding,
-      left: props.padding.left || padding,
-      right: props.padding.right || padding
+      top: paddingObj.top || padding,
+      bottom: paddingObj.bottom || padding,
+      left: paddingObj.left || padding,
+      right: paddingObj.right || padding
     };
   }
 
