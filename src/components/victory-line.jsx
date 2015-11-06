@@ -2,15 +2,9 @@ import React from "react";
 import Radium from "radium";
 import d3 from "d3";
 import _ from "lodash";
-import log from "../log";
 import {VictoryAnimation} from "victory-animation";
 
-const styles = {
-  parent: {
-    width: 500,
-    height: 300,
-    margin: 50
-  },
+const defaultStyles = {
   data: {
     strokeWidth: 2,
     fill: "none",
@@ -27,16 +21,18 @@ const styles = {
   }
 };
 
+const defaultPadding = 30;
+
 @Radium
 export default class VictoryLine extends React.Component {
   static propTypes = {
     /**
-     * The style prop specifies styles for your chart. VictoryLine relies on Radium,
-     * so valid Radium style objects should work for this prop, however height, width, and margin
-     * are used to calculate range, and need to be expressed as a number of pixels
-     * @example {parent: {width: 300, margin: 50}, data: {stroke: "red", opacity, 0.8}}
+     * The animate prop specifies props for victory-animation to use. It this prop is
+     * not given, the line will not tween between changing data / style props.
+     * Large datasets might animate slowly due to the inherent limits of svg rendering.
+     * @examples {line: {delay: 5, velocity: 10, onEnd: () => alert("woo!")}}
      */
-    style: React.PropTypes.object,
+    animate: React.PropTypes.object,
     /**
      * The data prop specifies the data to be plotted. Data should be in the form of an array
      * of data points where each data point should be an object with x and y properties.
@@ -53,24 +49,6 @@ export default class VictoryLine extends React.Component {
       })
     ),
     /**
-     * The x prop provides another way to supply data for line to plot. This prop can be given
-     * as an array of values, and it will be plotted against whatever y prop is provided. If no
-     * props are provided for y, the values in x will be plotted as the identity function (x) => x.
-     * @examples [1, 2, 3]
-     */
-    x: React.PropTypes.array,
-    /**
-     * The y prop provides another way to supply data for line to plot. This prop can be given
-     * as a function of x, or an array of values. If x props are given, they will be used
-     * in plotting (x, y) data points. If x props are not provided, a set of x values
-     * evenly spaced across the x domain will be calculated, and used for plotting data points.
-     * @examples (x) => Math.sin(x), [1, 2, 3]
-     */
-    y: React.PropTypes.oneOfType([
-      React.PropTypes.array,
-      React.PropTypes.func
-    ]),
-    /**
      * The domain prop describes the range of values your chart will include. This prop can be
      * given as a array of the minimum and maximum expected values for your chart,
      * or as an object that specifies separate arrays for x and y.
@@ -86,38 +64,9 @@ export default class VictoryLine extends React.Component {
       })
     ]),
     /**
-     * The range prop describes the range of pixels your chart will cover. This prop can be
-     * given as a array of the minimum and maximum expected values for your chart,
-     * or as an object that specifies separate arrays for x and y.
-     * If this prop is not provided, a range will be calculated based on the height,
-     * width, and margin provided in the style prop, or in default styles. It is usually
-     * a good idea to let the chart component calculate its own range.
-     * @exampes [0, 500], {x: [0, 500], y: [500, 300]}
+     * The height props specifies the height of the chart container element in pixels
      */
-    range: React.PropTypes.oneOfType([
-      React.PropTypes.array,
-      React.PropTypes.shape({
-        x: React.PropTypes.array,
-        y: React.PropTypes.array
-      })
-    ]),
-    /**
-     * The scale prop determines which scales your chart should use. This prop can be
-     * given as a function, or as an object that specifies separate functions for x and y.
-     * @exampes d3.time.scale(), {x: d3.scale.linear(), y: d3.scale.log()}
-     */
-    scale: React.PropTypes.oneOfType([
-      React.PropTypes.func,
-      React.PropTypes.shape({
-        x: React.PropTypes.func,
-        y: React.PropTypes.func
-      })
-    ]),
-    /**
-     * The samples prop specifies how many individual points to plot when plotting
-     * y as a function of x. Samples is ignored if x props are provided instead.
-     */
-    samples: React.PropTypes.number,
+    height: React.PropTypes.number,
     /**
      * The interpolation prop determines how data points should be connected
      * when plotting a line
@@ -138,12 +87,41 @@ export default class VictoryLine extends React.Component {
       "monotone"
     ]),
     /**
-     * The animate prop specifies props for victory-animation to use. It this prop is
-     * not given, the line will not tween between changing data / style props.
-     * Large datasets might animate slowly due to the inherent limits of svg rendering.
-     * @examples {line: {delay: 5, velocity: 10, onEnd: () => alert("woo!")}}
+     * The label prop specifies a label to display at the end of a line component
      */
-    animate: React.PropTypes.object,
+    label: React.PropTypes.string,
+    /**
+     * The padding props specifies the amount of padding in number of pixels between
+     * the edge of the chart and any rendered child components. This prop can be given
+     * as a number or as an object with padding specified for top, bottom, left
+     * and right.
+     */
+    padding: React.PropTypes.oneOfType([
+      React.PropTypes.number,
+      React.PropTypes.shape({
+        top: React.PropTypes.number,
+        bottom: React.PropTypes.number,
+        left: React.PropTypes.number,
+        right: React.PropTypes.number
+      })
+    ]),
+    /**
+     * The samples prop specifies how many individual points to plot when plotting
+     * y as a function of x. Samples is ignored if x props are provided instead.
+     */
+    samples: React.PropTypes.number,
+    /**
+     * The scale prop determines which scales your chart should use. This prop can be
+     * given as a function, or as an object that specifies separate functions for x and y.
+     * @exampes d3.time.scale(), {x: d3.scale.linear(), y: d3.scale.log()}
+     */
+    scale: React.PropTypes.oneOfType([
+      React.PropTypes.func,
+      React.PropTypes.shape({
+        x: React.PropTypes.func,
+        y: React.PropTypes.func
+      })
+    ]),
     /**
      * The standalone prop determines whether the component will render a standalone svg
      * or a <g> tag that will be included in an external svg. Set standalone to false to
@@ -151,17 +129,45 @@ export default class VictoryLine extends React.Component {
      */
     standalone: React.PropTypes.bool,
     /**
-     * The label prop specifies a label to display at the end of a line component
+     * The style prop specifies styles for your chart. VictoryLine relies on Radium,
+     * so valid Radium style objects should work for this prop, however height, width, and margin
+     * are used to calculate range, and need to be expressed as a number of pixels
+     * @example {parent: {width: 300, margin: 50}, data: {stroke: "red", opacity, 0.8}}
      */
-    label: React.PropTypes.string
+    style: React.PropTypes.object,
+    /**
+     * The width props specifies the width of the chart container element in pixels
+     */
+    width: React.PropTypes.number,
+    /**
+     * The x prop provides another way to supply data for line to plot. This prop can be given
+     * as an array of values, and it will be plotted against whatever y prop is provided. If no
+     * props are provided for y, the values in x will be plotted as the identity function (x) => x.
+     * @examples [1, 2, 3]
+     */
+    x: React.PropTypes.array,
+    /**
+     * The y prop provides another way to supply data for line to plot. This prop can be given
+     * as a function of x, or an array of values. If x props are given, they will be used
+     * in plotting (x, y) data points. If x props are not provided, a set of x values
+     * evenly spaced across the x domain will be calculated, and used for plotting data points.
+     * @examples (x) => Math.sin(x), [1, 2, 3]
+     */
+    y: React.PropTypes.oneOfType([
+      React.PropTypes.array,
+      React.PropTypes.func
+    ])
   };
 
   static defaultProps = {
+    height: 300,
     interpolation: "linear",
+    padding: 30,
     samples: 50,
     scale: d3.scale.linear(),
-    y: (x) => x,
-    standalone: true
+    standalone: true,
+    width: 500,
+    y: (x) => x
   };
 
   componentWillMount() {
@@ -178,6 +184,7 @@ export default class VictoryLine extends React.Component {
 
   getCalculatedValues(props) {
     this.style = this.getStyles(props);
+    this.padding = this.getPadding(props);
     this.range = {
       x: this.getRange(props, "x"),
       y: this.getRange(props, "y")
@@ -193,15 +200,23 @@ export default class VictoryLine extends React.Component {
     this.dataset = this.getData(props);
   }
 
-  getStyles(props) {
-    if (!props.style) {
-      return styles;
-    }
-    const {data, labels, parent} = props.style;
+   getStyles(props) {
+    const style = props.style || defaultStyles;
+    const {data, labels, parent} = style;
     return {
-      parent: _.merge({}, styles.parent, parent),
-      data: _.merge({}, styles.data, data),
-      labels: _.merge({}, styles.labels, labels)
+      parent: _.merge({height: props.height, width: props.width}, parent),
+      labels: _.merge({}, defaultStyles.labels, labels),
+      data: _.merge({}, defaultStyles.data, data)
+    };
+  }
+
+  getPadding(props) {
+    const padding = _.isNumber(props.padding) ? props.padding : defaultPadding;
+    return {
+      top: props.padding.top || padding,
+      bottom: props.padding.bottom || padding,
+      left: props.padding.left || padding,
+      right: props.padding.right || padding
     };
   }
 
@@ -212,14 +227,6 @@ export default class VictoryLine extends React.Component {
     const domain = this.domain[axis];
     scale.range(range);
     scale.domain(domain);
-    // hacky check for identity scale
-    if (_.difference(scale.range(), range).length !== 0) {
-      // identity scale, reset the domain and range
-      scale.range(range);
-      scale.domain(range);
-      log.warn("Identity Scale: domain and range must be identical. " +
-        "Domain has been reset to match range.");
-    }
     return scale;
   }
 
@@ -249,28 +256,14 @@ export default class VictoryLine extends React.Component {
     // The scale will never be undefined due to default props
     const scaleDomain = props.scale[axis] ? props.scale[axis].domain() :
       props.scale.domain();
-
-    // Warn when particular types of scales need more information to produce meaningful lines
-    if (_.isDate(scaleDomain[0])) {
-      log.warn("please specify a domain or data when using time scales");
-    } else if (scaleDomain.length === 0) {
-      log.warn("please specify a domain or data when using ordinal or quantile scales");
-    } else if (scaleDomain.length === 1) {
-      log.warn("please specify a domain or data when using a threshold scale");
-    }
-    // return the default domain for the scale
     return scaleDomain;
   }
 
   getRange(props, axis) {
-    if (props.range) {
-      return props.range[axis] ? props.range[axis] : props.range;
-    }
     // if the range is not given in props, calculate it from width, height and margin
-    const style = this.style.parent;
     return axis === "x" ?
-      [style.margin, style.width - style.margin] :
-      [style.height - style.margin, style.margin];
+      [this.padding.left, props.width - this.padding.right] :
+      [props.height - this.padding.bottom, this.padding.top];
   }
 
   getData(props) {
