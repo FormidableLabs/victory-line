@@ -3,6 +3,7 @@ import Radium from "radium";
 import d3 from "d3";
 import _ from "lodash";
 import {VictoryAnimation} from "victory-animation";
+import {VictoryLabel} from "victory-label";
 
 const defaultStyles = {
   data: {
@@ -88,6 +89,11 @@ export default class VictoryLine extends React.Component {
      * The label prop specifies a label to display at the end of a line component
      */
     label: React.PropTypes.string,
+    /**
+     * The labelComponents prop takes in an entire, HTML-complete label component
+     * which will be used to create labels for line to use
+     */
+    labelComponent: React.PropTypes.element,
     /**
      * The padding props specifies the amount of padding in number of pixels between
      * the edge of the chart and any rendered child components. This prop can be given
@@ -321,6 +327,30 @@ export default class VictoryLine extends React.Component {
     });
   }
 
+  getLabel(position) {
+    const component = this.props.labelComponent;
+    // match labels styles to data style by default (fill, opacity, others?)
+    const opacity = this.style.data.opacity;
+    // match label color to data color if it is not given.
+    // use fill instead of stroke for text
+    const fill = this.style.data.stroke;
+    const componentStyle = component ? component.props.style : {};
+    const padding = componentStyle.padding || this.style.labels.padding;
+    const children = component ? component.props.children || this.props.label : this.props.label;
+    const props = {
+      x: (component && component.props.x) || position.x + padding,
+      y: (component && component.props.y) || position.y,
+      data: this.dataset, // Pass dataset for custom label component to access
+      textAnchor: (component && component.props.textAnchor) || "start",
+      verticalAnchor: (component && component.props.textAnchor) || "middle",
+      style: _.merge({opacity, fill}, this.style.labels, componentStyle)
+    };
+    return React.createElement(VictoryLabel, props, children);
+    // return component ?
+    //   React.cloneElement(component, props, children) :
+    //   React.createElement(VictoryLabel, props, children);
+  }
+
   drawLine() {
     const xScale = this.scale.x;
     const yScale = this.scale.y;
@@ -328,24 +358,15 @@ export default class VictoryLine extends React.Component {
       .interpolate(this.props.interpolation)
       .x((data) => xScale(data.x))
       .y((data) => yScale(data.y));
-    if (this.props.label) {
-      const x = xScale.call(this, _.last(this.dataset).x);
-      const y = yScale.call(this, _.last(this.dataset).y);
-
-      // match labels styles to data style by default (fill, opacity, others?)
-      const opacity = this.style.data.opacity;
-      // match label color to data color if it is not given.
-      // use fill instead of stroke for text
-      const fill = this.style.data.stroke;
+    if (this.props.label || this.props.labelComponent) {
+      const position = {
+        x: xScale.call(this, _.last(this.dataset).x),
+        y: yScale.call(this, _.last(this.dataset).y)
+      };
       return (
         <g>
           <path style={this.style.data} d={lineFunction(this.dataset)}/>
-          <text
-            x={x}
-            y={y}
-            style={_.merge({}, {fill, opacity}, this.style.labels)}>
-            {this.getTextLines(this.props.label, x)}
-          </text>
+          {this.getLabel(position)}
         </g>
       );
     }
