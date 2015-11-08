@@ -4,7 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import {VictoryLine} from "../src/index";
 import _ from "lodash";
-import VictoryLabel from "victory-label";
+import {VictoryLabel} from "victory-label";
 
 class App extends React.Component {
   constructor(props) {
@@ -45,12 +45,6 @@ class App extends React.Component {
   }
 
   render() {
-    const labelComponent = (
-      <VictoryLabel style={{padding: 10, fill: "red"}}>
-        LABEL
-      </VictoryLabel>
-    );
-
     return (
       <div className="demo">
         <VictoryLine
@@ -61,7 +55,7 @@ class App extends React.Component {
 
         <VictoryLine style={{border: "2px solid black", data: {stroke: "blue"}}}
           y={(x) => Math.sin(x)}
-          labelComponent={labelComponent}
+          labelComponent={<VictoryLabel>stuff</VictoryLabel>}
           sample={25}/>
 
         <VictoryLine style={{border: "2px solid black", data: {stroke: "red"}}}
@@ -89,4 +83,4 @@ class App extends React.Component {
 
 const content = document.getElementById("content");
 
-ReactDOM.render(<App />, content);
+ReactDOM.render(<App/>, content);

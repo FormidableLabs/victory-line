@@ -311,44 +311,27 @@ export default class VictoryLine extends React.Component {
     return props.y;
   }
 
-  getTextLines(text, x) {
-    if (!text) {
-      return "";
-    }
-    // TODO: split text to new lines based on font size, number of characters and total width
-    // TODO: determine line height ("1.2em") based on font size
-    const dx = this.style.labels.padding;
-    const textString = "" + text;
-    const textLines = textString.split("\n");
-    return _.map(textLines, (line, index) => {
-      return index === 0 ?
-      (<tspan x={x} dx={dx} key={"text-line-" + index}>{line}</tspan>) :
-      (<tspan x={x} dx={dx} dy="1.2em" key={"text-line-" + index}>{line}</tspan>);
-    });
-  }
-
-  getLabel(position) {
+  getLabel(position, text) {
     const component = this.props.labelComponent;
     // match labels styles to data style by default (fill, opacity, others?)
     const opacity = this.style.data.opacity;
     // match label color to data color if it is not given.
     // use fill instead of stroke for text
     const fill = this.style.data.stroke;
-    const componentStyle = component ? component.props.style : {};
-    const padding = componentStyle.padding || this.style.labels.padding;
-    const children = component ? component.props.children || this.props.label : this.props.label;
+    const componentStyle = component && component.props.style || {};
+    const padding = componentStyle.padding || this.style.labels.padding || 0;
+    const children = component && component.props.children || text;
     const props = {
-      x: (component && component.props.x) || position.x + padding,
-      y: (component && component.props.y) || position.y,
+      x: component && component.props.x || position.x + padding,
+      y: component && component.props.y || position.y,
       data: this.dataset, // Pass dataset for custom label component to access
-      textAnchor: (component && component.props.textAnchor) || "start",
-      verticalAnchor: (component && component.props.textAnchor) || "middle",
+      textAnchor: component && component.props.textAnchor || "start",
+      verticalAnchor: component && component.props.textAnchor || "middle",
       style: _.merge({opacity, fill}, this.style.labels, componentStyle)
     };
-    return React.createElement(VictoryLabel, props, children);
-    // return component ?
-    //   React.cloneElement(component, props, children) :
-    //   React.createElement(VictoryLabel, props, children);
+    return component ?
+      React.cloneElement(component, props, children) :
+      React.createElement(VictoryLabel, props, children);
   }
 
   drawLine() {
@@ -363,10 +346,14 @@ export default class VictoryLine extends React.Component {
         x: xScale.call(this, _.last(this.dataset).x),
         y: yScale.call(this, _.last(this.dataset).y)
       };
+      const text = this.props.label || "";
       return (
         <g>
-          <path style={this.style.data} d={lineFunction(this.dataset)}/>
-          {this.getLabel(position)}
+          <path
+            style={this.style.data}
+            d={lineFunction(this.dataset)}>
+          </path>
+          {this.getLabel(position, text)}
         </g>
       );
     }
