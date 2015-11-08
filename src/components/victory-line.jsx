@@ -90,7 +90,7 @@ export default class VictoryLine extends React.Component {
      */
     label: React.PropTypes.string,
     /**
-     * The labelComponents prop takes in an entire, HTML-complete label component
+     * The labelComponent prop takes in an entire, HTML-complete label component
      * which will be used to create labels for line to use
      */
     labelComponent: React.PropTypes.element,
@@ -311,23 +311,28 @@ export default class VictoryLine extends React.Component {
     return props.y;
   }
 
-  getLabel(position, text) {
-    const component = this.props.labelComponent;
+  getLabelStyle() {
     // match labels styles to data style by default (fill, opacity, others?)
     const opacity = this.style.data.opacity;
     // match label color to data color if it is not given.
     // use fill instead of stroke for text
     const fill = this.style.data.stroke;
+    const padding = this.style.labels.padding || 0;
+    return _.merge({opacity, fill, padding}, this.style.labels);
+  }
+
+  getLabel(position, text) {
+    const component = this.props.labelComponent;
     const componentStyle = component && component.props.style || {};
-    const padding = componentStyle.padding || this.style.labels.padding || 0;
+    const style = _.merge({}, this.getLabelStyle(), componentStyle);
     const children = component && component.props.children || text;
     const props = {
-      x: component && component.props.x || position.x + padding,
-      y: component && component.props.y || position.y,
+      x: component && component.props.x || position.x + style.padding,
+      y: component && component.props.y || position.y - style.padding,
       data: this.dataset, // Pass dataset for custom label component to access
       textAnchor: component && component.props.textAnchor || "start",
-      verticalAnchor: component && component.props.textAnchor || "middle",
-      style: _.merge({opacity, fill}, this.style.labels, componentStyle)
+      verticalAnchor: component && component.props.verticalAnchor || "middle",
+      style
     };
     return component ?
       React.cloneElement(component, props, children) :
@@ -341,6 +346,7 @@ export default class VictoryLine extends React.Component {
       .interpolate(this.props.interpolation)
       .x((data) => xScale(data.x))
       .y((data) => yScale(data.y));
+    const pathElement = <path style={this.style.data} d={lineFunction(this.dataset)}/>;
     if (this.props.label || this.props.labelComponent) {
       const position = {
         x: xScale.call(this, _.last(this.dataset).x),
@@ -349,15 +355,12 @@ export default class VictoryLine extends React.Component {
       const text = this.props.label || "";
       return (
         <g>
-          <path
-            style={this.style.data}
-            d={lineFunction(this.dataset)}>
-          </path>
+          {pathElement}
           {this.getLabel(position, text)}
         </g>
       );
     }
-    return <path style={this.style.data} d={lineFunction(this.dataset)}/>;
+    return pathElement;
   }
 
   render() {
