@@ -68,7 +68,6 @@
     "url-loader": "~0.5.5",
     "victory-animation": "^0.0.11",
     "victory-label": "git+https://github.com/FormidableLabs/victory-label#master",
-    "victory-util": "git+https://github.com/formidablelabs/victory-util#master",
     "webpack": "^1.10.0"
   },
   "devDependencies": {
