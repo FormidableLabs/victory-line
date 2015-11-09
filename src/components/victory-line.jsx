@@ -3,6 +3,7 @@ import Radium from "radium";
 import d3 from "d3";
 import _ from "lodash";
 import {VictoryAnimation} from "victory-animation";
+import {VictoryLabel} from "victory-label";
 
 const defaultStyles = {
   data: {
@@ -88,6 +89,11 @@ export default class VictoryLine extends React.Component {
      * The label prop specifies a label to display at the end of a line component
      */
     label: React.PropTypes.string,
+    /**
+     * The labelComponent prop takes in an entire, HTML-complete label component
+     * which will be used to create labels for line to use
+     */
+    labelComponent: React.PropTypes.element,
     /**
      * The padding props specifies the amount of padding in number of pixels between
      * the edge of the chart and any rendered child components. This prop can be given
@@ -305,20 +311,32 @@ export default class VictoryLine extends React.Component {
     return props.y;
   }
 
-  getTextLines(text, x) {
-    if (!text) {
-      return "";
-    }
-    // TODO: split text to new lines based on font size, number of characters and total width
-    // TODO: determine line height ("1.2em") based on font size
-    const dx = this.style.labels.padding;
-    const textString = "" + text;
-    const textLines = textString.split("\n");
-    return _.map(textLines, (line, index) => {
-      return index === 0 ?
-      (<tspan x={x} dx={dx} key={"text-line-" + index}>{line}</tspan>) :
-      (<tspan x={x} dx={dx} dy="1.2em" key={"text-line-" + index}>{line}</tspan>);
-    });
+  getLabelStyle() {
+    // match labels styles to data style by default (fill, opacity, others?)
+    const opacity = this.style.data.opacity;
+    // match label color to data color if it is not given.
+    // use fill instead of stroke for text
+    const fill = this.style.data.stroke;
+    const padding = this.style.labels.padding || 0;
+    return _.merge({opacity, fill, padding}, this.style.labels);
+  }
+
+  getLabel(position, text) {
+    const component = this.props.labelComponent;
+    const componentStyle = component && component.props.style || {};
+    const style = _.merge({}, this.getLabelStyle(), componentStyle);
+    const children = component && component.props.children || text;
+    const props = {
+      x: component && component.props.x || position.x + style.padding,
+      y: component && component.props.y || position.y - style.padding,
+      data: this.dataset, // Pass dataset for custom label component to access
+      textAnchor: component && component.props.textAnchor || "start",
+      verticalAnchor: component && component.props.verticalAnchor || "middle",
+      style
+    };
+    return component ?
+      React.cloneElement(component, props, children) :
+      React.createElement(VictoryLabel, props, children);
   }
 
   drawLine() {
@@ -328,28 +346,21 @@ export default class VictoryLine extends React.Component {
       .interpolate(this.props.interpolation)
       .x((data) => xScale(data.x))
       .y((data) => yScale(data.y));
-    if (this.props.label) {
-      const x = xScale.call(this, _.last(this.dataset).x);
-      const y = yScale.call(this, _.last(this.dataset).y);
-
-      // match labels styles to data style by default (fill, opacity, others?)
-      const opacity = this.style.data.opacity;
-      // match label color to data color if it is not given.
-      // use fill instead of stroke for text
-      const fill = this.style.data.stroke;
+    const pathElement = <path style={this.style.data} d={lineFunction(this.dataset)}/>;
+    if (this.props.label || this.props.labelComponent) {
+      const position = {
+        x: xScale.call(this, _.last(this.dataset).x),
+        y: yScale.call(this, _.last(this.dataset).y)
+      };
+      const text = this.props.label || "";
       return (
         <g>
-          <path style={this.style.data} d={lineFunction(this.dataset)}/>
-          <text
-            x={x}
-            y={y}
-            style={_.merge({}, {fill, opacity}, this.style.labels)}>
-            {this.getTextLines(this.props.label, x)}
-          </text>
+          {pathElement}
+          {this.getLabel(position, text)}
         </g>
       );
     }
-    return <path style={this.style.data} d={lineFunction(this.dataset)}/>;
+    return pathElement;
   }
 
   render() {
