@@ -24,6 +24,7 @@ const defaultStyles = {
 
 @Radium
 export default class VictoryLine extends React.Component {
+  static role = "line";
   static propTypes = {
     /**
      * The animate prop specifies props for victory-animation to use. It this prop is
