@@ -54,7 +54,7 @@ class App extends React.Component {
           animate={{velocity: 0.03}}/>
 
         <VictoryLine style={{border: "2px solid black", data: {stroke: "blue"}}}
-          y={(x) => Math.sin(x)}
+          y={(x) => Math.sin(2 * Math.PI * x)}
           labelComponent={<VictoryLabel>stuff</VictoryLabel>}
           sample={25}/>
 

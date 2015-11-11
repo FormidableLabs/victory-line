@@ -194,6 +194,7 @@ export default class VictoryLine extends React.Component {
       x: this.getRange(props, "x"),
       y: this.getRange(props, "y")
     };
+    this.dataset = this.getData(props);
     this.domain = {
       x: this.getDomain(props, "x"),
       y: this.getDomain(props, "y")
@@ -202,7 +203,6 @@ export default class VictoryLine extends React.Component {
       x: this.getScale(props, "x"),
       y: this.getScale(props, "y")
     };
-    this.dataset = this.getData(props);
   }
 
    getStyles(props) {
@@ -239,30 +239,9 @@ export default class VictoryLine extends React.Component {
   getDomain(props, axis) {
     if (props.domain) {
       return props.domain[axis] || props.domain;
-    } else if (props.data || _.isArray(props[axis])) {
-      return this._getDomainFromData(props, axis);
     } else {
-      return this._getDomainFromScale(props, axis);
+      return [_.min(_.pluck(this.dataset, axis)), _.max(_.pluck(this.dataset, axis))];
     }
-  }
-
-  // helper method for getDomain
-  _getDomainFromData(props, axis) {
-    // if data is given, return the max/min of the data
-    if (props.data) {
-      return [_.min(_.pluck(props.data, axis)), _.max(_.pluck(props.data, axis))];
-    } else {
-      // return the max / min of the array specified by props[axis]
-      return [_.min(props[axis]), _.max(props[axis])];
-    }
-  }
-
-  // helper method for getDomain
-  _getDomainFromScale(props, axis) {
-    // The scale will never be undefined due to default props
-    const scaleDomain = props.scale[axis] ? props.scale[axis].domain() :
-      props.scale.domain();
-    return scaleDomain;
   }
 
   getRange(props, axis) {
@@ -293,7 +272,10 @@ export default class VictoryLine extends React.Component {
     }
     // if x is not given in props, create an array of values evenly
     // spaced across the x domain
-    const domain = this.domain.x;
+    const domainFromProps = props.domain && props.domain.x || props.domain;
+    const domainFromScale = props.scale && props.scale.x ?
+      props.scale.x.domain() : props.scale.domain();
+    const domain = domainFromProps || domainFromScale;
     const samples = _.isArray(props.y) ? props.y.length : props.samples;
     const step = _.max(domain) / samples;
     // return an array of x values spaced across the domain,
