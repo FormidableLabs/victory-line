@@ -1,48 +1,127 @@
-Victory Line
+VictoryLine
 =============
-Victory Line
-============
 
-`victory-line` draws an SVG line on your screen. Unlike core `d3`, it can graph
-functions or passed in data, from a clean `React` interface. Style, data,
-interpolate, scale -- all can be overridden by passing in new values.
+VictoryLine creates a line based on data. VictoryLine is a composable component, so it does not include an axis.  Check out [VictoryChart](https://github.com/formidablelabs/victory-chart) for easy to use line charts and more.
 
-## Examples
+## Features
 
-The plain component comes with a random data generator, so rendering will
-produce *some* output.
+### Props are optional
 
-This:
+VictoryLine is written to be highly configurable, but it also includes a set of sensible defaults and fallbacks. If no props are provided, VictoryLine plots the identity function `(x) => x`.
 
 ```playground
 <VictoryLine />
 ```
 
-will produce a straight line.
-
-Styles can be overridden by passing them in as a map. Also, we can graph
-arbitrary equations.
+To display your own data, just pass in an array of data objects via the data prop. The domain of the line is automatically set to include all of the data provided.
 
 ```playground
-<VictoryLine 
-  style={{stroke: "blue"}}
-  y={(x) => Math.sin(x)}/>
+ <VictoryLine
+    data={[
+      {x: 0, y: 1},
+      {x: 1, y: 3},
+      {x: 2, y: 2},      
+      {x: 3, y: 4},
+      {x: 4, y: 3},
+      {x: 5, y: 5}
+    ]}
+ />
 ```
 
-Or you can pass in data:
+VictoryLine can also plot functions. Again, the domain is set so that the entire line is visible:
 
 ```playground
-<VictoryLine data={[
-  {x: 1, y: 1},
-  {x: 2, y: 4},
-  {x: 3, y: 5},
-  {x: 4, y: 2},
-  {x: 5, y: 11},
-  {x: 6, y: 7},
-  {x: 7, y: 6},
-  {x: 8, y: 7},
-  {x: 9, y: 8},
-  {x: 10, y: 12}
-]}/>
+ <VictoryLine
+    y={(x) => Math.sin(2 * Math.PI * x)}
+ />
+```
+
+### Flexible and configurable 
+
+The sensible defaults VictoryLine provides makes it easy to get started, but everything can be overridden, and configured to suit your needs:
+
+Add labels, style the data, change the interpolation, add a custom domain:
+
+```playground
+<VictoryLine
+    domain={[0, 5]}
+    padding={75}
+    height={500}
+    data={[
+      {x: 0, y: 1},
+      {x: 1, y: 3},
+      {x: 2, y: 2},      
+      {x: 3, y: 4},
+      {x: 4, y: 3},
+      {x: 5, y: 5}
+    ]}
+    interpolation="monotone"
+    label="LINE"
+    style={{
+      data: {
+        stroke: "#c33b33", 
+        strokeWidth: 3
+      },
+      labels: {fontSize: 12}
+    }}
+ />
+```
+
+
+### Animating
+
+VictoryLine animates with [VictoryAnimation](http://github.com/formidablelabs/victory-animation) as data changes when an `animate` prop is provided.
+
+```playground_norender
+class App extends React.Component {
+   constructor(props) {
+    super(props);
+    this.state = {
+      y: this.getYFunction(),
+      style: this.getStyles()
+    };
+  }
+
+  getYFunction() {
+    const n = _.random(2, 7);
+    return (x) => Math.exp(-n * x) *
+      Math.sin(2 * n * Math.PI * x);
+  }
+
+  getStyles() {
+    const colors = [
+      "red", "orange", "magenta", 
+      "gold", "blue", "purple"
+    ];
+    return {
+      stroke: colors[_.random(0, 5)],
+      strokeWidth: _.random(1, 5)
+    };
+  }
+
+  componentDidMount() {
+    setInterval(() => {
+      this.setState({
+        y: this.getYFunction(),
+        style: this.getStyles()
+      });
+    }, 3000);
+  }
+
+  render() {
+    return (
+      <VictoryLine
+        style={{data: this.state.style}}
+        height={600}
+        interpolation="basis"
+        animate={{velocity: 0.02}}
+        y={this.state.y}
+      />
+        
+    );
+  }
+}
+ReactDOM.render(<App/>, mountNode);
+
 ```
 

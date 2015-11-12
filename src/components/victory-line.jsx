@@ -30,17 +30,13 @@ export default class VictoryLine extends React.Component {
      * The animate prop specifies props for victory-animation to use. It this prop is
      * not given, the line will not tween between changing data / style props.
      * Large datasets might animate slowly due to the inherent limits of svg rendering.
-     * @examples {line: {delay: 5, velocity: 10, onEnd: () => alert("woo!")}}
+     * @examples {velocity: 0.02, onEnd: () => alert("done!")}
      */
     animate: React.PropTypes.object,
     /**
      * The data prop specifies the data to be plotted. Data should be in the form of an array
      * of data points where each data point should be an object with x and y properties.
-     * @exampes [
-     *   {x: 1, y: 125},
-     *   {x: 10, y: 257},
-     *   {x: 100, y: 345},
-     * ]
+     * @examples [{x: 1, y: 12}, {x: 10, y: 25}, {x: 100, y: 34}]
      */
     data: React.PropTypes.arrayOf(
       React.PropTypes.shape({
@@ -54,7 +50,7 @@ export default class VictoryLine extends React.Component {
      * or as an object that specifies separate arrays for x and y.
      * If this prop is not provided, a domain will be calculated from data, or other
      * available information.
-     * @exampes [-1, 1], {x: [0, 100], y: [0, 1]}
+     * @examples [-1, 1], {x: [0, 100], y: [0, 1]}
      */
     domain: React.PropTypes.oneOfType([
       React.PropTypes.array,
@@ -118,7 +114,7 @@ export default class VictoryLine extends React.Component {
     /**
      * The scale prop determines which scales your chart should use. This prop can be
      * given as a function, or as an object that specifies separate functions for x and y.
-     * @exampes d3.time.scale(), {x: d3.scale.linear(), y: d3.scale.log()}
+     * @examples d3.time.scale(), {x: d3.scale.linear(), y: d3.scale.log()}
      */
     scale: React.PropTypes.oneOfType([
       React.PropTypes.func,
@@ -137,7 +133,7 @@ export default class VictoryLine extends React.Component {
      * The style prop specifies styles for your chart. VictoryLine relies on Radium,
      * so valid Radium style objects should work for this prop, however height, width, and margin
      * are used to calculate range, and need to be expressed as a number of pixels
-     * @example {parent: {width: 300, margin: 50}, data: {stroke: "red", opacity, 0.8}}
+     * @examples {data: {stroke: "red"}, labels: {fontSize: 14}}
      */
     style: React.PropTypes.object,
     /**
@@ -167,11 +163,11 @@ export default class VictoryLine extends React.Component {
   static defaultProps = {
     height: 300,
     interpolation: "linear",
-    padding: 30,
+    padding: 50,
     samples: 50,
     scale: d3.scale.linear(),
     standalone: true,
-    width: 500,
+    width: 450,
     y: (x) => x
   };
 
