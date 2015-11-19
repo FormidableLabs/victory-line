@@ -1,9 +1,10 @@
-import React from "react";
+import React, { PropTypes } from "react";
 import Radium from "radium";
 import d3 from "d3";
 import _ from "lodash";
 import {VictoryAnimation} from "victory-animation";
 import {VictoryLabel} from "victory-label";
+import Util from "victory-util";
 
 const defaultStyles = {
   data: {
@@ -32,16 +33,16 @@ export default class VictoryLine extends React.Component {
      * Large datasets might animate slowly due to the inherent limits of svg rendering.
      * @examples {velocity: 0.02, onEnd: () => alert("done!")}
      */
-    animate: React.PropTypes.object,
+    animate: PropTypes.object,
     /**
      * The data prop specifies the data to be plotted. Data should be in the form of an array
      * of data points where each data point should be an object with x and y properties.
      * @examples [{x: 1, y: 12}, {x: 10, y: 25}, {x: 100, y: 34}]
      */
-    data: React.PropTypes.arrayOf(
-      React.PropTypes.shape({
-        x: React.PropTypes.any,
-        y: React.PropTypes.any
+    data: PropTypes.arrayOf(
+      PropTypes.shape({
+        x: PropTypes.any,
+        y: PropTypes.any
       })
     ),
     /**
@@ -52,22 +53,22 @@ export default class VictoryLine extends React.Component {
      * available information.
      * @examples [-1, 1], {x: [0, 100], y: [0, 1]}
      */
-    domain: React.PropTypes.oneOfType([
-      React.PropTypes.array,
-      React.PropTypes.shape({
-        x: React.PropTypes.array,
-        y: React.PropTypes.array
+    domain: PropTypes.oneOfType([
+      Util.PropTypes.minMaxArray,
+      PropTypes.shape({
+        x: Util.PropTypes.minMaxArray,
+        y: Util.PropTypes.minMaxArray
       })
     ]),
     /**
      * The height props specifies the height of the chart container element in pixels
      */
-    height: React.PropTypes.number,
+    height: Util.PropTypes.nonNegative,
     /**
      * The interpolation prop determines how data points should be connected
      * when plotting a line
      */
-    interpolation: React.PropTypes.oneOf([
+    interpolation: PropTypes.oneOf([
       "linear",
       "linear-closed",
       "step",
@@ -85,42 +86,42 @@ export default class VictoryLine extends React.Component {
     /**
      * The label prop specifies a label to display at the end of a line component
      */
-    label: React.PropTypes.string,
+    label: PropTypes.string,
     /**
      * The labelComponent prop takes in an entire, HTML-complete label component
      * which will be used to create labels for line to use
      */
-    labelComponent: React.PropTypes.element,
+    labelComponent: PropTypes.element,
     /**
      * The padding props specifies the amount of padding in number of pixels between
      * the edge of the chart and any rendered child components. This prop can be given
      * as a number or as an object with padding specified for top, bottom, left
      * and right.
      */
-    padding: React.PropTypes.oneOfType([
-      React.PropTypes.number,
-      React.PropTypes.shape({
-        top: React.PropTypes.number,
-        bottom: React.PropTypes.number,
-        left: React.PropTypes.number,
-        right: React.PropTypes.number
+    padding: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.shape({
+        top: PropTypes.number,
+        bottom: PropTypes.number,
+        left: PropTypes.number,
+        right: PropTypes.number
       })
     ]),
     /**
      * The samples prop specifies how many individual points to plot when plotting
      * y as a function of x. Samples is ignored if x props are provided instead.
      */
-    samples: React.PropTypes.number,
+    samples: Util.PropTypes.nonNegative,
     /**
      * The scale prop determines which scales your chart should use. This prop can be
      * given as a function, or as an object that specifies separate functions for x and y.
      * @examples d3.time.scale(), {x: d3.scale.linear(), y: d3.scale.log()}
      */
-    scale: React.PropTypes.oneOfType([
-      React.PropTypes.func,
-      React.PropTypes.shape({
-        x: React.PropTypes.func,
-        y: React.PropTypes.func
+    scale: PropTypes.oneOfType([
+      Util.PropTypes.scale,
+      PropTypes.shape({
+        x: Util.PropTypes.scale,
+        y: Util.PropTypes.scale
       })
     ]),
     /**
@@ -128,25 +129,29 @@ export default class VictoryLine extends React.Component {
      * or a <g> tag that will be included in an external svg. Set standalone to false to
      * compose VictoryLine with other components within an enclosing <svg> tag.
      */
-    standalone: React.PropTypes.bool,
+    standalone: PropTypes.bool,
     /**
      * The style prop specifies styles for your chart. VictoryLine relies on Radium,
      * so valid Radium style objects should work for this prop, however height, width, and margin
      * are used to calculate range, and need to be expressed as a number of pixels
      * @examples {data: {stroke: "red"}, labels: {fontSize: 14}}
      */
-    style: React.PropTypes.object,
+    style: PropTypes.shape({
+      parent: PropTypes.object,
+      data: PropTypes.object,
+      labels: PropTypes.object
+    }),
     /**
      * The width props specifies the width of the chart container element in pixels
      */
-    width: React.PropTypes.number,
+    width: Util.PropTypes.nonNegative,
     /**
      * The x prop provides another way to supply data for line to plot. This prop can be given
      * as an array of values, and it will be plotted against whatever y prop is provided. If no
      * props are provided for y, the values in x will be plotted as the identity function (x) => x.
      * @examples [1, 2, 3]
      */
-    x: React.PropTypes.array,
+    x: Util.PropTypes.homogenousArray,
     /**
      * The y prop provides another way to supply data for line to plot. This prop can be given
      * as a function of x, or an array of values. If x props are given, they will be used
@@ -154,9 +159,9 @@ export default class VictoryLine extends React.Component {
      * evenly spaced across the x domain will be calculated, and used for plotting data points.
      * @examples (x) => Math.sin(x), [1, 2, 3]
      */
-    y: React.PropTypes.oneOfType([
-      React.PropTypes.array,
-      React.PropTypes.func
+    y: PropTypes.oneOfType([
+      PropTypes.array,
+      PropTypes.func
     ])
   };
 
@@ -170,18 +175,6 @@ export default class VictoryLine extends React.Component {
     width: 450,
     y: (x) => x
   };
-
-  componentWillMount() {
-    // If animating, the `VictoryLine` instance wrapped in `VictoryAnimation`
-    // will compute these values.
-    if (!this.props.animate) {
-      this.getCalculatedValues(this.props);
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.getCalculatedValues(nextProps);
-  }
 
   getCalculatedValues(props) {
     this.style = this.getStyles(props);
@@ -300,7 +293,7 @@ export default class VictoryLine extends React.Component {
     return _.merge({opacity, fill, padding}, this.style.labels);
   }
 
-  getLabel(position, text) {
+  renderLabel(position, text) {
     const component = this.props.labelComponent;
     const componentStyle = component && component.props.style || {};
     const style = _.merge({}, this.getLabelStyle(), componentStyle);
@@ -318,7 +311,7 @@ export default class VictoryLine extends React.Component {
       React.createElement(VictoryLabel, props, children);
   }
 
-  drawLine() {
+  renderLine() {
     const xScale = this.scale.x;
     const yScale = this.scale.y;
     const lineFunction = d3.svg.line()
@@ -335,7 +328,7 @@ export default class VictoryLine extends React.Component {
       return (
         <g>
           {pathElement}
-          {this.getLabel(position, text)}
+          {this.renderLabel(position, text)}
         </g>
       );
     }
@@ -350,17 +343,19 @@ export default class VictoryLine extends React.Component {
       // Do less work by having `VictoryAnimation` tween only values that
       // make sense to tween. In the future, allow customization of animated
       // prop whitelist/blacklist?
-      const animateData = _.omit(this.props, [
-        "animate", "scale", "standalone", "interpolation"
+      const animateData = _.pick(this.props, [
+        "data", "domain", "height", "padding", "samples", "style", "width", "x", "y"
       ]);
       return (
         <VictoryAnimation {...this.props.animate} data={animateData}>
           {(props) => <VictoryLine {...this.props} {...props} animate={null}/>}
         </VictoryAnimation>
       );
+    } else {
+      this.getCalculatedValues(this.props);
     }
     const style = this.style.parent;
-    const group = <g style={style}>{this.drawLine()}</g>;
+    const group = <g style={style}>{this.renderLine()}</g>;
 
     return this.props.standalone ? <svg style={style}>{group}</svg> : group;
   }

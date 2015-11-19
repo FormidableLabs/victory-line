@@ -34,8 +34,9 @@
     "radium": "^0.14.1",
     "style-loader": "~0.8.0",
     "victory-animation": "^0.0.10",
-    "victory-util": "2.0.0",
-    "victory-label": "0.1.1"
+    "victory-label": "0.1.1",
+    "victory-util": "2.0.0"
+
   },
   "devDependencies": {
     "babel": "^5.5.8",
