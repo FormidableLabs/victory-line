@@ -201,7 +201,7 @@ export default class VictoryLine extends React.Component {
     };
   }
 
-   getStyles(props) {
+  getStyles(props) {
     const style = props.style || defaultStyles;
     const {data, labels, parent} = style;
     return {
@@ -355,7 +355,7 @@ export default class VictoryLine extends React.Component {
       ]);
       return (
         <VictoryAnimation {...this.props.animate} data={animateData}>
-          {props => <VictoryLine {...this.props} {...props} animate={null}/>}
+          {(props) => <VictoryLine {...this.props} {...props} animate={null}/>}
         </VictoryAnimation>
       );
     }

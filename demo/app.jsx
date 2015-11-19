@@ -35,7 +35,7 @@ class App extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     window.setInterval(() => {
       this.setState({
         data: this.getData(),
@@ -51,15 +51,18 @@ class App extends React.Component {
           style={{border: "2px solid black", data: this.state.style}}
           data={this.state.data}
           label="label\none"
-          animate={{velocity: 0.03}}/>
+          animate={{velocity: 0.03}}
+        />
 
         <VictoryLine style={{border: "2px solid black", data: {stroke: "blue"}}}
           y={(x) => Math.sin(2 * Math.PI * x)}
           labelComponent={<VictoryLabel>stuff</VictoryLabel>}
-          sample={25}/>
+          sample={25}
+        />
 
         <VictoryLine style={{border: "2px solid black", data: {stroke: "red"}}}
-          y={(x) => x * x} />
+          y={(x) => x * x}
+        />
 
         <VictoryLine style={{border: "2px solid black"}}
           data={[
@@ -73,7 +76,8 @@ class App extends React.Component {
             {x: 8, y: 7},
             {x: 9, y: 8},
             {x: 10, y: 12}
-          ]}/>
+          ]}
+        />
 
         <VictoryLine style={{border: "2px solid black"}}/>
       </div>
