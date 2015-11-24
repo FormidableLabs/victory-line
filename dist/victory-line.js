@@ -102,7 +102,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _victoryLabel = __webpack_require__(34);
 	
-	var _victoryUtil = __webpack_require__(41);
+	var _victoryUtil = __webpack_require__(40);
 	
 	var _victoryUtil2 = _interopRequireDefault(_victoryUtil);
 	
@@ -498,10 +498,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = function (ComposedComponent /*: constructor*/) {
 	  return Enhancer(ComposedComponent);
 	};
-	module.exports.Plugins = __webpack_require__(12);
+	module.exports.Plugins = __webpack_require__(7);
 	module.exports.PrintStyleSheet = __webpack_require__(23);
 	module.exports.Style = __webpack_require__(24);
-	module.exports.getState = __webpack_require__(7);
+	module.exports.getState = __webpack_require__(17);
 	module.exports.keyframes = __webpack_require__(27);
 	module.exports.__clearStateForTests = __webpack_require__(6).__clearStateForTests;
 
@@ -758,12 +758,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	/*:: import type {Config} from './config';*/
 	
-	var _getState = __webpack_require__(7);
-	var getStateKey = __webpack_require__(8);
-	var mergeStyles = __webpack_require__(9);
-	var Plugins = __webpack_require__(12);
+	var _getState = __webpack_require__(17);
+	var getStateKey = __webpack_require__(18);
+	var mergeStyles = __webpack_require__(19);
+	var Plugins = __webpack_require__(7);
 	
-	var ExecutionEnvironment = __webpack_require__(17);
+	var ExecutionEnvironment = __webpack_require__(12);
 	var React = __webpack_require__(2);
 	
 	var DEFAULT_CONFIG = {
@@ -1035,141 +1035,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* @flow */
-	
-	'use strict';
-	
-	var getStateKey = __webpack_require__(8);
-	
-	var getState = function getState(state /*: {_radiumStyleState: {[key: string]: {[value: string]: boolean}}}*/, elementKey /*: string*/, value /*: string*/) /*: any*/ {
-	  var key = getStateKey(elementKey);
-	
-	  return !!state && !!state._radiumStyleState && !!state._radiumStyleState[key] && state._radiumStyleState[key][value];
-	};
-	
-	module.exports = getState;
-
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-	/* @flow */
-	
-	'use strict';
-	
-	var getStateKey = function getStateKey(elementKey /*: ?string*/) /*: string*/ {
-	  return elementKey === null || elementKey === undefined ? 'main' : elementKey.toString();
-	};
-	
-	module.exports = getStateKey;
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var isPlainObject = __webpack_require__(10);
-	
-	var shouldMerge = function shouldMerge(value) {
-	  // Don't merge objects overriding toString, since they should be converted
-	  // to string values.
-	  return isPlainObject(value) && value.toString === Object.prototype.toString;
-	};
-	
-	// Merge style objects. Deep merge plain object values.
-	var mergeStyles = function mergeStyles(styles) {
-	  var result = {};
-	
-	  styles.forEach(function (style) {
-	    if (!style || typeof style !== 'object') {
-	      return;
-	    }
-	
-	    if (Array.isArray(style)) {
-	      style = mergeStyles(style);
-	    }
-	
-	    Object.keys(style).forEach(function (key) {
-	      if (shouldMerge(style[key]) && shouldMerge(result[key])) {
-	        result[key] = mergeStyles([result[key], style[key]]);
-	      } else {
-	        result[key] = style[key];
-	      }
-	    });
-	  });
-	
-	  return result;
-	};
-	
-	module.exports = mergeStyles;
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*!
-	 * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
-	 *
-	 * Copyright (c) 2014-2015, Jon Schlinkert.
-	 * Licensed under the MIT License.
-	 */
-	
-	'use strict';
-	
-	var isObject = __webpack_require__(11);
-	
-	function isObjectObject(o) {
-	  return isObject(o) === true
-	    && Object.prototype.toString.call(o) === '[object Object]';
-	}
-	
-	module.exports = function isPlainObject(o) {
-	  var ctor,prot;
-	  
-	  if (isObjectObject(o) === false) return false;
-	  
-	  // If has modified constructor
-	  ctor = o.constructor;
-	  if (typeof ctor !== 'function') return false;
-	  
-	  // If has modified prototype
-	  prot = ctor.prototype;
-	  if (isObjectObject(prot) === false) return false;
-	  
-	  // If constructor does not have an Object-specific method
-	  if (prot.hasOwnProperty('isPrototypeOf') === false) {
-	    return false;
-	  }
-	  
-	  // Most likely a plain Object
-	  return true;
-	};
-
-
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-	/*!
-	 * isobject <https://github.com/jonschlinkert/isobject>
-	 *
-	 * Copyright (c) 2014-2015, Jon Schlinkert.
-	 * Licensed under the MIT License.
-	 */
-	
-	'use strict';
-	
-	module.exports = function isObject(val) {
-	  return val != null && typeof val === 'object'
-	    && !Array.isArray(val);
-	};
-
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/** @flow */
 	/* eslint-disable block-scoped-var */
 	
@@ -1181,11 +1046,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	/*:: import type {Config} from '../config';*/
 	
-	var checkPropsPlugin = __webpack_require__(13);
-	var mergeStyleArrayPlugin = __webpack_require__(14);
-	var prefixPlugin = __webpack_require__(15);
-	var resolveInteractionStylesPlugin = __webpack_require__(19);
-	var resolveMediaQueriesPlugin = __webpack_require__(21);
+	var checkPropsPlugin = __webpack_require__(8);
+	var mergeStyleArrayPlugin = __webpack_require__(9);
+	var prefixPlugin = __webpack_require__(10);
+	var resolveInteractionStylesPlugin = __webpack_require__(14);
+	var resolveMediaQueriesPlugin = __webpack_require__(16);
 	
 	/*:: export type PluginConfig = {
 	  // May not be readable if code has been minified
@@ -1292,7 +1157,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Replaces (not merged into) the rendered element's style property.
 
 /***/ },
-/* 13 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/* @flow */
@@ -1354,7 +1219,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 14 */
+/* 9 */
 /***/ function(module, exports) {
 
 	/* @flow */
@@ -1374,7 +1239,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = mergeStyleArrayPlugin;
 
 /***/ },
-/* 15 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* @flow */
@@ -1383,7 +1248,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	/*:: import type {PluginConfig, PluginResult} from '.';*/
 	
-	var Prefixer = __webpack_require__(16);
+	var Prefixer = __webpack_require__(11);
 	
 	var prefixPlugin = function prefixPlugin(_ref /*: PluginConfig*/) /*: PluginResult*/ {
 	  var componentName = _ref.componentName;
@@ -1396,7 +1261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = prefixPlugin;
 
 /***/ },
-/* 16 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -1408,8 +1273,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var ExecutionEnvironment = __webpack_require__(17);
-	var arrayFind = __webpack_require__(18);
+	var ExecutionEnvironment = __webpack_require__(12);
+	var arrayFind = __webpack_require__(13);
 	
 	var VENDOR_PREFIX_REGEX = /-(moz|webkit|ms|o)-/;
 	
@@ -1797,7 +1662,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 17 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -1842,7 +1707,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 18 */
+/* 13 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1871,7 +1736,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 19 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @flow */
@@ -1880,7 +1745,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	/*:: import type {PluginConfig, PluginResult} from '.';*/
 	
-	var MouseUpListener = __webpack_require__(20);
+	var MouseUpListener = __webpack_require__(15);
 	
 	var _isInteractiveStyleField = function _isInteractiveStyleField(styleFieldName) {
 	  return styleFieldName === ':hover' || styleFieldName === ':active' || styleFieldName === ':focus';
@@ -1992,7 +1857,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = resolveInteractionStyles;
 
 /***/ },
-/* 20 */
+/* 15 */
 /***/ function(module, exports) {
 
 	/* @flow */
@@ -2036,7 +1901,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 21 */
+/* 16 */
 /***/ function(module, exports) {
 
 	/** @flow */
@@ -2125,6 +1990,141 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	module.exports = resolveMediaQueries;
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* @flow */
+	
+	'use strict';
+	
+	var getStateKey = __webpack_require__(18);
+	
+	var getState = function getState(state /*: {_radiumStyleState: {[key: string]: {[value: string]: boolean}}}*/, elementKey /*: string*/, value /*: string*/) /*: any*/ {
+	  var key = getStateKey(elementKey);
+	
+	  return !!state && !!state._radiumStyleState && !!state._radiumStyleState[key] && state._radiumStyleState[key][value];
+	};
+	
+	module.exports = getState;
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	/* @flow */
+	
+	'use strict';
+	
+	var getStateKey = function getStateKey(elementKey /*: ?string*/) /*: string*/ {
+	  return elementKey === null || elementKey === undefined ? 'main' : elementKey.toString();
+	};
+	
+	module.exports = getStateKey;
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var isPlainObject = __webpack_require__(20);
+	
+	var shouldMerge = function shouldMerge(value) {
+	  // Don't merge objects overriding toString, since they should be converted
+	  // to string values.
+	  return isPlainObject(value) && value.toString === Object.prototype.toString;
+	};
+	
+	// Merge style objects. Deep merge plain object values.
+	var mergeStyles = function mergeStyles(styles) {
+	  var result = {};
+	
+	  styles.forEach(function (style) {
+	    if (!style || typeof style !== 'object') {
+	      return;
+	    }
+	
+	    if (Array.isArray(style)) {
+	      style = mergeStyles(style);
+	    }
+	
+	    Object.keys(style).forEach(function (key) {
+	      if (shouldMerge(style[key]) && shouldMerge(result[key])) {
+	        result[key] = mergeStyles([result[key], style[key]]);
+	      } else {
+	        result[key] = style[key];
+	      }
+	    });
+	  });
+	
+	  return result;
+	};
+	
+	module.exports = mergeStyles;
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*!
+	 * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
+	 *
+	 * Copyright (c) 2014-2015, Jon Schlinkert.
+	 * Licensed under the MIT License.
+	 */
+	
+	'use strict';
+	
+	var isObject = __webpack_require__(21);
+	
+	function isObjectObject(o) {
+	  return isObject(o) === true
+	    && Object.prototype.toString.call(o) === '[object Object]';
+	}
+	
+	module.exports = function isPlainObject(o) {
+	  var ctor,prot;
+	  
+	  if (isObjectObject(o) === false) return false;
+	  
+	  // If has modified constructor
+	  ctor = o.constructor;
+	  if (typeof ctor !== 'function') return false;
+	  
+	  // If has modified prototype
+	  prot = ctor.prototype;
+	  if (isObjectObject(prot) === false) return false;
+	  
+	  // If constructor does not have an Object-specific method
+	  if (prot.hasOwnProperty('isPrototypeOf') === false) {
+	    return false;
+	  }
+	  
+	  // Most likely a plain Object
+	  return true;
+	};
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
+
+	/*!
+	 * isobject <https://github.com/jonschlinkert/isobject>
+	 *
+	 * Copyright (c) 2014-2015, Jon Schlinkert.
+	 * Licensed under the MIT License.
+	 */
+	
+	'use strict';
+	
+	module.exports = function isObject(val) {
+	  return val != null && typeof val === 'object'
+	    && !Array.isArray(val);
+	};
+
 
 /***/ },
 /* 22 */
@@ -2261,7 +2261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var camelCasePropsToDashCase = __webpack_require__(25);
 	var createMarkupForStyles = __webpack_require__(26);
-	var Prefixer = __webpack_require__(16);
+	var Prefixer = __webpack_require__(11);
 	
 	var React = __webpack_require__(2);
 	
@@ -2404,9 +2404,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var camelCasePropsToDashCase = __webpack_require__(25);
 	var createMarkupForStyles = __webpack_require__(26);
-	var Prefixer = __webpack_require__(16);
+	var Prefixer = __webpack_require__(11);
 	
-	var ExecutionEnvironment = __webpack_require__(17);
+	var ExecutionEnvironment = __webpack_require__(12);
 	
 	var isAnimationSupported = false;
 	var keyframesPrefixed = 'keyframes';
@@ -25119,7 +25119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/*
 	 * Module dependencies
 	 */
-	var balanced = __webpack_require__(40)
+	var balanced = __webpack_require__(38)
 	
 	/**
 	 * Expose `reduceFunctionCall`
@@ -25194,36 +25194,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 40 */
-/***/ function(module, exports) {
-
-	module.exports = function(a, b, str) {
-	  var bal = 0;
-	  var m = {};
-	
-	  for (var i = 0; i < str.length; i++) {
-	    if (a == str.substr(i, a.length)) {
-	      if (!('start' in m)) m.start = i;
-	      bal++;
-	    }
-	    else if (b == str.substr(i, b.length) && 'start' in m) {
-	      bal--;
-	      if (!bal) {
-	        m.end = i;
-	        m.pre = str.substr(0, m.start);
-	        m.body = (m.end - m.start > 1)
-	          ? str.substring(m.start + a.length, m.end)
-	          : '';
-	        m.post = str.slice(m.end + b.length);
-	        return m;
-	      }
-	    }
-	  }
-	};
-	
-
-
-/***/ },
-/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25234,23 +25204,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
 	
-	var _collection = __webpack_require__(42);
+	var _collection = __webpack_require__(41);
 	
 	var Collection = _interopRequireWildcard(_collection);
 	
-	var _log = __webpack_require__(43);
+	var _log = __webpack_require__(42);
 	
 	var Log = _interopRequireWildcard(_log);
 	
-	var _style = __webpack_require__(44);
+	var _style = __webpack_require__(43);
 	
 	var Style = _interopRequireWildcard(_style);
 	
-	var _type = __webpack_require__(45);
+	var _type = __webpack_require__(47);
 	
 	var Type = _interopRequireWildcard(_type);
 	
-	var _propTypes = __webpack_require__(46);
+	var _propTypes = __webpack_require__(48);
 	
 	var PropTypes = _interopRequireWildcard(_propTypes);
 	
@@ -25264,7 +25234,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 42 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25294,7 +25264,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.containsOnlyStrings = containsOnlyStrings;
 
 /***/ },
-/* 43 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/* global console */
@@ -25317,7 +25287,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 44 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25328,7 +25298,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 	
-	var _reduceCssCalc = __webpack_require__(37);
+	var _reduceCssCalc = __webpack_require__(44);
 	
 	var _reduceCssCalc2 = _interopRequireDefault(_reduceCssCalc);
 	
@@ -25381,7 +25351,276 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.getColorScale = getColorScale;
 
 /***/ },
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Module dependencies
+	 */
+	var balanced = __webpack_require__(45)
+	var reduceFunctionCall = __webpack_require__(46)
+	
+	/**
+	 * Constantes
+	 */
+	var MAX_STACK = 100 // should be enough for a single calc()...
+	var NESTED_CALC_RE = /(\+|\-|\*|\\|[^a-z]|)(\s*)(\()/g
+	
+	/**
+	 * Global variables
+	 */
+	var stack
+	
+	/**
+	 * Expose reduceCSSCalc plugin
+	 *
+	 * @type {Function}
+	 */
+	module.exports = reduceCSSCalc
+	
+	/**
+	 * Reduce CSS calc() in a string, whenever it's possible
+	 *
+	 * @param {String} value css input
+	 */
+	function reduceCSSCalc(value, decimalPrecision) {
+	  stack = 0
+	  decimalPrecision = Math.pow(10, decimalPrecision === undefined ? 5 : decimalPrecision)
+	
+	  /**
+	   * Evaluates an expression
+	   *
+	   * @param {String} expression
+	   * @returns {String}
+	   */
+	  function evaluateExpression (expression, functionIdentifier, call) {
+	    if (stack++ > MAX_STACK) {
+	      stack = 0
+	      throw new Error("Call stack overflow for " + call)
+	    }
+	
+	    if (expression === "") {
+	      throw new Error(functionIdentifier + "(): '" + call + "' must contain a non-whitespace string")
+	    }
+	
+	    expression = evaluateNestedExpression(expression, call)
+	
+	    var units = getUnitsInExpression(expression)
+	
+	    // If multiple units let the expression be (i.e. browser calc())
+	    if (units.length > 1) {
+	      return functionIdentifier + "(" + expression + ")"
+	    }
+	
+	    var unit = units[0] || ""
+	
+	    if (unit === "%") {
+	      // Convert percentages to numbers, to handle expressions like: 50% * 50% (will become: 25%):
+	      expression = expression.replace(/\b[0-9\.]+%/g, function(percent) {
+	        return parseFloat(percent.slice(0, -1)) * 0.01
+	      })
+	    }
+	
+	    // Remove units in expression:
+	    var toEvaluate = expression.replace(new RegExp(unit, "g"), "")
+	    var result
+	
+	    try {
+	      result = eval(toEvaluate)
+	    }
+	    catch (e) {
+	      return functionIdentifier + "(" + expression + ")"
+	    }
+	
+	    // Transform back to a percentage result:
+	    if (unit === "%") {
+	      result *= 100
+	    }
+	
+	    // adjust rounding shit
+	    // (0.1 * 0.2 === 0.020000000000000004)
+	    result = Math.round(result * decimalPrecision) / decimalPrecision
+	
+	    // We don't need units for zero values...
+	    if (result !== 0) {
+	      result += unit
+	    }
+	
+	    return result
+	  }
+	
+	  /**
+	   * Evaluates nested expressions
+	   *
+	   * @param {String} expression
+	   * @returns {String}
+	   */
+	  function evaluateNestedExpression(expression, call) {
+	    var evaluatedPart = ""
+	    var nonEvaluatedPart = expression
+	    var matches
+	    while ((matches = NESTED_CALC_RE.exec(nonEvaluatedPart))) {
+	      if (matches[0].index > 0) {
+	        evaluatedPart += nonEvaluatedPart.substring(0, matches[0].index)
+	      }
+	
+	      var balancedExpr = balanced("(", ")", nonEvaluatedPart.substring([0].index))
+	      if (balancedExpr.body === "") {
+	        throw new Error("'" + expression + "' must contain a non-whitespace string")
+	      }
+	
+	      var evaluated = evaluateExpression(balancedExpr.body, "", call)
+	
+	      evaluatedPart += balancedExpr.pre + evaluated
+	      nonEvaluatedPart = balancedExpr.post
+	    }
+	
+	    return evaluatedPart + nonEvaluatedPart
+	  }
+	
+	  return reduceFunctionCall(value, /((?:\-[a-z]+\-)?calc)\(/, evaluateExpression)
+	}
+	
+	/**
+	 * Checks what units are used in an expression
+	 *
+	 * @param {String} expression
+	 * @returns {Array}
+	 */
+	
+	function getUnitsInExpression(expression) {
+	  var uniqueUnits = []
+	  var unitRegEx = /[\.0-9]([%a-z]+)/g
+	  var matches = unitRegEx.exec(expression)
+	
+	  while (matches) {
+	    if (!matches || !matches[1]) {
+	      continue
+	    }
+	
+	    if (uniqueUnits.indexOf(matches[1]) === -1) {
+	      uniqueUnits.push(matches[1])
+	    }
+	
+	    matches = unitRegEx.exec(expression)
+	  }
+	
+	  return uniqueUnits
+	}
+
+
+/***/ },
 /* 45 */
+/***/ function(module, exports) {
+
+	module.exports = function(a, b, str) {
+	  var bal = 0;
+	  var m = {};
+	
+	  for (var i = 0; i < str.length; i++) {
+	    if (a == str.substr(i, a.length)) {
+	      if (!('start' in m)) m.start = i;
+	      bal++;
+	    }
+	    else if (b == str.substr(i, b.length) && 'start' in m) {
+	      bal--;
+	      if (!bal) {
+	        m.end = i;
+	        m.pre = str.substr(0, m.start);
+	        m.body = (m.end - m.start > 1)
+	          ? str.substring(m.start + a.length, m.end)
+	          : '';
+	        m.post = str.slice(m.end + b.length);
+	        return m;
+	      }
+	    }
+	  }
+	};
+	
+
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	 * Module dependencies
+	 */
+	var balanced = __webpack_require__(45)
+	
+	/**
+	 * Expose `reduceFunctionCall`
+	 *
+	 * @type {Function}
+	 */
+	module.exports = reduceFunctionCall
+	
+	/**
+	 * Walkthrough all expressions, evaluate them and insert them into the declaration
+	 *
+	 * @param {Array} expressions
+	 * @param {Object} declaration
+	 */
+	
+	function reduceFunctionCall(string, functionRE, callback) {
+	  var call = string
+	  return getFunctionCalls(string, functionRE).reduce(function(string, obj) {
+	    return string.replace(obj.functionIdentifier + "(" + obj.matches.body + ")", evalFunctionCall(obj.matches.body, obj.functionIdentifier, callback, call, functionRE))
+	  }, string)
+	}
+	
+	/**
+	 * Parses expressions in a value
+	 *
+	 * @param {String} value
+	 * @returns {Array}
+	 * @api private
+	 */
+	
+	function getFunctionCalls(call, functionRE) {
+	  var expressions = []
+	
+	  var fnRE = typeof functionRE === "string" ? new RegExp("\\b(" + functionRE + ")\\(") : functionRE
+	  do {
+	    var searchMatch = fnRE.exec(call)
+	    if (!searchMatch) {
+	      return expressions
+	    }
+	    if (searchMatch[1] === undefined) {
+	      throw new Error("Missing the first couple of parenthesis to get the function identifier in " + functionRE)
+	    }
+	    var fn = searchMatch[1]
+	    var startIndex = searchMatch.index
+	    var matches = balanced("(", ")", call.substring(startIndex))
+	
+	    if (!matches) {
+	      throw new SyntaxError(fn + "(): missing closing ')' in the value '" + call + "'")
+	    }
+	
+	    expressions.push({matches: matches, functionIdentifier: fn})
+	    call = matches.post
+	  }
+	  while (fnRE.test(call))
+	
+	  return expressions
+	}
+	
+	/**
+	 * Evaluates an expression
+	 *
+	 * @param {String} expression
+	 * @returns {String}
+	 * @api private
+	 */
+	
+	function evalFunctionCall (string, functionIdentifier, callback, call, functionRE) {
+	  // allow recursivity
+	  return callback(reduceFunctionCall(string, functionRE, callback), functionIdentifier, call)
+	}
+
+
+/***/ },
+/* 47 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -25432,7 +25671,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.getConstructorName = getConstructorName;
 
 /***/ },
-/* 46 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25445,7 +25684,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react = __webpack_require__(2);
 	
-	var _type = __webpack_require__(45);
+	var _type = __webpack_require__(47);
 	
 	var _lodash = __webpack_require__(29);
 	
