@@ -102,7 +102,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _victoryLabel = __webpack_require__(34);
 	
-	var _victoryUtil = __webpack_require__(40);
+	var _victoryUtil = __webpack_require__(36);
 	
 	var _victoryUtil2 = _interopRequireDefault(_victoryUtil);
 	
@@ -24424,7 +24424,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 	
@@ -24446,6 +24446,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var VictoryAnimation = (function (_React$Component) {
 	  _inherits(VictoryAnimation, _React$Component);
+	
+	  _createClass(VictoryAnimation, null, [{
+	    key: "propTypes",
+	    value: {
+	      children: _react2["default"].PropTypes.func,
+	      velocity: _react2["default"].PropTypes.number,
+	      easing: _react2["default"].PropTypes.string,
+	      delay: _react2["default"].PropTypes.number,
+	      onEnd: _react2["default"].PropTypes.func,
+	      data: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.object, _react2["default"].PropTypes.array])
+	    },
+	    enumerable: true
+	  }, {
+	    key: "defaultProps",
+	    value: {
+	      /* velocity modifies step each frame */
+	      velocity: 0.02,
+	      /* easing modifies step each frame */
+	      easing: "quad-in-out",
+	      /* delay between transitions */
+	      delay: 0,
+	      /* we got nothin' */
+	      data: {}
+	    },
+	    enumerable: true
+	  }]);
 	
 	  function VictoryAnimation(props) {
 	    _classCallCheck(this, VictoryAnimation);
@@ -24495,6 +24521,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	          /* Start traversing the tween queue */
 	          this.traverseQueue();
 	        }
+	    }
+	  }, {
+	    key: "componentWillUnmount",
+	    value: function componentWillUnmount() {
+	      if (this.raf) {
+	        cancelAnimationFrame(this.raf);
+	      }
 	    }
 	
 	    /* Traverse the tween queue */
@@ -24562,25 +24595,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return VictoryAnimation;
 	})(_react2["default"].Component);
 	
-	VictoryAnimation.propTypes = {
-	  velocity: _react2["default"].PropTypes.number,
-	  easing: _react2["default"].PropTypes.string,
-	  delay: _react2["default"].PropTypes.number,
-	  onEnd: _react2["default"].PropTypes.func,
-	  data: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.object, _react2["default"].PropTypes.array])
-	};
-	
-	VictoryAnimation.defaultProps = {
-	  /* velocity modifies step each frame */
-	  velocity: 0.02,
-	  /* easing modifies step each frame */
-	  easing: "quad-in-out",
-	  /* delay between transitions */
-	  delay: 0,
-	  /* we got nothin' */
-	  data: {}
-	};
-	
 	exports["default"] = VictoryAnimation;
 	module.exports = exports["default"];
 
@@ -24600,15 +24614,110 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _d32 = _interopRequireDefault(_d3);
 	
-	var interpolatorAdded = false;
+	var _lodash = __webpack_require__(29);
 	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	var isInterpolatable = function isInterpolatable(obj) {
+	  // d3 turns null into 0 and undefined into NaN, which we don't want.
+	  if (obj !== null) {
+	    switch (typeof obj) {
+	      case "undefined":
+	        return false;
+	      case "number":
+	        // The standard `isNaN` is fine in this case since we already know the
+	        // type is number.
+	        return !isNaN(obj) && _lodash2["default"].isFinite(obj);
+	      case "string":
+	        // d3 might not *actually* be able to interpolate the string, but it
+	        // won't cause any issues to let it try.
+	        return true;
+	      case "boolean":
+	        // d3 turns Booleans into integers, which we don't want. Sure, we could
+	        // interpolate from 0 -> 1, but we'd be sending a non-Boolean to
+	        // something expecting a Boolean.
+	        return false;
+	      case "object":
+	        // Don't try to interpolate class instances (except Date or Array).
+	        return _lodash2["default"].isDate(obj) || _lodash2["default"].isArray(obj) || _lodash2["default"].isPlainObject(obj);
+	      case "function":
+	        // Careful! There may be extra properties on function objects that the
+	        // component expects to access - for instance, it may be a `d3.scale()`
+	        // function, which has its own methods attached. We don't know if the
+	        // component is only going to call the function (in which case it's
+	        // safely interpolatable) or if it's going to access special properties
+	        // (in which case our function generated from `interpolateFunction` will
+	        // most likely cause an error. We could check for enumerable properties
+	        // on the function object here to see if it's a "plain" function, but
+	        // let's just require that components prevent such function props from
+	        // being animated in the first place.
+	        return true;
+	    }
+	  }
+	  return false;
+	};
+	
+	exports.isInterpolatable = isInterpolatable;
 	/**
-	 * By default, `d3.interpolate` (which cycles through a list of interpolators)
-	 * has a few downsides:
+	 * Interpolate immediately to the end value at the given step `when`.
+	 * Some nicer default behavior might be to jump at the halfway point or return
+	 * `a` if `t` is 0 (instead of always returning `b`). But d3's default
+	 * interpolator does not do these things:
+	 *
+	 *   d3.interpolate('aaa', 'bbb')(0) === 'bbb'
+	 *
+	 * ...and things might get wonky if we don't replicate that behavior.
+	 *
+	 * @param {any} a - Start value.
+	 * @param {any} b - End value.
+	 * @param {Number} when - Step value (0 to 1) at which to jump to `b`.
+	 * @returns {Function} An interpolation function.
+	 */
+	var interpolateImmediate = function interpolateImmediate(a, b) {
+	  var when = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+	
+	  return function (t) {
+	    return t < when ? a : b;
+	  };
+	};
+	
+	exports.interpolateImmediate = interpolateImmediate;
+	/**
+	 * Interpolate to or from a function. The interpolated value will be a function
+	 * that calls `a` (if it's a function) and `b` (if it's a function) and calls
+	 * `d3.interpolate` on the resulting values. Note that our function won't
+	 * necessarily be called (that's up to the component this eventually gets
+	 * passed to) - but if it does get called, it will return an appropriately
+	 * interpolated value.
+	 *
+	 * @param {any} a - Start value.
+	 * @param {any} b - End value.
+	 * @returns {Function} An interpolation function.
+	 */
+	var interpolateFunction = function interpolateFunction(a, b) {
+	  return function (t) {
+	    if (t >= 1) {
+	      return b;
+	    }
+	    return function () {
+	      /* eslint-disable no-invalid-this */
+	      var aval = typeof a === "function" ? a.apply(this, arguments) : a;
+	      var bval = typeof b === "function" ? b.apply(this, arguments) : b;
+	      return _d32["default"].interpolate(aval, bval)(t);
+	    };
+	  };
+	};
+	
+	exports.interpolateFunction = interpolateFunction;
+	/**
+	 * By default, the list of interpolators used by `d3.interpolate` has a few
+	 * downsides:
 	 *
 	 * - `null` values get turned into 0.
 	 * - `undefined`, `function`, and some other value types get turned into NaN.
-	 * - It tries to interpolate between identical start->end values, doing
+	 * - Boolean types get turned into numbers, which probably will be meaningless
+	 *   to whatever is consuming them.
+	 * - It tries to interpolate between identical start and end values, doing
 	 *   unnecessary calculations that sometimes result in floating point rounding
 	 *   errors.
 	 *
@@ -24621,37 +24730,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	 *
 	 * @param {any} a - Start value.
 	 * @param {any} b - End value.
-	 * @returns {Function} Returns an interpolation function, if possible.
+	 * @returns {Function|undefined} An interpolation function, if necessary.
 	 */
 	var victoryInterpolator = function victoryInterpolator(a, b) {
-	  // If the values are strictly equal, or either value is null or undefined,
-	  // just use the start value `a` or end value `b` at every step, as there is
-	  // no reasonable in-between value. The value will jump, but we can try to
-	  // jump at a good time (like the halfway point).
-	  if (a === b || a == null || b == null) {
-	    return function (t) {
-	      // Switch to `b` halfway through the interpolation.
-	      return t < 0.5 ? a : b;
-	    };
+	  // If the values are strictly equal, or either value is not interpolatable,
+	  // just use either the start value `a` or end value `b` at every step, as
+	  // there is no reasonable in-between value.
+	  if (a === b || !isInterpolatable(a) || !isInterpolatable(b)) {
+	    return interpolateImmediate(a, b);
 	  }
 	  if (typeof a === "function" || typeof b === "function") {
-	    return function (t) {
-	      // We're interpolating to or from a function. The interpolated value will
-	      // be a function that calls `a` (if it's a function) and `b` (if it's a
-	      // function) and calls `d3.interpolate` on the resulting values.
-	      // Note that our function won't necessarily be called (that's up to the
-	      // component) - but if it does get called, it will return an
-	      // appropriately interpolated value.
-	      return function () {
-	        var aval = typeof a === "function" ? a.apply(this, arguments) : a;
-	        var bval = typeof b === "function" ? b.apply(this, arguments) : b;
-	        return _d32["default"].interpolate(aval, bval)(t);
-	      };
-	    };
+	    return interpolateFunction(a, b);
 	  }
 	};
 	
 	exports.victoryInterpolator = victoryInterpolator;
+	var interpolatorAdded = false;
+	
 	var addVictoryInterpolator = function addVictoryInterpolator() {
 	  if (!interpolatorAdded) {
 	    _d32["default"].interpolators.push(victoryInterpolator);
@@ -24698,7 +24793,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _radium2 = _interopRequireDefault(_radium);
 	
-	var _victoryUtilLibStyle = __webpack_require__(36);
+	var _victoryUtil = __webpack_require__(36);
+	
+	var _victoryUtil2 = _interopRequireDefault(_victoryUtil);
 	
 	var _lodash = __webpack_require__(29);
 	
@@ -24732,7 +24829,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var _this = this;
 	
 	      var style = this.getStyles();
-	      var transform = (0, _victoryUtilLibStyle.toTransformString)(this.props.transform);
+	      var transform = _victoryUtil2["default"].Style.toTransformString(this.props.transform);
 	      var content = this.props.children || "";
 	      var lines = content.split("\n");
 	
@@ -24749,13 +24846,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var dy = this.props.dy;
 	      switch (this.props.verticalAnchor) {
 	        case "end":
-	          dy = (0, _victoryUtilLibStyle.calc)(dy + " + " + capHeight + " / 2 + (0.5 - " + lines.length + ") * " + lineHeight);
+	          dy = _victoryUtil2["default"].Style.calc(dy + " + " + capHeight + " / 2 + (0.5 - " + lines.length + ") * " + lineHeight);
 	          break;
 	        case "middle":
-	          dy = (0, _victoryUtilLibStyle.calc)(dy + " + " + capHeight + " / 2 + (0.5 - " + lines.length + " / 2) * " + lineHeight);
+	          dy = _victoryUtil2["default"].Style.calc(dy + " + " + capHeight + " / 2 + (0.5 - " + lines.length + " / 2) * " + lineHeight);
 	          break;
 	        default:
-	          dy = (0, _victoryUtilLibStyle.calc)(dy + " + " + capHeight + " / 2 + " + lineHeight + " / 2");
+	          dy = _victoryUtil2["default"].Style.calc(dy + " + " + capHeight + " / 2 + " + lineHeight + " / 2");
 	      }
 	
 	      return _react2["default"].createElement(
@@ -24785,7 +24882,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * `lineHeight` and `dy`, preferably ems. If given a unitless number, it
 	       * is assumed to be ems.
 	       */
-	      capHeight: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number]),
+	      capHeight: _react.PropTypes.oneOfType([_react.PropTypes.string, _victoryUtil2["default"].PropTypes.nonNegative]),
 	      /**
 	       * The children of this component define the content of the label. This
 	       * makes using the component similar to normal HTML spans or labels.
@@ -24801,7 +24898,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * as `capHeight` and `dy`, preferably ems. If given a unitless number, it
 	       * is assumed to be ems.
 	       */
-	      lineHeight: _react.PropTypes.oneOfType([_react.PropTypes.string, _react.PropTypes.number]),
+	      lineHeight: _react.PropTypes.oneOfType([_react.PropTypes.string, _victoryUtil2["default"].PropTypes.nonNegative]),
 	      /**
 	       * The style prop applies CSS properties to the rendered `<text>` element.
 	       */
@@ -24826,12 +24923,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * The x prop defines the x coordinate to use as a basis for horizontal
 	       * positioning.
 	       */
-	      x: _react.PropTypes.number,
+	      x: _victoryUtil2["default"].PropTypes.nonNegative,
 	      /**
 	       * The y prop defines the y coordinate to use as a basis for vertical
 	       * positioning.
 	       */
-	      y: _react.PropTypes.number,
+	      y: _victoryUtil2["default"].PropTypes.nonNegative,
 	      /**
 	       * The dy prop defines a vertical shift from the `y` coordinate. Since this
 	       * component already accounts for `capHeight`, `lineHeight`, and
@@ -24869,358 +24966,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-	
-	var _reduceCssCalc = __webpack_require__(37);
-	
-	var _reduceCssCalc2 = _interopRequireDefault(_reduceCssCalc);
-	
-	/**
-	 * Given an object with CSS/SVG transform definitions, return the string value
-	 * for use with the `transform` CSS property or SVG attribute. Note that we
-	 * can't always guarantee the order will match the author's intended order, so
-	 * authors should only use the object notation if they know that their transform
-	 * is commutative or that there is only one.
-	 * @param {Object} obj An object of transform definitions.
-	 * @returns {String} The generated transform string.
-	 */
-	var toTransformString = function toTransformString(obj) {
-	  if (!obj || typeof obj === "string") {
-	    return obj;
-	  }
-	  var transforms = [];
-	  for (var key in obj) {
-	    if (obj.hasOwnProperty(key)) {
-	      var value = obj[key];
-	      transforms.push(key + "(" + value + ")");
-	    }
-	  }
-	  return transforms.join(" ");
-	};
-	
-	exports.toTransformString = toTransformString;
-	var calc = function calc(expr, precision) {
-	  return (0, _reduceCssCalc2["default"])("calc(" + expr + ")", precision);
-	};
-	
-	exports.calc = calc;
-	/**
-	 * Given the name of a color scale, getColorScale will return an array
-	 * of 5 hex string values in that color scale. If no 'name' parameter
-	 * is given, it will return the Victory default grayscale.
-	 * @param {String} name The name of the color scale to return (optional).
-	 * @returns {Array} An array of 5 hex string values composing a color scale.
-	 */
-	var getColorScale = function getColorScale(name) {
-	  var scales = {
-	    victory: ["#9f9f9f", "#e0dfe0", "#7e7e7e", "#d3d2d3", "#000000"],
-	    gray: ["#969696", "#f1f1f1", "#636363", "#cccccc", "#252525"],
-	    bluePurple: ["#8c96c6", "#edf8fb", "#8856a7", "#b3cde3", "#810f7c"],
-	    red: ["#de2d26", "#fee5d9", "#fb6a4a", "#fcae91", "#a50f15"],
-	    yellowBlue: ["#41b6c4", "#ffffcc", "#2c7fb8", "#a1dab4", "#253494"]
-	  };
-	  return name ? scales[name] : scales.victory;
-	};
-	exports.getColorScale = getColorScale;
-
-/***/ },
-/* 37 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Module dependencies
-	 */
-	var balanced = __webpack_require__(38)
-	var reduceFunctionCall = __webpack_require__(39)
-	
-	/**
-	 * Constantes
-	 */
-	var MAX_STACK = 100 // should be enough for a single calc()...
-	var NESTED_CALC_RE = /(\+|\-|\*|\\|[^a-z]|)(\s*)(\()/g
-	
-	/**
-	 * Global variables
-	 */
-	var stack
-	
-	/**
-	 * Expose reduceCSSCalc plugin
-	 *
-	 * @type {Function}
-	 */
-	module.exports = reduceCSSCalc
-	
-	/**
-	 * Reduce CSS calc() in a string, whenever it's possible
-	 *
-	 * @param {String} value css input
-	 */
-	function reduceCSSCalc(value, decimalPrecision) {
-	  stack = 0
-	  decimalPrecision = Math.pow(10, decimalPrecision === undefined ? 5 : decimalPrecision)
-	
-	  /**
-	   * Evaluates an expression
-	   *
-	   * @param {String} expression
-	   * @returns {String}
-	   */
-	  function evaluateExpression (expression, functionIdentifier, call) {
-	    if (stack++ > MAX_STACK) {
-	      stack = 0
-	      throw new Error("Call stack overflow for " + call)
-	    }
-	
-	    if (expression === "") {
-	      throw new Error(functionIdentifier + "(): '" + call + "' must contain a non-whitespace string")
-	    }
-	
-	    expression = evaluateNestedExpression(expression, call)
-	
-	    var units = getUnitsInExpression(expression)
-	
-	    // If multiple units let the expression be (i.e. browser calc())
-	    if (units.length > 1) {
-	      return functionIdentifier + "(" + expression + ")"
-	    }
-	
-	    var unit = units[0] || ""
-	
-	    if (unit === "%") {
-	      // Convert percentages to numbers, to handle expressions like: 50% * 50% (will become: 25%):
-	      expression = expression.replace(/\b[0-9\.]+%/g, function(percent) {
-	        return parseFloat(percent.slice(0, -1)) * 0.01
-	      })
-	    }
-	
-	    // Remove units in expression:
-	    var toEvaluate = expression.replace(new RegExp(unit, "g"), "")
-	    var result
-	
-	    try {
-	      result = eval(toEvaluate)
-	    }
-	    catch (e) {
-	      return functionIdentifier + "(" + expression + ")"
-	    }
-	
-	    // Transform back to a percentage result:
-	    if (unit === "%") {
-	      result *= 100
-	    }
-	
-	    // adjust rounding shit
-	    // (0.1 * 0.2 === 0.020000000000000004)
-	    result = Math.round(result * decimalPrecision) / decimalPrecision
-	
-	    // We don't need units for zero values...
-	    if (result !== 0) {
-	      result += unit
-	    }
-	
-	    return result
-	  }
-	
-	  /**
-	   * Evaluates nested expressions
-	   *
-	   * @param {String} expression
-	   * @returns {String}
-	   */
-	  function evaluateNestedExpression(expression, call) {
-	    var evaluatedPart = ""
-	    var nonEvaluatedPart = expression
-	    var matches
-	    while ((matches = NESTED_CALC_RE.exec(nonEvaluatedPart))) {
-	      if (matches[0].index > 0) {
-	        evaluatedPart += nonEvaluatedPart.substring(0, matches[0].index)
-	      }
-	
-	      var balancedExpr = balanced("(", ")", nonEvaluatedPart.substring([0].index))
-	      if (balancedExpr.body === "") {
-	        throw new Error("'" + expression + "' must contain a non-whitespace string")
-	      }
-	
-	      var evaluated = evaluateExpression(balancedExpr.body, "", call)
-	
-	      evaluatedPart += balancedExpr.pre + evaluated
-	      nonEvaluatedPart = balancedExpr.post
-	    }
-	
-	    return evaluatedPart + nonEvaluatedPart
-	  }
-	
-	  return reduceFunctionCall(value, /((?:\-[a-z]+\-)?calc)\(/, evaluateExpression)
-	}
-	
-	/**
-	 * Checks what units are used in an expression
-	 *
-	 * @param {String} expression
-	 * @returns {Array}
-	 */
-	
-	function getUnitsInExpression(expression) {
-	  var uniqueUnits = []
-	  var unitRegEx = /[\.0-9]([%a-z]+)/g
-	  var matches = unitRegEx.exec(expression)
-	
-	  while (matches) {
-	    if (!matches || !matches[1]) {
-	      continue
-	    }
-	
-	    if (uniqueUnits.indexOf(matches[1]) === -1) {
-	      uniqueUnits.push(matches[1])
-	    }
-	
-	    matches = unitRegEx.exec(expression)
-	  }
-	
-	  return uniqueUnits
-	}
-
-
-/***/ },
-/* 38 */
-/***/ function(module, exports) {
-
-	module.exports = function(a, b, str) {
-	  var bal = 0;
-	  var m = {};
-	
-	  for (var i = 0; i < str.length; i++) {
-	    if (a == str.substr(i, a.length)) {
-	      if (!('start' in m)) m.start = i;
-	      bal++;
-	    }
-	    else if (b == str.substr(i, b.length) && 'start' in m) {
-	      bal--;
-	      if (!bal) {
-	        m.end = i;
-	        m.pre = str.substr(0, m.start);
-	        m.body = (m.end - m.start > 1)
-	          ? str.substring(m.start + a.length, m.end)
-	          : '';
-	        m.post = str.slice(m.end + b.length);
-	        return m;
-	      }
-	    }
-	  }
-	};
-	
-
-
-/***/ },
-/* 39 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*
-	 * Module dependencies
-	 */
-	var balanced = __webpack_require__(38)
-	
-	/**
-	 * Expose `reduceFunctionCall`
-	 *
-	 * @type {Function}
-	 */
-	module.exports = reduceFunctionCall
-	
-	/**
-	 * Walkthrough all expressions, evaluate them and insert them into the declaration
-	 *
-	 * @param {Array} expressions
-	 * @param {Object} declaration
-	 */
-	
-	function reduceFunctionCall(string, functionRE, callback) {
-	  var call = string
-	  return getFunctionCalls(string, functionRE).reduce(function(string, obj) {
-	    return string.replace(obj.functionIdentifier + "(" + obj.matches.body + ")", evalFunctionCall(obj.matches.body, obj.functionIdentifier, callback, call, functionRE))
-	  }, string)
-	}
-	
-	/**
-	 * Parses expressions in a value
-	 *
-	 * @param {String} value
-	 * @returns {Array}
-	 * @api private
-	 */
-	
-	function getFunctionCalls(call, functionRE) {
-	  var expressions = []
-	
-	  var fnRE = typeof functionRE === "string" ? new RegExp("\\b(" + functionRE + ")\\(") : functionRE
-	  do {
-	    var searchMatch = fnRE.exec(call)
-	    if (!searchMatch) {
-	      return expressions
-	    }
-	    if (searchMatch[1] === undefined) {
-	      throw new Error("Missing the first couple of parenthesis to get the function identifier in " + functionRE)
-	    }
-	    var fn = searchMatch[1]
-	    var startIndex = searchMatch.index
-	    var matches = balanced("(", ")", call.substring(startIndex))
-	
-	    if (!matches) {
-	      throw new SyntaxError(fn + "(): missing closing ')' in the value '" + call + "'")
-	    }
-	
-	    expressions.push({matches: matches, functionIdentifier: fn})
-	    call = matches.post
-	  }
-	  while (fnRE.test(call))
-	
-	  return expressions
-	}
-	
-	/**
-	 * Evaluates an expression
-	 *
-	 * @param {String} expression
-	 * @returns {String}
-	 * @api private
-	 */
-	
-	function evalFunctionCall (string, functionIdentifier, callback, call, functionRE) {
-	  // allow recursivity
-	  return callback(reduceFunctionCall(string, functionRE, callback), functionIdentifier, call)
-	}
-
-
-/***/ },
-/* 40 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
 	
-	var _collection = __webpack_require__(41);
+	var _collection = __webpack_require__(37);
 	
 	var Collection = _interopRequireWildcard(_collection);
 	
-	var _log = __webpack_require__(42);
+	var _log = __webpack_require__(38);
 	
 	var Log = _interopRequireWildcard(_log);
 	
-	var _style = __webpack_require__(43);
+	var _style = __webpack_require__(39);
 	
 	var Style = _interopRequireWildcard(_style);
 	
-	var _type = __webpack_require__(47);
+	var _type = __webpack_require__(44);
 	
 	var Type = _interopRequireWildcard(_type);
 	
-	var _propTypes = __webpack_require__(48);
+	var _propTypes = __webpack_require__(45);
 	
 	var PropTypes = _interopRequireWildcard(_propTypes);
 	
@@ -25234,7 +24998,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 41 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25261,10 +25025,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _lodash2["default"].isString(item);
 	  });
 	};
+	
 	exports.containsOnlyStrings = containsOnlyStrings;
+	var isArrayOfArrays = function isArrayOfArrays(collection) {
+	  return _lodash2["default"].isArray(collection) && _lodash2["default"].every(collection, function (item) {
+	    return _lodash2["default"].isArray(item);
+	  });
+	};
+	
+	exports.isArrayOfArrays = isArrayOfArrays;
+	var removeUndefined = function removeUndefined(arr) {
+	  return _lodash2["default"].filter(arr, function (el) {
+	    return el !== undefined;
+	  });
+	};
+	exports.removeUndefined = removeUndefined;
 
 /***/ },
-/* 42 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/* global console */
@@ -25287,7 +25065,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 43 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25298,7 +25076,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 	
-	var _reduceCssCalc = __webpack_require__(44);
+	var _reduceCssCalc = __webpack_require__(40);
 	
 	var _reduceCssCalc2 = _interopRequireDefault(_reduceCssCalc);
 	
@@ -25340,25 +25118,28 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	var getColorScale = function getColorScale(name) {
 	  var scales = {
-	    victory: ["#9f9f9f", "#e0dfe0", "#7e7e7e", "#d3d2d3", "#000000"],
-	    gray: ["#969696", "#f1f1f1", "#636363", "#cccccc", "#252525"],
-	    bluePurple: ["#8c96c6", "#edf8fb", "#8856a7", "#b3cde3", "#810f7c"],
-	    red: ["#de2d26", "#fee5d9", "#fb6a4a", "#fcae91", "#a50f15"],
-	    yellowBlue: ["#41b6c4", "#ffffcc", "#2c7fb8", "#a1dab4", "#253494"]
+	    greyscale: ["#7d7d7d", "#5e5e5e", "#969696", "#bdbdbd", "#000000"],
+	    qualitative: ["#334D5C", "#45B29D", "#EFC94C", "#E27A3F", "#DF5A49", "#4F7DA1", "#55DBC1", "#EFDA97", "#E2A37F", "#DF948A"],
+	    heatmap: ["#428517", "#77D200", "#D6D305", "#EC8E19", "#C92B05"],
+	    warm: ["#940031", "#C43343", "#DC5429", "#FF821D", "#FFAF55"],
+	    cool: ["#2746B9", "#0B69D4", "#2794DB", "#31BB76", "#60E83B"],
+	    red: ["#611310", "#7D1D1D", "#B02928", "#B02928", "#D86B67"],
+	    blue: ["#002C61", "#004B8F", "#006BC9", "#3795E5", "#65B4F4"],
+	    green: ["#354722", "#466631", "#649146", "#8AB25C", "#A9C97E"]
 	  };
 	  return name ? scales[name] : scales.victory;
 	};
 	exports.getColorScale = getColorScale;
 
 /***/ },
-/* 44 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies
 	 */
-	var balanced = __webpack_require__(45)
-	var reduceFunctionCall = __webpack_require__(46)
+	var balanced = __webpack_require__(41)
+	var reduceFunctionCall = __webpack_require__(42)
 	
 	/**
 	 * Constantes
@@ -25510,7 +25291,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 45 */
+/* 41 */
 /***/ function(module, exports) {
 
 	module.exports = function(a, b, str) {
@@ -25540,13 +25321,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 46 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
 	 * Module dependencies
 	 */
-	var balanced = __webpack_require__(45)
+	var balanced = __webpack_require__(43)
 	
 	/**
 	 * Expose `reduceFunctionCall`
@@ -25620,7 +25401,37 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 47 */
+/* 43 */
+/***/ function(module, exports) {
+
+	module.exports = function(a, b, str) {
+	  var bal = 0;
+	  var m = {};
+	
+	  for (var i = 0; i < str.length; i++) {
+	    if (a == str.substr(i, a.length)) {
+	      if (!('start' in m)) m.start = i;
+	      bal++;
+	    }
+	    else if (b == str.substr(i, b.length) && 'start' in m) {
+	      bal--;
+	      if (!bal) {
+	        m.end = i;
+	        m.pre = str.substr(0, m.start);
+	        m.body = (m.end - m.start > 1)
+	          ? str.substring(m.start + a.length, m.end)
+	          : '';
+	        m.post = str.slice(m.end + b.length);
+	        return m;
+	      }
+	    }
+	  }
+	};
+	
+
+
+/***/ },
+/* 44 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -25671,7 +25482,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.getConstructorName = getConstructorName;
 
 /***/ },
-/* 48 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -25684,7 +25495,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react = __webpack_require__(2);
 	
-	var _type = __webpack_require__(47);
+	var _type = __webpack_require__(44);
 	
 	var _lodash = __webpack_require__(29);
 	
