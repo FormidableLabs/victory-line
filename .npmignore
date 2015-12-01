@@ -18,6 +18,7 @@ npm-debug.log*
 coverage
 node_modules
 bower_components
+docs
 demo
 test
 karma*
