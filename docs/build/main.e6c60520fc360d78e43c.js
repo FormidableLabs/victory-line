@@ -78,7 +78,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _docs2 = _interopRequireDefault(_docs);
 
-	var _staticIndex = __webpack_require__(417);
+	var _staticIndex = __webpack_require__(418);
 
 	var _staticIndex2 = _interopRequireDefault(_staticIndex);
 
@@ -20289,6 +20289,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  _createClass(Ecology, [{
+	    key: "renderAPI",
+	    value: function renderAPI(source) {
+	      if (source) {
+	        return _react2["default"].createElement(
+	          "div",
+	          { className: "Documentation" },
+	          _react2["default"].createElement(_api2["default"], { source: this.props.source })
+	        );
+	      }
+	    }
+	  }, {
 	    key: "render",
 	    value: function render() {
 	      return _react2["default"].createElement(
@@ -20302,12 +20313,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            scope: this.props.scope,
 	            playgroundtheme: this.props.playgroundtheme })
 	        ),
-	        _react2["default"].createElement(
-	          "div",
-	          { className: "Documentation" },
-	          _react2["default"].createElement(_api2["default"], {
-	            source: this.props.source })
-	        )
+	        this.renderAPI(this.props.source)
 	      );
 	    }
 	  }]);
@@ -20366,13 +20372,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	      {
 	        return value.map(function (val) {
 	          return val.name;
-	        }).join(', ');
+	        }).join(", ");
 	      }
 	    case "enum":
 	      {
 	        return value.map(function (val) {
 	          return val.value;
-	        }).join(', ');
+	        }).join(", ");
 	      }
 	    case "instanceOf":
 	      {
@@ -20385,8 +20391,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    case "shape":
 	      {
 	        return "{" + Object.keys(value).map(function (val) {
-	          return val + ': ' + renderType(value[val]);
-	        }).join(', ') + "}";
+	          return val + ": " + renderType(value[val]);
+	        }).join(", ") + "}";
 	      }
 	    default:
 	      {
@@ -20561,12 +20567,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      this.renderPlaygrounds();
 	    }
 	  }, {
+	    key: "findPlayground",
+	    value: function findPlayground(className) {
+	      return _reactDom2["default"].findDOMNode(this.refs.overview).getElementsByClassName(className);
+	    }
+	  }, {
 	    key: "renderPlaygrounds",
 	    value: function renderPlaygrounds() {
-	      var playgrounds = Array.prototype.slice.call(_reactDom2["default"].findDOMNode(this.refs.overview).getElementsByClassName("lang-playground"), 0);
+	      var playgrounds = Array.prototype.slice.call(this.findPlayground("lang-playground"), 0);
 	      for (var p in playgrounds) {
 	        if (playgrounds.hasOwnProperty(p)) {
-	          var source = playgrounds[p].innerText;
+	          var source = playgrounds[p].textContent;
 	          _reactDom2["default"].render(_react2["default"].createElement(
 	            "div",
 	            { className: "Interactive" },
@@ -20578,10 +20589,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          ), playgrounds[p].parentNode);
 	        }
 	      }
-	      var playgroundsNoRender = Array.prototype.slice.call(_reactDom2["default"].findDOMNode(this.refs.overview).getElementsByClassName("lang-playground_norender"), 0);
+	      var playgroundsNoRender = Array.prototype.slice.call(this.findPlayground("lang-playground_norender"), 0);
 	      for (var p in playgroundsNoRender) {
 	        if (playgroundsNoRender.hasOwnProperty(p)) {
-	          var source = playgroundsNoRender[p].innerText;
+	          var source = playgroundsNoRender[p].textContent;
 	          _reactDom2["default"].render(_react2["default"].createElement(
 	            "div",
 	            { className: "Interactive" },
@@ -122366,11 +122377,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var Style = _interopRequireWildcard(_style);
 
-	var _type = __webpack_require__(415);
+	var _type = __webpack_require__(416);
 
 	var Type = _interopRequireWildcard(_type);
 
-	var _propTypes = __webpack_require__(416);
+	var _propTypes = __webpack_require__(417);
 
 	var PropTypes = _interopRequireWildcard(_propTypes);
 
@@ -122411,7 +122422,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return _lodash2["default"].isString(item);
 	  });
 	};
+
 	exports.containsOnlyStrings = containsOnlyStrings;
+	var isArrayOfArrays = function isArrayOfArrays(collection) {
+	  return _lodash2["default"].isArray(collection) && _lodash2["default"].every(collection, function (item) {
+	    return _lodash2["default"].isArray(item);
+	  });
+	};
+
+	exports.isArrayOfArrays = isArrayOfArrays;
+	var removeUndefined = function removeUndefined(arr) {
+	  return _lodash2["default"].filter(arr, function (el) {
+	    return el !== undefined;
+	  });
+	};
+	exports.removeUndefined = removeUndefined;
 
 /***/ },
 /* 410 */
@@ -122490,11 +122515,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 	var getColorScale = function getColorScale(name) {
 	  var scales = {
-	    victory: ["#9f9f9f", "#e0dfe0", "#7e7e7e", "#d3d2d3", "#000000"],
-	    gray: ["#969696", "#f1f1f1", "#636363", "#cccccc", "#252525"],
-	    bluePurple: ["#8c96c6", "#edf8fb", "#8856a7", "#b3cde3", "#810f7c"],
-	    red: ["#de2d26", "#fee5d9", "#fb6a4a", "#fcae91", "#a50f15"],
-	    yellowBlue: ["#41b6c4", "#ffffcc", "#2c7fb8", "#a1dab4", "#253494"]
+	    greyscale: ["#7d7d7d", "#5e5e5e", "#969696", "#bdbdbd", "#000000"],
+	    qualitative: ["#334D5C", "#45B29D", "#EFC94C", "#E27A3F", "#DF5A49", "#4F7DA1", "#55DBC1", "#EFDA97", "#E2A37F", "#DF948A"],
+	    heatmap: ["#428517", "#77D200", "#D6D305", "#EC8E19", "#C92B05"],
+	    warm: ["#940031", "#C43343", "#DC5429", "#FF821D", "#FFAF55"],
+	    cool: ["#2746B9", "#0B69D4", "#2794DB", "#31BB76", "#60E83B"],
+	    red: ["#611310", "#7D1D1D", "#B02928", "#B02928", "#D86B67"],
+	    blue: ["#002C61", "#004B8F", "#006BC9", "#3795E5", "#65B4F4"],
+	    green: ["#354722", "#466631", "#649146", "#8AB25C", "#A9C97E"]
 	  };
 	  return name ? scales[name] : scales.victory;
 	};
@@ -122663,30 +122691,56 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 413 */
 /***/ function(module, exports) {
 
-	module.exports = function(a, b, str) {
-	  var bal = 0;
-	  var m = {};
+	module.exports = balanced;
+	function balanced(a, b, str) {
+	  var r = range(a, b, str);
 
-	  for (var i = 0; i < str.length; i++) {
-	    if (a == str.substr(i, a.length)) {
-	      if (!('start' in m)) m.start = i;
-	      bal++;
-	    }
-	    else if (b == str.substr(i, b.length) && 'start' in m) {
-	      bal--;
-	      if (!bal) {
-	        m.end = i;
-	        m.pre = str.substr(0, m.start);
-	        m.body = (m.end - m.start > 1)
-	          ? str.substring(m.start + a.length, m.end)
-	          : '';
-	        m.post = str.slice(m.end + b.length);
-	        return m;
+	  return r && {
+	    start: r[0],
+	    end: r[1],
+	    pre: str.slice(0, r[0]),
+	    body: str.slice(r[0] + a.length, r[1]),
+	    post: str.slice(r[1] + b.length)
+	  };
+	}
+
+	balanced.range = range;
+	function range(a, b, str) {
+	  var begs, beg, left, right, result;
+	  var ai = str.indexOf(a);
+	  var bi = str.indexOf(b, ai + 1);
+	  var i = ai;
+
+	  if (ai >= 0 && bi > 0) {
+	    begs = [];
+	    left = str.length;
+
+	    while (i < str.length && i >= 0 && ! result) {
+	      if (i == ai) {
+	        begs.push(i);
+	        ai = str.indexOf(a, i + 1);
+	      } else if (begs.length == 1) {
+	        result = [ begs.pop(), bi ];
+	      } else {
+	        beg = begs.pop();
+	        if (beg < left) {
+	          left = beg;
+	          right = bi;
+	        }
+
+	        bi = str.indexOf(b, i + 1);
 	      }
+
+	      i = ai < bi && ai >= 0 ? ai : bi;
+	    }
+
+	    if (begs.length) {
+	      result = [ left, right ];
 	    }
 	  }
-	};
 
+	  return result;
+	}
 
 
 /***/ },
@@ -122696,7 +122750,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/*
 	 * Module dependencies
 	 */
-	var balanced = __webpack_require__(413)
+	var balanced = __webpack_require__(415)
 
 	/**
 	 * Expose `reduceFunctionCall`
@@ -122773,6 +122827,36 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 415 */
 /***/ function(module, exports) {
 
+	module.exports = function(a, b, str) {
+	  var bal = 0;
+	  var m = {};
+
+	  for (var i = 0; i < str.length; i++) {
+	    if (a == str.substr(i, a.length)) {
+	      if (!('start' in m)) m.start = i;
+	      bal++;
+	    }
+	    else if (b == str.substr(i, b.length) && 'start' in m) {
+	      bal--;
+	      if (!bal) {
+	        m.end = i;
+	        m.pre = str.substr(0, m.start);
+	        m.body = (m.end - m.start > 1)
+	          ? str.substring(m.start + a.length, m.end)
+	          : '';
+	        m.post = str.slice(m.end + b.length);
+	        return m;
+	      }
+	    }
+	  }
+	};
+
+
+
+/***/ },
+/* 416 */
+/***/ function(module, exports) {
+
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
@@ -122821,7 +122905,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.getConstructorName = getConstructorName;
 
 /***/ },
-/* 416 */
+/* 417 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -122834,7 +122918,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react = __webpack_require__(1);
 
-	var _type = __webpack_require__(415);
+	var _type = __webpack_require__(416);
 
 	var _lodash = __webpack_require__(397);
 
@@ -122930,7 +123014,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.homogenousArray = homogenousArray;
 
 /***/ },
-/* 417 */
+/* 418 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
