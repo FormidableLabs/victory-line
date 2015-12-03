@@ -1,6 +1,6 @@
 ### Overview
 
-The VictoryBar documentation site (currently `projects.formidablelabs.com/victory-line`; eventually `victory.formidable.com/line`) is served as a GitHub Pages project page, which means the content of the remote `gh-pages` branch corresponds to the live site. The site source lives in `/docs`, and the static site is built to `/docs/build` and deployed from there.
+The VictoryLine documentation site (currently `projects.formidablelabs.com/victory-line`; eventually `victory.formidable.com/line`) is served as a GitHub Pages project page, which means the content of the remote `gh-pages` branch corresponds to the live site. The site source lives in `/docs`, and the static site is built to `/docs/build` and deployed from there.
 
 ### Development
 

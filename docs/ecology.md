@@ -36,7 +36,7 @@ VictoryLine can also plot functions. Again, the domain is set so that the entire
  />
 ```
 
-### Flexible and configurable 
+### Flexible and configurable
 
 The sensible defaults VictoryLine provides makes it easy to get started, but everything can be overridden, and configured to suit your needs:
 
@@ -59,8 +59,9 @@ Add labels, style the data, change the interpolation, add a custom domain:
     label="LINE"
     style={{
       data: {
-        stroke: "#c33b33", 
-        strokeWidth: 3
+        stroke: "#822722",
+        strokeWidth: 3,
+        ":hover": {stroke: "#c33b33"}
       },
       labels: {fontSize: 12}
     }}
@@ -90,7 +91,7 @@ class App extends React.Component {
 
   getStyles() {
     const colors = [
-      "red", "orange", "magenta", 
+      "red", "orange", "magenta",
       "gold", "blue", "purple"
     ];
     return {
@@ -117,11 +118,10 @@ class App extends React.Component {
         animate={{velocity: 0.02}}
         y={this.state.y}
       />
-        
+
     );
   }
 }
 ReactDOM.render(<App/>, mountNode);
 
 ```
-

@@ -54,10 +54,10 @@ export default class VictoryLine extends React.Component {
      * @examples [-1, 1], {x: [0, 100], y: [0, 1]}
      */
     domain: PropTypes.oneOfType([
-      Util.PropTypes.minMaxArray,
+      Util.PropTypes.domain,
       PropTypes.shape({
-        x: Util.PropTypes.minMaxArray,
-        y: Util.PropTypes.minMaxArray
+        x: Util.PropTypes.domain,
+        y: Util.PropTypes.domain
       })
     ]),
     /**
@@ -151,7 +151,7 @@ export default class VictoryLine extends React.Component {
      * props are provided for y, the values in x will be plotted as the identity function (x) => x.
      * @examples [1, 2, 3]
      */
-    x: Util.PropTypes.homogenousArray,
+    x: Util.PropTypes.homogeneousArray,
     /**
      * The y prop provides another way to supply data for line to plot. This prop can be given
      * as a function of x, or an array of values. If x props are given, they will be used
