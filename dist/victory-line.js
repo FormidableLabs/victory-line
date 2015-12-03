@@ -370,9 +370,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * available information.
 	       * @examples [-1, 1], {x: [0, 100], y: [0, 1]}
 	       */
-	      domain: _react.PropTypes.oneOfType([_victoryUtil2["default"].PropTypes.minMaxArray, _react.PropTypes.shape({
-	        x: _victoryUtil2["default"].PropTypes.minMaxArray,
-	        y: _victoryUtil2["default"].PropTypes.minMaxArray
+	      domain: _react.PropTypes.oneOfType([_victoryUtil2["default"].PropTypes.domain, _react.PropTypes.shape({
+	        x: _victoryUtil2["default"].PropTypes.domain,
+	        y: _victoryUtil2["default"].PropTypes.domain
 	      })]),
 	      /**
 	       * The height props specifies the height of the chart container element in pixels
@@ -445,7 +445,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * props are provided for y, the values in x will be plotted as the identity function (x) => x.
 	       * @examples [1, 2, 3]
 	       */
-	      x: _victoryUtil2["default"].PropTypes.homogenousArray,
+	      x: _victoryUtil2["default"].PropTypes.homogeneousArray,
 	      /**
 	       * The y prop provides another way to supply data for line to plot. This prop can be given
 	       * as a function of x, or an array of values. If x props are given, they will be used
@@ -498,10 +498,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = function (ComposedComponent /*: constructor*/) {
 	  return Enhancer(ComposedComponent);
 	};
-	module.exports.Plugins = __webpack_require__(7);
+	module.exports.Plugins = __webpack_require__(12);
 	module.exports.PrintStyleSheet = __webpack_require__(23);
 	module.exports.Style = __webpack_require__(24);
-	module.exports.getState = __webpack_require__(17);
+	module.exports.getState = __webpack_require__(7);
 	module.exports.keyframes = __webpack_require__(27);
 	module.exports.__clearStateForTests = __webpack_require__(6).__clearStateForTests;
 
@@ -758,12 +758,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	/*:: import type {Config} from './config';*/
 	
-	var _getState = __webpack_require__(17);
-	var getStateKey = __webpack_require__(18);
-	var mergeStyles = __webpack_require__(19);
-	var Plugins = __webpack_require__(7);
+	var _getState = __webpack_require__(7);
+	var getStateKey = __webpack_require__(8);
+	var mergeStyles = __webpack_require__(9);
+	var Plugins = __webpack_require__(12);
 	
-	var ExecutionEnvironment = __webpack_require__(12);
+	var ExecutionEnvironment = __webpack_require__(17);
 	var React = __webpack_require__(2);
 	
 	var DEFAULT_CONFIG = {
@@ -1035,6 +1035,141 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/* @flow */
+	
+	'use strict';
+	
+	var getStateKey = __webpack_require__(8);
+	
+	var getState = function getState(state /*: {_radiumStyleState: {[key: string]: {[value: string]: boolean}}}*/, elementKey /*: string*/, value /*: string*/) /*: any*/ {
+	  var key = getStateKey(elementKey);
+	
+	  return !!state && !!state._radiumStyleState && !!state._radiumStyleState[key] && state._radiumStyleState[key][value];
+	};
+	
+	module.exports = getState;
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	/* @flow */
+	
+	'use strict';
+	
+	var getStateKey = function getStateKey(elementKey /*: ?string*/) /*: string*/ {
+	  return elementKey === null || elementKey === undefined ? 'main' : elementKey.toString();
+	};
+	
+	module.exports = getStateKey;
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var isPlainObject = __webpack_require__(10);
+	
+	var shouldMerge = function shouldMerge(value) {
+	  // Don't merge objects overriding toString, since they should be converted
+	  // to string values.
+	  return isPlainObject(value) && value.toString === Object.prototype.toString;
+	};
+	
+	// Merge style objects. Deep merge plain object values.
+	var mergeStyles = function mergeStyles(styles) {
+	  var result = {};
+	
+	  styles.forEach(function (style) {
+	    if (!style || typeof style !== 'object') {
+	      return;
+	    }
+	
+	    if (Array.isArray(style)) {
+	      style = mergeStyles(style);
+	    }
+	
+	    Object.keys(style).forEach(function (key) {
+	      if (shouldMerge(style[key]) && shouldMerge(result[key])) {
+	        result[key] = mergeStyles([result[key], style[key]]);
+	      } else {
+	        result[key] = style[key];
+	      }
+	    });
+	  });
+	
+	  return result;
+	};
+	
+	module.exports = mergeStyles;
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*!
+	 * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
+	 *
+	 * Copyright (c) 2014-2015, Jon Schlinkert.
+	 * Licensed under the MIT License.
+	 */
+	
+	'use strict';
+	
+	var isObject = __webpack_require__(11);
+	
+	function isObjectObject(o) {
+	  return isObject(o) === true
+	    && Object.prototype.toString.call(o) === '[object Object]';
+	}
+	
+	module.exports = function isPlainObject(o) {
+	  var ctor,prot;
+	  
+	  if (isObjectObject(o) === false) return false;
+	  
+	  // If has modified constructor
+	  ctor = o.constructor;
+	  if (typeof ctor !== 'function') return false;
+	  
+	  // If has modified prototype
+	  prot = ctor.prototype;
+	  if (isObjectObject(prot) === false) return false;
+	  
+	  // If constructor does not have an Object-specific method
+	  if (prot.hasOwnProperty('isPrototypeOf') === false) {
+	    return false;
+	  }
+	  
+	  // Most likely a plain Object
+	  return true;
+	};
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	/*!
+	 * isobject <https://github.com/jonschlinkert/isobject>
+	 *
+	 * Copyright (c) 2014-2015, Jon Schlinkert.
+	 * Licensed under the MIT License.
+	 */
+	
+	'use strict';
+	
+	module.exports = function isObject(val) {
+	  return val != null && typeof val === 'object'
+	    && !Array.isArray(val);
+	};
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/** @flow */
 	/* eslint-disable block-scoped-var */
 	
@@ -1046,11 +1181,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	/*:: import type {Config} from '../config';*/
 	
-	var checkPropsPlugin = __webpack_require__(8);
-	var mergeStyleArrayPlugin = __webpack_require__(9);
-	var prefixPlugin = __webpack_require__(10);
-	var resolveInteractionStylesPlugin = __webpack_require__(14);
-	var resolveMediaQueriesPlugin = __webpack_require__(16);
+	var checkPropsPlugin = __webpack_require__(13);
+	var mergeStyleArrayPlugin = __webpack_require__(14);
+	var prefixPlugin = __webpack_require__(15);
+	var resolveInteractionStylesPlugin = __webpack_require__(19);
+	var resolveMediaQueriesPlugin = __webpack_require__(21);
 	
 	/*:: export type PluginConfig = {
 	  // May not be readable if code has been minified
@@ -1157,7 +1292,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Replaces (not merged into) the rendered element's style property.
 
 /***/ },
-/* 8 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/* @flow */
@@ -1219,7 +1354,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 9 */
+/* 14 */
 /***/ function(module, exports) {
 
 	/* @flow */
@@ -1239,7 +1374,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = mergeStyleArrayPlugin;
 
 /***/ },
-/* 10 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* @flow */
@@ -1248,7 +1383,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	/*:: import type {PluginConfig, PluginResult} from '.';*/
 	
-	var Prefixer = __webpack_require__(11);
+	var Prefixer = __webpack_require__(16);
 	
 	var prefixPlugin = function prefixPlugin(_ref /*: PluginConfig*/) /*: PluginResult*/ {
 	  var componentName = _ref.componentName;
@@ -1261,7 +1396,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = prefixPlugin;
 
 /***/ },
-/* 11 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -1273,8 +1408,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	'use strict';
 	
-	var ExecutionEnvironment = __webpack_require__(12);
-	var arrayFind = __webpack_require__(13);
+	var ExecutionEnvironment = __webpack_require__(17);
+	var arrayFind = __webpack_require__(18);
 	
 	var VENDOR_PREFIX_REGEX = /-(moz|webkit|ms|o)-/;
 	
@@ -1662,7 +1797,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 12 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -1707,7 +1842,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 13 */
+/* 18 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1736,7 +1871,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 14 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @flow */
@@ -1745,7 +1880,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	/*:: import type {PluginConfig, PluginResult} from '.';*/
 	
-	var MouseUpListener = __webpack_require__(15);
+	var MouseUpListener = __webpack_require__(20);
 	
 	var _isInteractiveStyleField = function _isInteractiveStyleField(styleFieldName) {
 	  return styleFieldName === ':hover' || styleFieldName === ':active' || styleFieldName === ':focus';
@@ -1857,7 +1992,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = resolveInteractionStyles;
 
 /***/ },
-/* 15 */
+/* 20 */
 /***/ function(module, exports) {
 
 	/* @flow */
@@ -1901,7 +2036,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 /***/ },
-/* 16 */
+/* 21 */
 /***/ function(module, exports) {
 
 	/** @flow */
@@ -1990,141 +2125,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	module.exports = resolveMediaQueries;
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* @flow */
-	
-	'use strict';
-	
-	var getStateKey = __webpack_require__(18);
-	
-	var getState = function getState(state /*: {_radiumStyleState: {[key: string]: {[value: string]: boolean}}}*/, elementKey /*: string*/, value /*: string*/) /*: any*/ {
-	  var key = getStateKey(elementKey);
-	
-	  return !!state && !!state._radiumStyleState && !!state._radiumStyleState[key] && state._radiumStyleState[key][value];
-	};
-	
-	module.exports = getState;
-
-/***/ },
-/* 18 */
-/***/ function(module, exports) {
-
-	/* @flow */
-	
-	'use strict';
-	
-	var getStateKey = function getStateKey(elementKey /*: ?string*/) /*: string*/ {
-	  return elementKey === null || elementKey === undefined ? 'main' : elementKey.toString();
-	};
-	
-	module.exports = getStateKey;
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var isPlainObject = __webpack_require__(20);
-	
-	var shouldMerge = function shouldMerge(value) {
-	  // Don't merge objects overriding toString, since they should be converted
-	  // to string values.
-	  return isPlainObject(value) && value.toString === Object.prototype.toString;
-	};
-	
-	// Merge style objects. Deep merge plain object values.
-	var mergeStyles = function mergeStyles(styles) {
-	  var result = {};
-	
-	  styles.forEach(function (style) {
-	    if (!style || typeof style !== 'object') {
-	      return;
-	    }
-	
-	    if (Array.isArray(style)) {
-	      style = mergeStyles(style);
-	    }
-	
-	    Object.keys(style).forEach(function (key) {
-	      if (shouldMerge(style[key]) && shouldMerge(result[key])) {
-	        result[key] = mergeStyles([result[key], style[key]]);
-	      } else {
-	        result[key] = style[key];
-	      }
-	    });
-	  });
-	
-	  return result;
-	};
-	
-	module.exports = mergeStyles;
-
-/***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/*!
-	 * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
-	 *
-	 * Copyright (c) 2014-2015, Jon Schlinkert.
-	 * Licensed under the MIT License.
-	 */
-	
-	'use strict';
-	
-	var isObject = __webpack_require__(21);
-	
-	function isObjectObject(o) {
-	  return isObject(o) === true
-	    && Object.prototype.toString.call(o) === '[object Object]';
-	}
-	
-	module.exports = function isPlainObject(o) {
-	  var ctor,prot;
-	  
-	  if (isObjectObject(o) === false) return false;
-	  
-	  // If has modified constructor
-	  ctor = o.constructor;
-	  if (typeof ctor !== 'function') return false;
-	  
-	  // If has modified prototype
-	  prot = ctor.prototype;
-	  if (isObjectObject(prot) === false) return false;
-	  
-	  // If constructor does not have an Object-specific method
-	  if (prot.hasOwnProperty('isPrototypeOf') === false) {
-	    return false;
-	  }
-	  
-	  // Most likely a plain Object
-	  return true;
-	};
-
-
-/***/ },
-/* 21 */
-/***/ function(module, exports) {
-
-	/*!
-	 * isobject <https://github.com/jonschlinkert/isobject>
-	 *
-	 * Copyright (c) 2014-2015, Jon Schlinkert.
-	 * Licensed under the MIT License.
-	 */
-	
-	'use strict';
-	
-	module.exports = function isObject(val) {
-	  return val != null && typeof val === 'object'
-	    && !Array.isArray(val);
-	};
-
 
 /***/ },
 /* 22 */
@@ -2261,7 +2261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var camelCasePropsToDashCase = __webpack_require__(25);
 	var createMarkupForStyles = __webpack_require__(26);
-	var Prefixer = __webpack_require__(11);
+	var Prefixer = __webpack_require__(16);
 	
 	var React = __webpack_require__(2);
 	
@@ -2404,9 +2404,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var camelCasePropsToDashCase = __webpack_require__(25);
 	var createMarkupForStyles = __webpack_require__(26);
-	var Prefixer = __webpack_require__(11);
+	var Prefixer = __webpack_require__(16);
 	
-	var ExecutionEnvironment = __webpack_require__(12);
+	var ExecutionEnvironment = __webpack_require__(17);
 	
 	var isAnimationSupported = false;
 	var keyframesPrefixed = 'keyframes';
@@ -2477,7 +2477,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;!function() {
 	  var d3 = {
-	    version: "3.5.9"
+	    version: "3.5.10"
 	  };
 	  var d3_arraySlice = [].slice, d3_array = function(list) {
 	    return d3_arraySlice.call(list);
@@ -8844,7 +8844,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          alpha = x;
 	        } else {
 	          timer.c = null, timer.t = NaN, timer = null;
-	          event.start({
+	          event.end({
 	            type: "end",
 	            alpha: alpha = 0
 	          });
@@ -24830,7 +24830,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	      var style = this.getStyles();
 	      var transform = _victoryUtil2["default"].Style.toTransformString(this.props.transform);
-	      var content = this.props.children || "";
+	      var content = "" + this.props.children || "";
 	      var lines = content.split("\n");
 	
 	      var lineHeight = this.props.lineHeight;
@@ -24888,7 +24888,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * makes using the component similar to normal HTML spans or labels.
 	       * Currently, only strings are supported.
 	       */
-	      children: _react.PropTypes.string, // TODO: Expand child support in future release
+	      children: _react.PropTypes.oneOfType([// TODO: Expand child support in future release
+	      _react.PropTypes.string, _react.PropTypes.number]),
 	      /**
 	       * The lineHeight prop defines how much space a single line of text should
 	       * take up. Note that SVG has no notion of line-height, so the positioning
@@ -24923,12 +24924,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	       * The x prop defines the x coordinate to use as a basis for horizontal
 	       * positioning.
 	       */
-	      x: _victoryUtil2["default"].PropTypes.nonNegative,
+	      x: _react.PropTypes.number,
 	      /**
 	       * The y prop defines the y coordinate to use as a basis for vertical
 	       * positioning.
 	       */
-	      y: _victoryUtil2["default"].PropTypes.nonNegative,
+	      y: _react.PropTypes.number,
 	      /**
 	       * The dy prop defines a vertical shift from the `y` coordinate. Since this
 	       * component already accounts for `capHeight`, `lineHeight`, and
@@ -25013,24 +25014,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _lodash2 = _interopRequireDefault(_lodash);
 	
+	var isNonEmptyArray = function isNonEmptyArray(collection) {
+	  return _lodash2["default"].isArray(collection) && collection.length > 0;
+	};
+	
+	exports.isNonEmptyArray = isNonEmptyArray;
 	var containsStrings = function containsStrings(collection) {
-	  return _lodash2["default"].some(collection, function (item) {
-	    return _lodash2["default"].isString(item);
-	  });
+	  return _lodash2["default"].some(collection, _lodash2["default"].isString);
 	};
 	
 	exports.containsStrings = containsStrings;
 	var containsOnlyStrings = function containsOnlyStrings(collection) {
-	  return _lodash2["default"].every(collection, function (item) {
-	    return _lodash2["default"].isString(item);
-	  });
+	  return isNonEmptyArray(collection) && _lodash2["default"].every(collection, _lodash2["default"].isString);
 	};
 	
 	exports.containsOnlyStrings = containsOnlyStrings;
 	var isArrayOfArrays = function isArrayOfArrays(collection) {
-	  return _lodash2["default"].isArray(collection) && _lodash2["default"].every(collection, function (item) {
-	    return _lodash2["default"].isArray(item);
-	  });
+	  return isNonEmptyArray(collection) && _lodash2["default"].every(collection, _lodash2["default"].isArray);
 	};
 	
 	exports.isArrayOfArrays = isArrayOfArrays;
@@ -25542,20 +25542,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	exports.nonNegative = nonNegative;
 	/**
-	 * Check that the value is a two-item Array in ascending order.
+	 * Check that the value is an Array of two unique values.
 	 */
-	var minMaxArray = makeChainable(function (props, propName, componentName) {
+	var domain = makeChainable(function (props, propName, componentName) {
 	  var error = _react.PropTypes.array(props, propName, componentName);
 	  if (error) {
 	    return error;
 	  }
 	  var value = props[propName];
-	  if (value.length !== 2 || value[1] < value[0]) {
-	    return new Error("`" + propName + "` in `" + componentName + "` must be a [min, max] array.");
+	  if (value.length !== 2 || value[1] === value[0]) {
+	    return new Error("`" + propName + "` in `" + componentName + "` must be an array of two unique numeric values.");
 	  }
 	});
 	
-	exports.minMaxArray = minMaxArray;
+	exports.domain = domain;
 	/**
 	 * Check that the value looks like a d3 `scale` function.
 	 */
@@ -25570,7 +25570,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/**
 	 * Check that an array contains items of the same type.
 	 */
-	var homogenousArray = makeChainable(function (props, propName, componentName) {
+	var homogeneousArray = makeChainable(function (props, propName, componentName) {
 	  var error = _react.PropTypes.array(props, propName, componentName);
 	  if (error) {
 	    return error;
@@ -25583,12 +25583,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (_constructor !== otherConstructor) {
 	        var constructorName = (0, _type.getConstructorName)(value[0]);
 	        var otherConstructorName = (0, _type.getConstructorName)(value[i]);
-	        return new Error("Expected `" + propName + "` in `" + componentName + "` to be a " + ("homogenous array, but found types `" + constructorName + "` and ") + ("`" + otherConstructorName + "`."));
+	        return new Error("Expected `" + propName + "` in `" + componentName + "` to be a " + ("homogeneous array, but found types `" + constructorName + "` and ") + ("`" + otherConstructorName + "`."));
 	      }
 	    }
 	  }
 	});
-	exports.homogenousArray = homogenousArray;
+	exports.homogeneousArray = homogeneousArray;
 
 /***/ }
 /******/ ])
