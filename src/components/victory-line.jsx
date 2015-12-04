@@ -311,6 +311,24 @@ export default class VictoryLine extends React.Component {
       React.createElement(VictoryLabel, props, children);
   }
 
+  segmentOnNull(collection) {
+    const segments = [];
+    let segmentStartIndex = 0;
+    _.each(collection, (obj, index) => {
+      if (obj.y === null || obj.y === undefined) {
+        segments.push(collection.slice(segmentStartIndex, index));
+        segmentStartIndex = index + 1;
+      }
+    });
+    segments.push(collection.slice(segmentStartIndex, collection.length));
+    return _.filter(segments, (segment) => {return !_.isEmpty(segment)});
+  }
+
+  getDataSegments() {
+    const orderedData = _.sortBy(this.dataset, "x");
+    return this.segmentOnNull(orderedData);
+  }
+
   renderLine() {
     const xScale = this.scale.x;
     const yScale = this.scale.y;
@@ -318,11 +336,13 @@ export default class VictoryLine extends React.Component {
       .interpolate(this.props.interpolation)
       .x((data) => xScale(data.x))
       .y((data) => yScale(data.y));
-    const pathElement = <path style={this.style.data} d={lineFunction(this.dataset)}/>;
+    const dataSegments = this.getDataSegments();
+    console.log(dataSegments);
+    const pathElement = <path style={this.style.data} d={lineFunction(dataSegments[0])}/>;
     if (this.props.label || this.props.labelComponent) {
       const position = {
-        x: xScale.call(this, _.last(this.dataset).x),
-        y: yScale.call(this, _.last(this.dataset).y)
+        x: xScale.call(this, _.last(dataSegments[0]).x),
+        y: yScale.call(this, _.last(dataSegments[0]).y)
       };
       const text = this.props.label || "";
       return (
