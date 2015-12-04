@@ -50,13 +50,13 @@ class App extends React.Component {
         <VictoryLine
           style={{border: "2px solid black", data: this.state.style}}
           data={this.state.data}
-          label="label\none"
+          label={"label\none"}
           animate={{velocity: 0.03}}
         />
 
         <VictoryLine style={{border: "2px solid black", data: {stroke: "blue"}}}
           y={(x) => Math.sin(2 * Math.PI * x)}
-          labelComponent={<VictoryLabel>stuff</VictoryLabel>}
+          labelComponent={<VictoryLabel>{"label\ntwo"}</VictoryLabel>}
           sample={25}
         />
 
@@ -70,8 +70,8 @@ class App extends React.Component {
             {x: 2, y: 4},
             {x: 3, y: 5},
             {x: 4, y: 2},
-            {x: 5, y: 11},
-            {x: 6, y: 7},
+            {x: 5, y: null},
+            {x: 6, y: null},
             {x: 7, y: 6},
             {x: 8, y: 7},
             {x: 9, y: 8},
