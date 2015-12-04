@@ -12,9 +12,6 @@ export default class LineSegment extends React.Component {
     style: PropTypes.object
   };
 
-  static defaultProps = {
-  };
-
   render() {
     const xScale = this.props.scale.x;
     const yScale = this.props.scale.y;
