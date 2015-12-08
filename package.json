@@ -48,6 +48,7 @@
     "mocha": "^2.2.5",
     "raw-loader": "^0.5.1",
     "react": "0.14.x",
+    "react-addons-test-utils": "0.14.x",
     "react-docgen": "^2.4.0",
     "react-dom": "0.14.x",
     "react-hot-loader": "^1.2.8",
