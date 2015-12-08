@@ -290,7 +290,7 @@ export default class VictoryLine extends React.Component {
     const segments = [];
     let segmentStartIndex = 0;
     _.each(orderedData, (datum, index) => {
-      if (datum.y === null || datum.y === undefined) {
+      if (_.isNull(datum.y) || _.isUndefined(datum.y)) {
         segments.push(orderedData.slice(segmentStartIndex, index));
         segmentStartIndex = index + 1;
       }
