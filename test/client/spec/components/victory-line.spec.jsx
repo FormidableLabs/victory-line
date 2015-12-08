@@ -8,24 +8,6 @@ import VictoryLine from "src/components/victory-line";
 // See: https://facebook.github.io/react/docs/test-utils.html
 import TestUtils from "react-addons-test-utils";
 
-// default styles from victory-line. This needs to be extracted.
-const defaultStyles = {
-  data: {
-    strokeWidth: 2,
-    fill: "none",
-    stroke: "#756f6a",
-    opacity: 1
-  },
-  labels: {
-    padding: 5,
-    fontFamily: "Helvetica",
-    fontSize: 10,
-    strokeWidth: 0,
-    stroke: "transparent",
-    textAnchor: "start"
-  }
-};
-
 const getElement = function (output, tagName) {
   return ReactDOM.findDOMNode(
     TestUtils.findRenderedDOMComponentWithTag(output, tagName)
@@ -46,12 +28,6 @@ describe("components/victory-line", () => {
       // default width and height
       expect(svg.style.width).to.equal(`${VictoryLine.defaultProps.width}px`);
       expect(svg.style.height).to.equal(`${VictoryLine.defaultProps.height}px`);
-    });
-
-    it("renders a single line with expected attrs", () => {
-      const path = getElement(renderedComponent, "path");
-
-      expect(path.style.stroke).to.equal(defaultStyles.data.stroke);
     });
   });
 
