@@ -67,7 +67,7 @@ class App extends React.Component {
         <VictoryLine style={{border: "2px solid black"}}
           data={[
             {x: 1, y: 1},
-            {x: 2, y: 4},
+            {x: 2, y: 3},
             {x: 3, y: 5},
             {x: 4, y: 2},
             {x: 5, y: null},
