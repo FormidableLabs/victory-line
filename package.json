@@ -40,7 +40,6 @@
     "react-addons-test-utils": "0.14.x",
     "react-docgen": "^2.4.0",
     "react-dom": "0.14.x",
-    "react-hot-loader": "^1.2.8",
     "sinon": "^1.15.4",
     "sinon-chai": "^2.8.0"
   }
