@@ -2,6 +2,7 @@ import React, { PropTypes } from "react";
 import Radium from "radium";
 import d3 from "d3";
 import _ from "lodash";
+import LineSegment from "./line-segment";
 import {VictoryAnimation} from "victory-animation";
 import {VictoryLabel} from "victory-label";
 import Util from "victory-util";
@@ -184,6 +185,7 @@ export default class VictoryLine extends React.Component {
       y: this.getRange(props, "y")
     };
     this.dataset = this.getData(props);
+    this.dataSegments = this.getDataSegments();
     this.domain = {
       x: this.getDomain(props, "x"),
       y: this.getDomain(props, "y")
@@ -283,6 +285,22 @@ export default class VictoryLine extends React.Component {
     return props.y;
   }
 
+  getDataSegments() {
+    const orderedData = _.sortBy(this.dataset, "x");
+    const segments = [];
+    let segmentStartIndex = 0;
+    _.each(orderedData, (datum, index) => {
+      if (_.isNull(datum.y) || _.isUndefined(datum.y)) {
+        segments.push(orderedData.slice(segmentStartIndex, index));
+        segmentStartIndex = index + 1;
+      }
+    });
+    segments.push(orderedData.slice(segmentStartIndex, orderedData.length));
+    return _.filter(segments, (segment) => {
+      return !_.isEmpty(segment);
+    });
+  }
+
   getLabelStyle() {
     // match labels styles to data style by default (fill, opacity, others?)
     const opacity = this.style.data.opacity;
@@ -293,7 +311,15 @@ export default class VictoryLine extends React.Component {
     return _.merge({opacity, fill, padding}, this.style.labels);
   }
 
-  renderLabel(position, text) {
+  renderLabel() {
+    if (!this.props.label && !this.props.labelComponent) {
+      return undefined;
+    }
+    const position = {
+      x: this.scale.x.call(this, _.last(_.flatten(this.dataSegments)).x),
+      y: this.scale.y.call(this, _.last(_.flatten(this.dataSegments)).y)
+    };
+    const text = this.props.label || "";
     const component = this.props.labelComponent;
     const componentStyle = component && component.props.style || {};
     const style = _.merge({}, this.getLabelStyle(), componentStyle);
@@ -312,27 +338,26 @@ export default class VictoryLine extends React.Component {
   }
 
   renderLine() {
-    const xScale = this.scale.x;
-    const yScale = this.scale.y;
-    const lineFunction = d3.svg.line()
-      .interpolate(this.props.interpolation)
-      .x((data) => xScale(data.x))
-      .y((data) => yScale(data.y));
-    const pathElement = <path style={this.style.data} d={lineFunction(this.dataset)}/>;
-    if (this.props.label || this.props.labelComponent) {
-      const position = {
-        x: xScale.call(this, _.last(this.dataset).x),
-        y: yScale.call(this, _.last(this.dataset).y)
-      };
-      const text = this.props.label || "";
+    return _.map(this.dataSegments, (segment, index) => {
       return (
-        <g>
-          {pathElement}
-          {this.renderLabel(position, text)}
-        </g>
+        <LineSegment
+          key={`line-segment-${index}`}
+          data={segment}
+          interpolation={this.props.interpolation}
+          scale={this.scale}
+          style={this.style.data}
+        />
       );
-    }
-    return pathElement;
+    });
+  }
+
+  renderData() {
+    return (
+      <g style={this.style.parent}>
+        {this.renderLine()}
+        {this.renderLabel()}
+      </g>
+    );
   }
 
   render() {
@@ -355,7 +380,7 @@ export default class VictoryLine extends React.Component {
       this.getCalculatedValues(this.props);
     }
     const style = this.style.parent;
-    const group = <g style={style}>{this.renderLine()}</g>;
+    const group = <g style={style}>{this.renderData()}</g>;
 
     return this.props.standalone ? <svg style={style}>{group}</svg> : group;
   }
