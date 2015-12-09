@@ -78,7 +78,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _docs2 = _interopRequireDefault(_docs);
 
-	var _staticIndex = __webpack_require__(447);
+	var _staticIndex = __webpack_require__(449);
 
 	var _staticIndex2 = _interopRequireDefault(_staticIndex);
 
@@ -19046,21 +19046,21 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var _react = __webpack_require__(1);
 
@@ -19086,32 +19086,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	  function Docs() {
 	    _classCallCheck(this, _Docs);
 
-	    _get(Object.getPrototypeOf(_Docs.prototype), 'constructor', this).apply(this, arguments);
+	    _get(Object.getPrototypeOf(_Docs.prototype), "constructor", this).apply(this, arguments);
 	  }
 
 	  _createClass(Docs, [{
-	    key: 'render',
+	    key: "render",
 	    value: function render() {
-	      return _react2['default'].createElement(
-	        'div',
+	      return _react2["default"].createElement(
+	        "div",
 	        null,
-	        _react2['default'].createElement(_ecology2['default'], {
-	          overview: __webpack_require__(426),
-	          source: __webpack_require__(427),
-	          scope: { React: _react2['default'], ReactDOM: _reactDom2['default'], VictoryLine: __webpack_require__(428) },
-	          playgroundtheme: 'elegant' }),
-	        _react2['default'].createElement(_radium.Style, { rules: _formidableLanders.VictoryTheme })
+	        _react2["default"].createElement(_ecology2["default"], {
+	          overview: __webpack_require__(429),
+	          source: __webpack_require__(430)[0],
+	          scope: { React: _react2["default"], ReactDOM: _reactDom2["default"], VictoryLine: __webpack_require__(431) },
+	          playgroundtheme: "elegant" }),
+	        _react2["default"].createElement(_radium.Style, { rules: _formidableLanders.VictoryTheme })
 	      );
 	    }
 	  }]);
 
 	  var _Docs = Docs;
-	  Docs = (0, _radium2['default'])(Docs) || Docs;
+	  Docs = (0, _radium2["default"])(Docs) || Docs;
 	  return Docs;
-	})(_react2['default'].Component);
+	})(_react2["default"].Component);
 
-	exports['default'] = Docs;
-	module.exports = exports['default'];
+	exports["default"] = Docs;
+	module.exports = exports["default"];
 
 /***/ },
 /* 156 */
@@ -95602,38 +95602,8 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 361 */
 /***/ function(module, exports) {
 
-	
-	/**
-	 * isArray
-	 */
-
-	var isArray = Array.isArray;
-
-	/**
-	 * toString
-	 */
-
-	var str = Object.prototype.toString;
-
-	/**
-	 * Whether or not the given `val`
-	 * is an array.
-	 *
-	 * example:
-	 *
-	 *        isArray([]);
-	 *        // > true
-	 *        isArray(arguments);
-	 *        // > false
-	 *        isArray('');
-	 *        // > false
-	 *
-	 * @param {mixed} val
-	 * @return {bool}
-	 */
-
-	module.exports = isArray || function (val) {
-	  return !! val && '[object Array]' == str.call(val);
+	module.exports = Array.isArray || function (arr) {
+	  return Object.prototype.toString.call(arr) == '[object Array]';
 	};
 
 
@@ -97903,19 +97873,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _componentsHeader2 = _interopRequireDefault(_componentsHeader);
 
-	var _componentsFooter = __webpack_require__(422);
+	var _componentsFooter = __webpack_require__(425);
 
 	var _componentsFooter2 = _interopRequireDefault(_componentsFooter);
 
-	var _themesVictorySettings = __webpack_require__(423);
+	var _themesVictorySettings = __webpack_require__(426);
 
 	var _themesVictorySettings2 = _interopRequireDefault(_themesVictorySettings);
 
-	var _componentsVictorySidebar = __webpack_require__(424);
+	var _componentsVictorySidebar = __webpack_require__(427);
 
 	var _componentsVictorySidebar2 = _interopRequireDefault(_componentsVictorySidebar);
 
-	var _themesVictory = __webpack_require__(425);
+	var _themesVictory = __webpack_require__(428);
 
 	var _themesVictory2 = _interopRequireDefault(_themesVictory);
 
@@ -98020,15 +97990,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _enhancer2 = _interopRequireDefault(_enhancer);
 
-	var _plugins = __webpack_require__(396);
+	var _plugins = __webpack_require__(398);
 
 	var _plugins2 = _interopRequireDefault(_plugins);
 
-	var _componentsPrintStyleSheet = __webpack_require__(417);
+	var _componentsPrintStyleSheet = __webpack_require__(420);
 
 	var _componentsPrintStyleSheet2 = _interopRequireDefault(_componentsPrintStyleSheet);
 
-	var _componentsStyle = __webpack_require__(418);
+	var _componentsStyle = __webpack_require__(421);
 
 	var _componentsStyle2 = _interopRequireDefault(_componentsStyle);
 
@@ -98036,7 +98006,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _getState2 = _interopRequireDefault(_getState);
 
-	var _keyframes = __webpack_require__(421);
+	var _keyframes = __webpack_require__(424);
 
 	var _keyframes2 = _interopRequireDefault(_keyframes);
 
@@ -98084,7 +98054,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _resolveStylesJs2 = _interopRequireDefault(_resolveStylesJs);
 
-	var _printStylesJs = __webpack_require__(416);
+	var _printStylesJs = __webpack_require__(419);
 
 	var _printStylesJs2 = _interopRequireDefault(_printStylesJs);
 
@@ -98262,11 +98232,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _mergeStyles2 = _interopRequireDefault(_mergeStyles);
 
-	var _plugins = __webpack_require__(396);
+	var _plugins = __webpack_require__(398);
 
 	var _plugins2 = _interopRequireDefault(_plugins);
 
-	var _exenv = __webpack_require__(377);
+	var _exenv = __webpack_require__(418);
 
 	var _exenv2 = _interopRequireDefault(_exenv);
 
@@ -98593,7 +98563,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _isPlainObject = __webpack_require__(370);
+	var _isPlainObject = __webpack_require__(396);
 
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
@@ -98635,6 +98605,68 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 396 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/*!
+	 * is-plain-object <https://github.com/jonschlinkert/is-plain-object>
+	 *
+	 * Copyright (c) 2014-2015, Jon Schlinkert.
+	 * Licensed under the MIT License.
+	 */
+
+	'use strict';
+
+	var isObject = __webpack_require__(397);
+
+	function isObjectObject(o) {
+	  return isObject(o) === true
+	    && Object.prototype.toString.call(o) === '[object Object]';
+	}
+
+	module.exports = function isPlainObject(o) {
+	  var ctor,prot;
+	  
+	  if (isObjectObject(o) === false) return false;
+	  
+	  // If has modified constructor
+	  ctor = o.constructor;
+	  if (typeof ctor !== 'function') return false;
+	  
+	  // If has modified prototype
+	  prot = ctor.prototype;
+	  if (isObjectObject(prot) === false) return false;
+	  
+	  // If constructor does not have an Object-specific method
+	  if (prot.hasOwnProperty('isPrototypeOf') === false) {
+	    return false;
+	  }
+	  
+	  // Most likely a plain Object
+	  return true;
+	};
+
+
+/***/ },
+/* 397 */
+/***/ function(module, exports) {
+
+	/*!
+	 * isobject <https://github.com/jonschlinkert/isobject>
+	 *
+	 * Copyright (c) 2014-2015, Jon Schlinkert.
+	 * Licensed under the MIT License.
+	 */
+
+	'use strict';
+
+	module.exports = function isObject(val) {
+	  return val != null && typeof val === 'object'
+	    && !Array.isArray(val);
+	};
+
+
+/***/ },
+/* 398 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/** @flow */
 	/* eslint-disable block-scoped-const */
 
@@ -98644,23 +98676,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _checkPropsPlugin = __webpack_require__(397);
+	var _checkPropsPlugin = __webpack_require__(399);
 
 	var _checkPropsPlugin2 = _interopRequireDefault(_checkPropsPlugin);
 
-	var _mergeStyleArrayPlugin = __webpack_require__(398);
+	var _mergeStyleArrayPlugin = __webpack_require__(400);
 
 	var _mergeStyleArrayPlugin2 = _interopRequireDefault(_mergeStyleArrayPlugin);
 
-	var _prefixPlugin = __webpack_require__(399);
+	var _prefixPlugin = __webpack_require__(401);
 
 	var _prefixPlugin2 = _interopRequireDefault(_prefixPlugin);
 
-	var _resolveInteractionStylesPlugin = __webpack_require__(413);
+	var _resolveInteractionStylesPlugin = __webpack_require__(415);
 
 	var _resolveInteractionStylesPlugin2 = _interopRequireDefault(_resolveInteractionStylesPlugin);
 
-	var _resolveMediaQueriesPlugin = __webpack_require__(415);
+	var _resolveMediaQueriesPlugin = __webpack_require__(417);
 
 	var _resolveMediaQueriesPlugin2 = _interopRequireDefault(_resolveMediaQueriesPlugin);
 
@@ -98769,7 +98801,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	// Replaces (not merged into) the rendered element's style property.
 
 /***/ },
-/* 397 */
+/* 399 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* @flow */
@@ -98835,7 +98867,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 398 */
+/* 400 */
 /***/ function(module, exports) {
 
 	/* @flow */
@@ -98858,7 +98890,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 399 */
+/* 401 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* @flow */
@@ -98868,7 +98900,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.__esModule = true;
 	exports['default'] = prefixPlugin;
 
-	var _prefixer = __webpack_require__(400);
+	var _prefixer = __webpack_require__(402);
 
 	/*:: import type {PluginConfig, PluginResult} from '.';*/
 	function prefixPlugin(_ref /*: PluginConfig*/) /*: PluginResult*/ {
@@ -98883,7 +98915,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 400 */
+/* 402 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -98900,7 +98932,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _inlineStylePrefixer = __webpack_require__(401);
+	var _inlineStylePrefixer = __webpack_require__(403);
 
 	var _inlineStylePrefixer2 = _interopRequireDefault(_inlineStylePrefixer);
 
@@ -98946,7 +98978,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 401 */
+/* 403 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -98961,19 +98993,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var _getBrowserInformation = __webpack_require__(402);
+	var _getBrowserInformation = __webpack_require__(404);
 
 	var _getBrowserInformation2 = _interopRequireDefault(_getBrowserInformation);
 
-	var _getPrefixedKeyframes = __webpack_require__(404);
+	var _getPrefixedKeyframes = __webpack_require__(406);
 
 	var _getPrefixedKeyframes2 = _interopRequireDefault(_getPrefixedKeyframes);
 
-	var _caniuseData = __webpack_require__(405);
+	var _caniuseData = __webpack_require__(407);
 
 	var _caniuseData2 = _interopRequireDefault(_caniuseData);
 
-	var _Plugins = __webpack_require__(406);
+	var _Plugins = __webpack_require__(408);
 
 	var _Plugins2 = _interopRequireDefault(_Plugins);
 
@@ -99145,7 +99177,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 402 */
+/* 404 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -99156,7 +99188,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _bowser = __webpack_require__(403);
+	var _bowser = __webpack_require__(405);
 
 	var _bowser2 = _interopRequireDefault(_bowser);
 
@@ -99354,7 +99386,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 403 */
+/* 405 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -99651,7 +99683,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 404 */
+/* 406 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -99675,13 +99707,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 405 */
+/* 407 */
 /***/ function(module, exports) {
 
-	var caniuseData = {"chrome":{"transform":35,"transformOrigin":35,"transformOriginX":35,"transformOriginY":35,"backfaceVisibility":35,"perspective":35,"perspectiveOrigin":35,"transformStyle":35,"transformOriginZ":35,"animation":42,"animationDelay":42,"animationDirection":42,"animationFillMode":42,"animationDuration":42,"anmationIterationCount":42,"animationName":42,"animationPlayState":42,"animationTimingFunction":42,"appearance":49,"userSelect":49,"fontKerning":32,"textEmphasisPosition":49,"textEmphasis":49,"textEmphasisStyle":49,"textEmphasisColor":49,"boxDecorationBreak":49,"clipPath":49,"maskImage":49,"maskMode":49,"maskRepeat":49,"maskPosition":49,"maskClip":49,"maskOrigin":49,"maskSize":49,"maskComposite":49,"mask":49,"maskBorderSource":49,"maskBorderMode":49,"maskBorderSlice":49,"maskBorderWidth":49,"maskBorderOutset":49,"maskBorderRepeat":49,"maskBorder":49,"maskType":49,"textDecorationStyle":49,"textDecorationSkip":49,"textDecorationLine":49,"textDecorationColor":49,"filter":49,"fontFeatureSettings":49,"breakAfter":49,"breakBefore":49,"breakInside":49,"columnCount":49,"columnFill":49,"columnGap":49,"columnRule":49,"columnRuleColor":49,"columnRuleStyle":49,"columnRuleWidth":49,"columns":49,"columnSpan":49,"columnWidth":49},"safari":{"flex":8,"flexBasis":8,"flexDirection":8,"flexGrow":8,"flexFlow":8,"flexShrink":8,"flexWrap":8,"alignContent":8,"alignItems":8,"alignSelf":8,"justifyContent":8,"order":8,"transition":6,"transitionDelay":6,"transitionDuration":6,"transitionProperty":6,"transitionTimingFunction":6,"transform":8,"transformOrigin":8,"transformOriginX":8,"transformOriginY":8,"backfaceVisibility":8,"perspective":8,"perspectiveOrigin":8,"transformStyle":8,"transformOriginZ":8,"animation":8,"animationDelay":8,"animationDirection":8,"animationFillMode":8,"animationDuration":8,"anmationIterationCount":8,"animationName":8,"animationPlayState":8,"animationTimingFunction":8,"appearance":9,"userSelect":9,"backdropFilter":9,"fontKerning":9,"scrollSnapType":9,"scrollSnapPointsX":9,"scrollSnapPointsY":9,"scrollSnapDestination":9,"scrollSnapCoordinate":9,"textEmphasisPosition":7,"textEmphasis":7,"textEmphasisStyle":7,"textEmphasisColor":7,"boxDecorationBreak":9,"clipPath":9,"maskImage":9,"maskMode":9,"maskRepeat":9,"maskPosition":9,"maskClip":9,"maskOrigin":9,"maskSize":9,"maskComposite":9,"mask":9,"maskBorderSource":9,"maskBorderMode":9,"maskBorderSlice":9,"maskBorderWidth":9,"maskBorderOutset":9,"maskBorderRepeat":9,"maskBorder":9,"maskType":9,"textDecorationStyle":9,"textDecorationSkip":9,"textDecorationLine":9,"textDecorationColor":9,"shapeImageThreshold":9,"shapeImageMargin":9,"shapeImageOutside":9,"filter":9,"hyphens":9,"flowInto":9,"flowFrom":9,"breakBefore":8,"breakAfter":8,"breakInside":8,"regionFragment":9,"columnCount":8,"columnFill":8,"columnGap":8,"columnRule":8,"columnRuleColor":8,"columnRuleStyle":8,"columnRuleWidth":8,"columns":8,"columnSpan":8,"columnWidth":8},"firefox":{"appearance":45,"userSelect":45,"boxSizing":28,"textAlignLast":45,"textDecorationStyle":35,"textDecorationSkip":35,"textDecorationLine":35,"textDecorationColor":35,"tabSize":45,"hyphens":42,"fontFeatureSettings":33,"breakAfter":45,"breakBefore":45,"breakInside":45,"columnCount":45,"columnFill":45,"columnGap":45,"columnRule":45,"columnRuleColor":45,"columnRuleStyle":45,"columnRuleWidth":45,"columns":45,"columnSpan":45,"columnWidth":45},"opera":{"flex":16,"flexBasis":16,"flexDirection":16,"flexGrow":16,"flexFlow":16,"flexShrink":16,"flexWrap":16,"alignContent":16,"alignItems":16,"alignSelf":16,"justifyContent":16,"order":16,"transform":22,"transformOrigin":22,"transformOriginX":22,"transformOriginY":22,"backfaceVisibility":22,"perspective":22,"perspectiveOrigin":22,"transformStyle":22,"transformOriginZ":22,"animation":29,"animationDelay":29,"animationDirection":29,"animationFillMode":29,"animationDuration":29,"anmationIterationCount":29,"animationName":29,"animationPlayState":29,"animationTimingFunction":29,"appearance":35,"userSelect":35,"fontKerning":19,"textEmphasisPosition":35,"textEmphasis":35,"textEmphasisStyle":35,"textEmphasisColor":35,"boxDecorationBreak":35,"clipPath":35,"maskImage":35,"maskMode":35,"maskRepeat":35,"maskPosition":35,"maskClip":35,"maskOrigin":35,"maskSize":35,"maskComposite":35,"mask":35,"maskBorderSource":35,"maskBorderMode":35,"maskBorderSlice":35,"maskBorderWidth":35,"maskBorderOutset":35,"maskBorderRepeat":35,"maskBorder":35,"maskType":35,"filter":35,"fontFeatureSettings":35,"breakAfter":35,"breakBefore":35,"breakInside":35,"columnCount":35,"columnFill":35,"columnGap":35,"columnRule":35,"columnRuleColor":35,"columnRuleStyle":35,"columnRuleWidth":35,"columns":35,"columnSpan":35,"columnWidth":35},"ie":{"wrapThrough":11,"flexWrap":10,"breakInside":11,"transform":9,"scrollSnapDestination":11,"wrapFlow":11,"gridAutoRows":11,"userSelect":11,"gridTemplateRows":11,"flexFlow":10,"wrapMargin":11,"gridArea":11,"touchAction":10,"hyphens":11,"gridGap":11,"gridTemplateAreas":11,"gridColumnStart":11,"transformOrigin":9,"transformOriginY":9,"scrollSnapCoordinate":11,"flex":10,"gridColumn":11,"scrollSnapPointsY":11,"breakBefore":11,"transformOriginX":9,"flowFrom":11,"gridRowStart":11,"gridAutoFlow":11,"columnGap":11,"gridTemplateColumns":11,"gridAutoColumns":11,"flowInto":11,"breakAfter":11,"regionFragment":11,"grid":11,"rowGap":11,"gridRowEnd":11,"gridTemplate":11,"scrollSnapPointsX":11,"gridRow":11,"flexDirection":10,"scrollSnapType":11,"textSizeAdjust":11},"ios_saf":{"flex":8.1,"flexBasis":8.1,"flexDirection":8.1,"flexGrow":8.1,"flexFlow":8.1,"flexShrink":8.1,"flexWrap":8.1,"alignContent":8.1,"alignItems":8.1,"alignSelf":8.1,"justifyContent":8.1,"order":8.1,"transition":6,"transitionDelay":6,"transitionDuration":6,"transitionProperty":6,"transitionTimingFunction":6,"transform":8.1,"transformOrigin":8.1,"transformOriginX":8.1,"transformOriginY":8.1,"backfaceVisibility":8.1,"perspective":8.1,"perspectiveOrigin":8.1,"transformStyle":8.1,"transformOriginZ":8.1,"animation":8.1,"animationDelay":8.1,"animationDirection":8.1,"animationFillMode":8.1,"animationDuration":8.1,"anmationIterationCount":8.1,"animationName":8.1,"animationPlayState":8.1,"animationTimingFunction":8.1,"appearance":9,"userSelect":9,"backdropFilter":9,"fontKerning":9,"scrollSnapType":9,"scrollSnapPointsX":9,"scrollSnapPointsY":9,"scrollSnapDestination":9,"scrollSnapCoordinate":9,"boxDecorationBreak":9,"clipPath":9,"maskImage":9,"maskMode":9,"maskRepeat":9,"maskPosition":9,"maskClip":9,"maskOrigin":9,"maskSize":9,"maskComposite":9,"mask":9,"maskBorderSource":9,"maskBorderMode":9,"maskBorderSlice":9,"maskBorderWidth":9,"maskBorderOutset":9,"maskBorderRepeat":9,"maskBorder":9,"maskType":9,"textSizeAdjust":9,"textDecorationStyle":9,"textDecorationSkip":9,"textDecorationLine":9,"textDecorationColor":9,"shapeImageThreshold":9,"shapeImageMargin":9,"shapeImageOutside":9,"filter":9,"hyphens":9,"flowInto":9,"flowFrom":9,"breakBefore":8.1,"breakAfter":8.1,"breakInside":8.1,"regionFragment":9,"columnCount":8.1,"columnFill":8.1,"columnGap":8.1,"columnRule":8.1,"columnRuleColor":8.1,"columnRuleStyle":8.1,"columnRuleWidth":8.1,"columns":8.1,"columnSpan":8.1,"columnWidth":8.1},"android":{"borderImage":4.2,"borderImageOutset":4.2,"borderImageRepeat":4.2,"borderImageSlice":4.2,"borderImageSource":4.2,"borderImageWidth":4.2,"flex":4.2,"flexBasis":4.2,"flexDirection":4.2,"flexGrow":4.2,"flexFlow":4.2,"flexShrink":4.2,"flexWrap":4.2,"alignContent":4.2,"alignItems":4.2,"alignSelf":4.2,"justifyContent":4.2,"order":4.2,"transition":4.2,"transitionDelay":4.2,"transitionDuration":4.2,"transitionProperty":4.2,"transitionTimingFunction":4.2,"transform":4.4,"transformOrigin":4.4,"transformOriginX":4.4,"transformOriginY":4.4,"backfaceVisibility":4.4,"perspective":4.4,"perspectiveOrigin":4.4,"transformStyle":4.4,"transformOriginZ":4.4,"animation":4.4,"animationDelay":4.4,"animationDirection":4.4,"animationFillMode":4.4,"animationDuration":4.4,"anmationIterationCount":4.4,"animationName":4.4,"animationPlayState":4.4,"animationTimingFunction":4.4,"appearance":44,"userSelect":44,"fontKerning":4.4,"textEmphasisPosition":44,"textEmphasis":44,"textEmphasisStyle":44,"textEmphasisColor":44,"boxDecorationBreak":44,"clipPath":44,"maskImage":44,"maskMode":44,"maskRepeat":44,"maskPosition":44,"maskClip":44,"maskOrigin":44,"maskSize":44,"maskComposite":44,"mask":44,"maskBorderSource":44,"maskBorderMode":44,"maskBorderSlice":44,"maskBorderWidth":44,"maskBorderOutset":44,"maskBorderRepeat":44,"maskBorder":44,"maskType":44,"filter":44,"fontFeatureSettings":44,"breakAfter":44,"breakBefore":44,"breakInside":44,"columnCount":44,"columnFill":44,"columnGap":44,"columnRule":44,"columnRuleColor":44,"columnRuleStyle":44,"columnRuleWidth":44,"columns":44,"columnSpan":44,"columnWidth":44},"and_chr":{"appearance":46,"userSelect":46,"textEmphasisPosition":46,"textEmphasis":46,"textEmphasisStyle":46,"textEmphasisColor":46,"boxDecorationBreak":46,"clipPath":46,"maskImage":46,"maskMode":46,"maskRepeat":46,"maskPosition":46,"maskClip":46,"maskOrigin":46,"maskSize":46,"maskComposite":46,"mask":46,"maskBorderSource":46,"maskBorderMode":46,"maskBorderSlice":46,"maskBorderWidth":46,"maskBorderOutset":46,"maskBorderRepeat":46,"maskBorder":46,"maskType":46,"textDecorationStyle":46,"textDecorationSkip":46,"textDecorationLine":46,"textDecorationColor":46,"filter":46,"fontFeatureSettings":46,"breakAfter":46,"breakBefore":46,"breakInside":46,"columnCount":46,"columnFill":46,"columnGap":46,"columnRule":46,"columnRuleColor":46,"columnRuleStyle":46,"columnRuleWidth":46,"columns":46,"columnSpan":46,"columnWidth":46},"and_uc":{"flex":9.9,"flexBasis":9.9,"flexDirection":9.9,"flexGrow":9.9,"flexFlow":9.9,"flexShrink":9.9,"flexWrap":9.9,"alignContent":9.9,"alignItems":9.9,"alignSelf":9.9,"justifyContent":9.9,"order":9.9,"transition":9.9,"transitionDelay":9.9,"transitionDuration":9.9,"transitionProperty":9.9,"transitionTimingFunction":9.9,"transform":9.9,"transformOrigin":9.9,"transformOriginX":9.9,"transformOriginY":9.9,"backfaceVisibility":9.9,"perspective":9.9,"perspectiveOrigin":9.9,"transformStyle":9.9,"transformOriginZ":9.9,"animation":9.9,"animationDelay":9.9,"animationDirection":9.9,"animationFillMode":9.9,"animationDuration":9.9,"anmationIterationCount":9.9,"animationName":9.9,"animationPlayState":9.9,"animationTimingFunction":9.9,"appearance":9.9,"userSelect":9.9,"fontKerning":9.9,"textEmphasisPosition":9.9,"textEmphasis":9.9,"textEmphasisStyle":9.9,"textEmphasisColor":9.9,"maskImage":9.9,"maskMode":9.9,"maskRepeat":9.9,"maskPosition":9.9,"maskClip":9.9,"maskOrigin":9.9,"maskSize":9.9,"maskComposite":9.9,"mask":9.9,"maskBorderSource":9.9,"maskBorderMode":9.9,"maskBorderSlice":9.9,"maskBorderWidth":9.9,"maskBorderOutset":9.9,"maskBorderRepeat":9.9,"maskBorder":9.9,"maskType":9.9,"textSizeAdjust":9.9,"filter":9.9,"hyphens":9.9,"flowInto":9.9,"flowFrom":9.9,"breakBefore":9.9,"breakAfter":9.9,"breakInside":9.9,"regionFragment":9.9,"fontFeatureSettings":9.9,"columnCount":9.9,"columnFill":9.9,"columnGap":9.9,"columnRule":9.9,"columnRuleColor":9.9,"columnRuleStyle":9.9,"columnRuleWidth":9.9,"columns":9.9,"columnSpan":9.9,"columnWidth":9.9},"op_mini":{"borderImage":5,"borderImageOutset":5,"borderImageRepeat":5,"borderImageSlice":5,"borderImageSource":5,"borderImageWidth":5,"tabSize":5,"objectFit":5,"objectPosition":5}}; module.exports = caniuseData
+	var caniuseData = {"chrome":{"transform":35,"transformOrigin":35,"transformOriginX":35,"transformOriginY":35,"backfaceVisibility":35,"perspective":35,"perspectiveOrigin":35,"transformStyle":35,"transformOriginZ":35,"animation":42,"animationDelay":42,"animationDirection":42,"animationFillMode":42,"animationDuration":42,"animationIterationCount":42,"animationName":42,"animationPlayState":42,"animationTimingFunction":42,"appearance":49,"userSelect":49,"fontKerning":32,"textEmphasisPosition":49,"textEmphasis":49,"textEmphasisStyle":49,"textEmphasisColor":49,"boxDecorationBreak":49,"clipPath":49,"maskImage":49,"maskMode":49,"maskRepeat":49,"maskPosition":49,"maskClip":49,"maskOrigin":49,"maskSize":49,"maskComposite":49,"mask":49,"maskBorderSource":49,"maskBorderMode":49,"maskBorderSlice":49,"maskBorderWidth":49,"maskBorderOutset":49,"maskBorderRepeat":49,"maskBorder":49,"maskType":49,"textDecorationStyle":49,"textDecorationSkip":49,"textDecorationLine":49,"textDecorationColor":49,"filter":49,"fontFeatureSettings":49,"breakAfter":49,"breakBefore":49,"breakInside":49,"columnCount":49,"columnFill":49,"columnGap":49,"columnRule":49,"columnRuleColor":49,"columnRuleStyle":49,"columnRuleWidth":49,"columns":49,"columnSpan":49,"columnWidth":49},"safari":{"flex":8,"flexBasis":8,"flexDirection":8,"flexGrow":8,"flexFlow":8,"flexShrink":8,"flexWrap":8,"alignContent":8,"alignItems":8,"alignSelf":8,"justifyContent":8,"order":8,"transition":6,"transitionDelay":6,"transitionDuration":6,"transitionProperty":6,"transitionTimingFunction":6,"transform":8,"transformOrigin":8,"transformOriginX":8,"transformOriginY":8,"backfaceVisibility":8,"perspective":8,"perspectiveOrigin":8,"transformStyle":8,"transformOriginZ":8,"animation":8,"animationDelay":8,"animationDirection":8,"animationFillMode":8,"animationDuration":8,"animationIterationCount":8,"animationName":8,"animationPlayState":8,"animationTimingFunction":8,"appearance":9,"userSelect":9,"backdropFilter":9,"fontKerning":9,"scrollSnapType":9,"scrollSnapPointsX":9,"scrollSnapPointsY":9,"scrollSnapDestination":9,"scrollSnapCoordinate":9,"textEmphasisPosition":7,"textEmphasis":7,"textEmphasisStyle":7,"textEmphasisColor":7,"boxDecorationBreak":9,"clipPath":9,"maskImage":9,"maskMode":9,"maskRepeat":9,"maskPosition":9,"maskClip":9,"maskOrigin":9,"maskSize":9,"maskComposite":9,"mask":9,"maskBorderSource":9,"maskBorderMode":9,"maskBorderSlice":9,"maskBorderWidth":9,"maskBorderOutset":9,"maskBorderRepeat":9,"maskBorder":9,"maskType":9,"textDecorationStyle":9,"textDecorationSkip":9,"textDecorationLine":9,"textDecorationColor":9,"shapeImageThreshold":9,"shapeImageMargin":9,"shapeImageOutside":9,"filter":9,"hyphens":9,"flowInto":9,"flowFrom":9,"breakBefore":8,"breakAfter":8,"breakInside":8,"regionFragment":9,"columnCount":8,"columnFill":8,"columnGap":8,"columnRule":8,"columnRuleColor":8,"columnRuleStyle":8,"columnRuleWidth":8,"columns":8,"columnSpan":8,"columnWidth":8},"firefox":{"appearance":45,"userSelect":45,"boxSizing":28,"textAlignLast":45,"textDecorationStyle":35,"textDecorationSkip":35,"textDecorationLine":35,"textDecorationColor":35,"tabSize":45,"hyphens":42,"fontFeatureSettings":33,"breakAfter":45,"breakBefore":45,"breakInside":45,"columnCount":45,"columnFill":45,"columnGap":45,"columnRule":45,"columnRuleColor":45,"columnRuleStyle":45,"columnRuleWidth":45,"columns":45,"columnSpan":45,"columnWidth":45},"opera":{"flex":16,"flexBasis":16,"flexDirection":16,"flexGrow":16,"flexFlow":16,"flexShrink":16,"flexWrap":16,"alignContent":16,"alignItems":16,"alignSelf":16,"justifyContent":16,"order":16,"transform":22,"transformOrigin":22,"transformOriginX":22,"transformOriginY":22,"backfaceVisibility":22,"perspective":22,"perspectiveOrigin":22,"transformStyle":22,"transformOriginZ":22,"animation":29,"animationDelay":29,"animationDirection":29,"animationFillMode":29,"animationDuration":29,"animationIterationCount":29,"animationName":29,"animationPlayState":29,"animationTimingFunction":29,"appearance":35,"userSelect":35,"fontKerning":19,"textEmphasisPosition":35,"textEmphasis":35,"textEmphasisStyle":35,"textEmphasisColor":35,"boxDecorationBreak":35,"clipPath":35,"maskImage":35,"maskMode":35,"maskRepeat":35,"maskPosition":35,"maskClip":35,"maskOrigin":35,"maskSize":35,"maskComposite":35,"mask":35,"maskBorderSource":35,"maskBorderMode":35,"maskBorderSlice":35,"maskBorderWidth":35,"maskBorderOutset":35,"maskBorderRepeat":35,"maskBorder":35,"maskType":35,"filter":35,"fontFeatureSettings":35,"breakAfter":35,"breakBefore":35,"breakInside":35,"columnCount":35,"columnFill":35,"columnGap":35,"columnRule":35,"columnRuleColor":35,"columnRuleStyle":35,"columnRuleWidth":35,"columns":35,"columnSpan":35,"columnWidth":35},"ie":{"gridTemplateRows":11,"grid":11,"flowInto":11,"flexDirection":10,"touchAction":10,"gridRow":11,"scrollSnapPointsX":11,"wrapMargin":11,"breakBefore":11,"gridRowEnd":11,"gridRowStart":11,"breakInside":11,"transformOrigin":9,"scrollSnapType":11,"scrollSnapDestination":11,"gridTemplate":11,"flexWrap":10,"transformOriginX":9,"flowFrom":11,"gridColumnStart":11,"userSelect":11,"wrapFlow":11,"scrollSnapCoordinate":11,"gridGap":11,"gridAutoRows":11,"hyphens":11,"regionFragment":11,"flex":10,"columnGap":11,"wrapThrough":11,"transformOriginY":9,"breakAfter":11,"rowGap":11,"gridTemplateColumns":11,"gridArea":11,"transform":9,"gridAutoFlow":11,"flexFlow":10,"gridTemplateAreas":11,"gridColumn":11,"gridAutoColumns":11,"scrollSnapPointsY":11,"textSizeAdjust":11},"ios_saf":{"flex":8.1,"flexBasis":8.1,"flexDirection":8.1,"flexGrow":8.1,"flexFlow":8.1,"flexShrink":8.1,"flexWrap":8.1,"alignContent":8.1,"alignItems":8.1,"alignSelf":8.1,"justifyContent":8.1,"order":8.1,"transition":6,"transitionDelay":6,"transitionDuration":6,"transitionProperty":6,"transitionTimingFunction":6,"transform":8.1,"transformOrigin":8.1,"transformOriginX":8.1,"transformOriginY":8.1,"backfaceVisibility":8.1,"perspective":8.1,"perspectiveOrigin":8.1,"transformStyle":8.1,"transformOriginZ":8.1,"animation":8.1,"animationDelay":8.1,"animationDirection":8.1,"animationFillMode":8.1,"animationDuration":8.1,"animationIterationCount":8.1,"animationName":8.1,"animationPlayState":8.1,"animationTimingFunction":8.1,"appearance":9,"userSelect":9,"backdropFilter":9,"fontKerning":9,"scrollSnapType":9,"scrollSnapPointsX":9,"scrollSnapPointsY":9,"scrollSnapDestination":9,"scrollSnapCoordinate":9,"boxDecorationBreak":9,"clipPath":9,"maskImage":9,"maskMode":9,"maskRepeat":9,"maskPosition":9,"maskClip":9,"maskOrigin":9,"maskSize":9,"maskComposite":9,"mask":9,"maskBorderSource":9,"maskBorderMode":9,"maskBorderSlice":9,"maskBorderWidth":9,"maskBorderOutset":9,"maskBorderRepeat":9,"maskBorder":9,"maskType":9,"textSizeAdjust":9,"textDecorationStyle":9,"textDecorationSkip":9,"textDecorationLine":9,"textDecorationColor":9,"shapeImageThreshold":9,"shapeImageMargin":9,"shapeImageOutside":9,"filter":9,"hyphens":9,"flowInto":9,"flowFrom":9,"breakBefore":8.1,"breakAfter":8.1,"breakInside":8.1,"regionFragment":9,"columnCount":8.1,"columnFill":8.1,"columnGap":8.1,"columnRule":8.1,"columnRuleColor":8.1,"columnRuleStyle":8.1,"columnRuleWidth":8.1,"columns":8.1,"columnSpan":8.1,"columnWidth":8.1},"android":{"borderImage":4.2,"borderImageOutset":4.2,"borderImageRepeat":4.2,"borderImageSlice":4.2,"borderImageSource":4.2,"borderImageWidth":4.2,"flex":4.2,"flexBasis":4.2,"flexDirection":4.2,"flexGrow":4.2,"flexFlow":4.2,"flexShrink":4.2,"flexWrap":4.2,"alignContent":4.2,"alignItems":4.2,"alignSelf":4.2,"justifyContent":4.2,"order":4.2,"transition":4.2,"transitionDelay":4.2,"transitionDuration":4.2,"transitionProperty":4.2,"transitionTimingFunction":4.2,"transform":4.4,"transformOrigin":4.4,"transformOriginX":4.4,"transformOriginY":4.4,"backfaceVisibility":4.4,"perspective":4.4,"perspectiveOrigin":4.4,"transformStyle":4.4,"transformOriginZ":4.4,"animation":4.4,"animationDelay":4.4,"animationDirection":4.4,"animationFillMode":4.4,"animationDuration":4.4,"animationIterationCount":4.4,"animationName":4.4,"animationPlayState":4.4,"animationTimingFunction":4.4,"appearance":44,"userSelect":44,"fontKerning":4.4,"textEmphasisPosition":44,"textEmphasis":44,"textEmphasisStyle":44,"textEmphasisColor":44,"boxDecorationBreak":44,"clipPath":44,"maskImage":44,"maskMode":44,"maskRepeat":44,"maskPosition":44,"maskClip":44,"maskOrigin":44,"maskSize":44,"maskComposite":44,"mask":44,"maskBorderSource":44,"maskBorderMode":44,"maskBorderSlice":44,"maskBorderWidth":44,"maskBorderOutset":44,"maskBorderRepeat":44,"maskBorder":44,"maskType":44,"filter":44,"fontFeatureSettings":44,"breakAfter":44,"breakBefore":44,"breakInside":44,"columnCount":44,"columnFill":44,"columnGap":44,"columnRule":44,"columnRuleColor":44,"columnRuleStyle":44,"columnRuleWidth":44,"columns":44,"columnSpan":44,"columnWidth":44},"and_chr":{"appearance":46,"userSelect":46,"textEmphasisPosition":46,"textEmphasis":46,"textEmphasisStyle":46,"textEmphasisColor":46,"boxDecorationBreak":46,"clipPath":46,"maskImage":46,"maskMode":46,"maskRepeat":46,"maskPosition":46,"maskClip":46,"maskOrigin":46,"maskSize":46,"maskComposite":46,"mask":46,"maskBorderSource":46,"maskBorderMode":46,"maskBorderSlice":46,"maskBorderWidth":46,"maskBorderOutset":46,"maskBorderRepeat":46,"maskBorder":46,"maskType":46,"textDecorationStyle":46,"textDecorationSkip":46,"textDecorationLine":46,"textDecorationColor":46,"filter":46,"fontFeatureSettings":46,"breakAfter":46,"breakBefore":46,"breakInside":46,"columnCount":46,"columnFill":46,"columnGap":46,"columnRule":46,"columnRuleColor":46,"columnRuleStyle":46,"columnRuleWidth":46,"columns":46,"columnSpan":46,"columnWidth":46},"and_uc":{"flex":9.9,"flexBasis":9.9,"flexDirection":9.9,"flexGrow":9.9,"flexFlow":9.9,"flexShrink":9.9,"flexWrap":9.9,"alignContent":9.9,"alignItems":9.9,"alignSelf":9.9,"justifyContent":9.9,"order":9.9,"transition":9.9,"transitionDelay":9.9,"transitionDuration":9.9,"transitionProperty":9.9,"transitionTimingFunction":9.9,"transform":9.9,"transformOrigin":9.9,"transformOriginX":9.9,"transformOriginY":9.9,"backfaceVisibility":9.9,"perspective":9.9,"perspectiveOrigin":9.9,"transformStyle":9.9,"transformOriginZ":9.9,"animation":9.9,"animationDelay":9.9,"animationDirection":9.9,"animationFillMode":9.9,"animationDuration":9.9,"animationIterationCount":9.9,"animationName":9.9,"animationPlayState":9.9,"animationTimingFunction":9.9,"appearance":9.9,"userSelect":9.9,"fontKerning":9.9,"textEmphasisPosition":9.9,"textEmphasis":9.9,"textEmphasisStyle":9.9,"textEmphasisColor":9.9,"maskImage":9.9,"maskMode":9.9,"maskRepeat":9.9,"maskPosition":9.9,"maskClip":9.9,"maskOrigin":9.9,"maskSize":9.9,"maskComposite":9.9,"mask":9.9,"maskBorderSource":9.9,"maskBorderMode":9.9,"maskBorderSlice":9.9,"maskBorderWidth":9.9,"maskBorderOutset":9.9,"maskBorderRepeat":9.9,"maskBorder":9.9,"maskType":9.9,"textSizeAdjust":9.9,"filter":9.9,"hyphens":9.9,"flowInto":9.9,"flowFrom":9.9,"breakBefore":9.9,"breakAfter":9.9,"breakInside":9.9,"regionFragment":9.9,"fontFeatureSettings":9.9,"columnCount":9.9,"columnFill":9.9,"columnGap":9.9,"columnRule":9.9,"columnRuleColor":9.9,"columnRuleStyle":9.9,"columnRuleWidth":9.9,"columns":9.9,"columnSpan":9.9,"columnWidth":9.9},"op_mini":{"borderImage":5,"borderImageOutset":5,"borderImageRepeat":5,"borderImageSlice":5,"borderImageSource":5,"borderImageWidth":5,"tabSize":5,"objectFit":5,"objectPosition":5}}; module.exports = caniuseData
 
 /***/ },
-/* 406 */
+/* 408 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -99692,29 +99724,29 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _pluginsCursor = __webpack_require__(407);
+	var _pluginsCursor = __webpack_require__(409);
 
 	var _pluginsCursor2 = _interopRequireDefault(_pluginsCursor);
 
-	var _pluginsFlex = __webpack_require__(408);
+	var _pluginsFlex = __webpack_require__(410);
 
 	var _pluginsFlex2 = _interopRequireDefault(_pluginsFlex);
 
-	var _pluginsSizing = __webpack_require__(409);
+	var _pluginsSizing = __webpack_require__(411);
 
 	var _pluginsSizing2 = _interopRequireDefault(_pluginsSizing);
 
-	var _pluginsGradient = __webpack_require__(410);
+	var _pluginsGradient = __webpack_require__(412);
 
 	var _pluginsGradient2 = _interopRequireDefault(_pluginsGradient);
 
 	// special flexbox specifications
 
-	var _pluginsFlexboxIE = __webpack_require__(411);
+	var _pluginsFlexboxIE = __webpack_require__(413);
 
 	var _pluginsFlexboxIE2 = _interopRequireDefault(_pluginsFlexboxIE);
 
-	var _pluginsFlexboxOld = __webpack_require__(412);
+	var _pluginsFlexboxOld = __webpack_require__(414);
 
 	var _pluginsFlexboxOld2 = _interopRequireDefault(_pluginsFlexboxOld);
 
@@ -99722,7 +99754,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 407 */
+/* 409 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -99748,7 +99780,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 408 */
+/* 410 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -99774,7 +99806,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 409 */
+/* 411 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -99803,7 +99835,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 410 */
+/* 412 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -99830,7 +99862,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 411 */
+/* 413 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -99876,7 +99908,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 412 */
+/* 414 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -99928,7 +99960,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 413 */
+/* 415 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @flow */
@@ -99939,7 +99971,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _mouseUpListener = __webpack_require__(414);
+	var _mouseUpListener = __webpack_require__(416);
 
 	var _mouseUpListener2 = _interopRequireDefault(_mouseUpListener);
 
@@ -100062,7 +100094,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 414 */
+/* 416 */
 /***/ function(module, exports) {
 
 	/* @flow */
@@ -100109,7 +100141,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 415 */
+/* 417 */
 /***/ function(module, exports) {
 
 	/** @flow */
@@ -100206,7 +100238,52 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 416 */
+/* 418 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2015 Jed Watson.
+	  Based on code that is Copyright 2013-2015, Facebook, Inc.
+	  All rights reserved.
+	*/
+
+	(function () {
+		'use strict';
+
+		var canUseDOM = !!(
+			typeof window !== 'undefined' &&
+			window.document &&
+			window.document.createElement
+		);
+
+		var ExecutionEnvironment = {
+
+			canUseDOM: canUseDOM,
+
+			canUseWorkers: typeof Worker !== 'undefined',
+
+			canUseEventListeners:
+				canUseDOM && !!(window.addEventListener || window.attachEvent),
+
+			canUseViewport: canUseDOM && !!window.screen
+
+		};
+
+		if (true) {
+			!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+				return ExecutionEnvironment;
+			}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+		} else if (typeof module !== 'undefined' && module.exports) {
+			module.exports = ExecutionEnvironment;
+		} else {
+			window.ExecutionEnvironment = ExecutionEnvironment;
+		}
+
+	}());
+
+
+/***/ },
+/* 419 */
 /***/ function(module, exports) {
 
 	/* @flow */
@@ -100286,7 +100363,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 417 */
+/* 420 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -100299,11 +100376,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _styleJs = __webpack_require__(418);
+	var _styleJs = __webpack_require__(421);
 
 	var _styleJs2 = _interopRequireDefault(_styleJs);
 
-	var _printStylesJs = __webpack_require__(416);
+	var _printStylesJs = __webpack_require__(419);
 
 	var _printStylesJs2 = _interopRequireDefault(_printStylesJs);
 
@@ -100345,7 +100422,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 418 */
+/* 421 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* @flow */
@@ -100356,15 +100433,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _camelCasePropsToDashCase = __webpack_require__(419);
+	var _camelCasePropsToDashCase = __webpack_require__(422);
 
 	var _camelCasePropsToDashCase2 = _interopRequireDefault(_camelCasePropsToDashCase);
 
-	var _createMarkupForStyles = __webpack_require__(420);
+	var _createMarkupForStyles = __webpack_require__(423);
 
 	var _createMarkupForStyles2 = _interopRequireDefault(_createMarkupForStyles);
 
-	var _prefixer = __webpack_require__(400);
+	var _prefixer = __webpack_require__(402);
 
 	var _react = __webpack_require__(1);
 
@@ -100460,7 +100537,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 419 */
+/* 422 */
 /***/ function(module, exports) {
 
 	/* @flow */
@@ -100498,7 +100575,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 420 */
+/* 423 */
 /***/ function(module, exports) {
 
 	/* @flow */
@@ -100518,7 +100595,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 421 */
+/* 424 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* @flow */
@@ -100530,17 +100607,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _camelCasePropsToDashCase = __webpack_require__(419);
+	var _camelCasePropsToDashCase = __webpack_require__(422);
 
 	var _camelCasePropsToDashCase2 = _interopRequireDefault(_camelCasePropsToDashCase);
 
-	var _createMarkupForStyles = __webpack_require__(420);
+	var _createMarkupForStyles = __webpack_require__(423);
 
 	var _createMarkupForStyles2 = _interopRequireDefault(_createMarkupForStyles);
 
-	var _prefixer = __webpack_require__(400);
+	var _prefixer = __webpack_require__(402);
 
-	var _exenv = __webpack_require__(377);
+	var _exenv = __webpack_require__(418);
 
 	var _exenv2 = _interopRequireDefault(_exenv);
 
@@ -100611,7 +100688,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports['default'];
 
 /***/ },
-/* 422 */
+/* 425 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -100711,7 +100788,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 423 */
+/* 426 */
 /***/ function(module, exports) {
 
 	/* eslint-disable max-len */
@@ -100745,7 +100822,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* eslint-enable max-len */
 
 /***/ },
-/* 424 */
+/* 427 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -100766,7 +100843,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _radium2 = _interopRequireDefault(_radium);
 
-	var _themesVictorySettings = __webpack_require__(423);
+	var _themesVictorySettings = __webpack_require__(426);
 
 	var _themesVictorySettings2 = _interopRequireDefault(_themesVictorySettings);
 
@@ -100885,7 +100962,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 425 */
+/* 428 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// -------------------------------
@@ -100898,7 +100975,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	var _victorySettings = __webpack_require__(423);
+	var _victorySettings = __webpack_require__(426);
 
 	var _victorySettings2 = _interopRequireDefault(_victorySettings);
 
@@ -101444,321 +101521,323 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 426 */
+/* 429 */
 /***/ function(module, exports) {
 
 	module.exports = "VictoryLine\n=============\n\nVictoryLine creates a line based on data. VictoryLine is a composable component, so it does not include an axis.  Check out [VictoryChart](https://github.com/formidablelabs/victory-chart) for easy to use line charts and more.\n\n## Features\n\n### Props are optional\n\nVictoryLine is written to be highly configurable, but it also includes a set of sensible defaults and fallbacks. If no props are provided, VictoryLine plots the identity function `(x) => x`.\n\n```playground\n<VictoryLine />\n```\n\nTo display your own data, just pass in an array of data objects via the data prop. The domain of the line is automatically set to include all of the data provided.\n\n```playground\n <VictoryLine\n    data={[\n      {x: 0, y: 1},\n      {x: 1, y: 3},\n      {x: 2, y: 2},      \n      {x: 3, y: 4},\n      {x: 4, y: 3},\n      {x: 5, y: 5}\n    ]}\n />\n```\n\nVictoryLine can also plot functions. Again, the domain is set so that the entire line is visible:\n\n```playground\n <VictoryLine\n    y={(x) => Math.sin(2 * Math.PI * x)}\n />\n```\n\n### Flexible and configurable\n\nThe sensible defaults VictoryLine provides makes it easy to get started, but everything can be overridden, and configured to suit your needs:\n\nAdd labels, style the data, change the interpolation, add a custom domain:\n\n```playground\n<VictoryLine\n    domain={[0, 5]}\n    padding={75}\n    height={500}\n    data={[\n      {x: 0, y: 1},\n      {x: 1, y: 3},\n      {x: 2, y: 2},      \n      {x: 3, y: 4},\n      {x: 4, y: 3},\n      {x: 5, y: 5}\n    ]}\n    interpolation=\"monotone\"\n    label=\"LINE\"\n    style={{\n      data: {\n        stroke: \"#822722\",\n        strokeWidth: 3,\n        \":hover\": {stroke: \"#c33b33\"}\n      },\n      labels: {fontSize: 12}\n    }}\n />\n```\n\n\n### Animating\n\nVictoryLine animates with [VictoryAnimation](http://github.com/formidablelabs/victory-animation) as data changes when an `animate` prop is provided.\n\n```playground_norender\nclass App extends React.Component {\n   constructor(props) {\n    super(props);\n    this.state = {\n      y: this.getYFunction(),\n      style: this.getStyles()\n    };\n  }\n\n  getYFunction() {\n    const n = _.random(2, 7);\n    return (x) => Math.exp(-n * x) *\n      Math.sin(2 * n * Math.PI * x);\n  }\n\n  getStyles() {\n    const colors = [\n      \"red\", \"orange\", \"magenta\",\n      \"gold\", \"blue\", \"purple\"\n    ];\n    return {\n      stroke: colors[_.random(0, 5)],\n      strokeWidth: _.random(1, 5)\n    };\n  }\n\n  componentDidMount() {\n    setInterval(() => {\n      this.setState({\n        y: this.getYFunction(),\n        style: this.getStyles()\n      });\n    }, 3000);\n  }\n\n  render() {\n    return (\n      <VictoryLine\n        style={{data: this.state.style}}\n        height={600}\n        interpolation=\"basis\"\n        animate={{velocity: 0.02}}\n        y={this.state.y}\n      />\n\n    );\n  }\n}\nReactDOM.render(<App/>, mountNode);\n\n```\n"
 
 /***/ },
-/* 427 */
+/* 430 */
 /***/ function(module, exports) {
 
-	module.exports = {
-		"description": "",
-		"props": {
-			"animate": {
-				"type": {
-					"name": "object"
+	module.exports = [
+		{
+			"description": "",
+			"props": {
+				"animate": {
+					"type": {
+						"name": "object"
+					},
+					"required": false,
+					"description": "The animate prop specifies props for victory-animation to use. It this prop is\nnot given, the line will not tween between changing data / style props.\nLarge datasets might animate slowly due to the inherent limits of svg rendering.\n@examples {velocity: 0.02, onEnd: () => alert(\"done!\")}"
 				},
-				"required": false,
-				"description": "The animate prop specifies props for victory-animation to use. It this prop is\nnot given, the line will not tween between changing data / style props.\nLarge datasets might animate slowly due to the inherent limits of svg rendering.\n@examples {velocity: 0.02, onEnd: () => alert(\"done!\")}"
-			},
-			"data": {
-				"type": {
-					"name": "arrayOf",
-					"value": {
+				"data": {
+					"type": {
+						"name": "arrayOf",
+						"value": {
+							"name": "shape",
+							"value": {
+								"x": {
+									"name": "any",
+									"required": false
+								},
+								"y": {
+									"name": "any",
+									"required": false
+								}
+							}
+						}
+					},
+					"required": false,
+					"description": "The data prop specifies the data to be plotted. Data should be in the form of an array\nof data points where each data point should be an object with x and y properties.\n@examples [{x: 1, y: 12}, {x: 10, y: 25}, {x: 100, y: 34}]"
+				},
+				"domain": {
+					"type": {
+						"name": "union",
+						"value": [
+							{
+								"name": "custom",
+								"raw": "Util.PropTypes.domain"
+							},
+							{
+								"name": "shape",
+								"value": {
+									"x": {
+										"name": "custom",
+										"raw": "Util.PropTypes.domain",
+										"required": false
+									},
+									"y": {
+										"name": "custom",
+										"raw": "Util.PropTypes.domain",
+										"required": false
+									}
+								}
+							}
+						]
+					},
+					"required": false,
+					"description": "The domain prop describes the range of values your chart will include. This prop can be\ngiven as a array of the minimum and maximum expected values for your chart,\nor as an object that specifies separate arrays for x and y.\nIf this prop is not provided, a domain will be calculated from data, or other\navailable information.\n@examples [-1, 1], {x: [0, 100], y: [0, 1]}"
+				},
+				"height": {
+					"type": {
+						"name": "custom",
+						"raw": "Util.PropTypes.nonNegative"
+					},
+					"required": false,
+					"description": "The height props specifies the height of the chart container element in pixels",
+					"defaultValue": {
+						"value": "300",
+						"computed": false
+					}
+				},
+				"interpolation": {
+					"type": {
+						"name": "enum",
+						"value": [
+							{
+								"value": "\"linear\"",
+								"computed": false
+							},
+							{
+								"value": "\"linear-closed\"",
+								"computed": false
+							},
+							{
+								"value": "\"step\"",
+								"computed": false
+							},
+							{
+								"value": "\"step-before\"",
+								"computed": false
+							},
+							{
+								"value": "\"step-after\"",
+								"computed": false
+							},
+							{
+								"value": "\"basis\"",
+								"computed": false
+							},
+							{
+								"value": "\"basis-open\"",
+								"computed": false
+							},
+							{
+								"value": "\"basis-closed\"",
+								"computed": false
+							},
+							{
+								"value": "\"bundle\"",
+								"computed": false
+							},
+							{
+								"value": "\"cardinal\"",
+								"computed": false
+							},
+							{
+								"value": "\"cardinal-open\"",
+								"computed": false
+							},
+							{
+								"value": "\"cardinal-closed\"",
+								"computed": false
+							},
+							{
+								"value": "\"monotone\"",
+								"computed": false
+							}
+						]
+					},
+					"required": false,
+					"description": "The interpolation prop determines how data points should be connected\nwhen plotting a line",
+					"defaultValue": {
+						"value": "\"linear\"",
+						"computed": false
+					}
+				},
+				"label": {
+					"type": {
+						"name": "string"
+					},
+					"required": false,
+					"description": "The label prop specifies a label to display at the end of a line component"
+				},
+				"labelComponent": {
+					"type": {
+						"name": "element"
+					},
+					"required": false,
+					"description": "The labelComponent prop takes in an entire, HTML-complete label component\nwhich will be used to create labels for line to use"
+				},
+				"padding": {
+					"type": {
+						"name": "union",
+						"value": [
+							{
+								"name": "number"
+							},
+							{
+								"name": "shape",
+								"value": {
+									"top": {
+										"name": "number",
+										"required": false
+									},
+									"bottom": {
+										"name": "number",
+										"required": false
+									},
+									"left": {
+										"name": "number",
+										"required": false
+									},
+									"right": {
+										"name": "number",
+										"required": false
+									}
+								}
+							}
+						]
+					},
+					"required": false,
+					"description": "The padding props specifies the amount of padding in number of pixels between\nthe edge of the chart and any rendered child components. This prop can be given\nas a number or as an object with padding specified for top, bottom, left\nand right.",
+					"defaultValue": {
+						"value": "50",
+						"computed": false
+					}
+				},
+				"samples": {
+					"type": {
+						"name": "custom",
+						"raw": "Util.PropTypes.nonNegative"
+					},
+					"required": false,
+					"description": "The samples prop specifies how many individual points to plot when plotting\ny as a function of x. Samples is ignored if x props are provided instead.",
+					"defaultValue": {
+						"value": "50",
+						"computed": false
+					}
+				},
+				"scale": {
+					"type": {
+						"name": "union",
+						"value": [
+							{
+								"name": "custom",
+								"raw": "Util.PropTypes.scale"
+							},
+							{
+								"name": "shape",
+								"value": {
+									"x": {
+										"name": "custom",
+										"raw": "Util.PropTypes.scale",
+										"required": false
+									},
+									"y": {
+										"name": "custom",
+										"raw": "Util.PropTypes.scale",
+										"required": false
+									}
+								}
+							}
+						]
+					},
+					"required": false,
+					"description": "The scale prop determines which scales your chart should use. This prop can be\ngiven as a function, or as an object that specifies separate functions for x and y.\n@examples d3.time.scale(), {x: d3.scale.linear(), y: d3.scale.log()}",
+					"defaultValue": {
+						"value": "d3.scale.linear()",
+						"computed": true
+					}
+				},
+				"standalone": {
+					"type": {
+						"name": "bool"
+					},
+					"required": false,
+					"description": "The standalone prop determines whether the component will render a standalone svg\nor a <g> tag that will be included in an external svg. Set standalone to false to\ncompose VictoryLine with other components within an enclosing <svg> tag.",
+					"defaultValue": {
+						"value": "true",
+						"computed": false
+					}
+				},
+				"style": {
+					"type": {
 						"name": "shape",
 						"value": {
-							"x": {
-								"name": "any",
+							"parent": {
+								"name": "object",
 								"required": false
 							},
-							"y": {
-								"name": "any",
+							"data": {
+								"name": "object",
+								"required": false
+							},
+							"labels": {
+								"name": "object",
 								"required": false
 							}
 						}
+					},
+					"required": false,
+					"description": "The style prop specifies styles for your chart. VictoryLine relies on Radium,\nso valid Radium style objects should work for this prop, however height, width, and margin\nare used to calculate range, and need to be expressed as a number of pixels\n@examples {data: {stroke: \"red\"}, labels: {fontSize: 14}}"
+				},
+				"width": {
+					"type": {
+						"name": "custom",
+						"raw": "Util.PropTypes.nonNegative"
+					},
+					"required": false,
+					"description": "The width props specifies the width of the chart container element in pixels",
+					"defaultValue": {
+						"value": "450",
+						"computed": false
 					}
 				},
-				"required": false,
-				"description": "The data prop specifies the data to be plotted. Data should be in the form of an array\nof data points where each data point should be an object with x and y properties.\n@examples [{x: 1, y: 12}, {x: 10, y: 25}, {x: 100, y: 34}]"
-			},
-			"domain": {
-				"type": {
-					"name": "union",
-					"value": [
-						{
-							"name": "custom",
-							"raw": "Util.PropTypes.domain"
-						},
-						{
-							"name": "shape",
-							"value": {
-								"x": {
-									"name": "custom",
-									"raw": "Util.PropTypes.domain",
-									"required": false
-								},
-								"y": {
-									"name": "custom",
-									"raw": "Util.PropTypes.domain",
-									"required": false
-								}
+				"x": {
+					"type": {
+						"name": "custom",
+						"raw": "Util.PropTypes.homogeneousArray"
+					},
+					"required": false,
+					"description": "The x prop provides another way to supply data for line to plot. This prop can be given\nas an array of values, and it will be plotted against whatever y prop is provided. If no\nprops are provided for y, the values in x will be plotted as the identity function (x) => x.\n@examples [1, 2, 3]"
+				},
+				"y": {
+					"type": {
+						"name": "union",
+						"value": [
+							{
+								"name": "array"
+							},
+							{
+								"name": "func"
 							}
-						}
-					]
-				},
-				"required": false,
-				"description": "The domain prop describes the range of values your chart will include. This prop can be\ngiven as a array of the minimum and maximum expected values for your chart,\nor as an object that specifies separate arrays for x and y.\nIf this prop is not provided, a domain will be calculated from data, or other\navailable information.\n@examples [-1, 1], {x: [0, 100], y: [0, 1]}"
-			},
-			"height": {
-				"type": {
-					"name": "custom",
-					"raw": "Util.PropTypes.nonNegative"
-				},
-				"required": false,
-				"description": "The height props specifies the height of the chart container element in pixels",
-				"defaultValue": {
-					"value": "300",
-					"computed": false
-				}
-			},
-			"interpolation": {
-				"type": {
-					"name": "enum",
-					"value": [
-						{
-							"value": "\"linear\"",
-							"computed": false
-						},
-						{
-							"value": "\"linear-closed\"",
-							"computed": false
-						},
-						{
-							"value": "\"step\"",
-							"computed": false
-						},
-						{
-							"value": "\"step-before\"",
-							"computed": false
-						},
-						{
-							"value": "\"step-after\"",
-							"computed": false
-						},
-						{
-							"value": "\"basis\"",
-							"computed": false
-						},
-						{
-							"value": "\"basis-open\"",
-							"computed": false
-						},
-						{
-							"value": "\"basis-closed\"",
-							"computed": false
-						},
-						{
-							"value": "\"bundle\"",
-							"computed": false
-						},
-						{
-							"value": "\"cardinal\"",
-							"computed": false
-						},
-						{
-							"value": "\"cardinal-open\"",
-							"computed": false
-						},
-						{
-							"value": "\"cardinal-closed\"",
-							"computed": false
-						},
-						{
-							"value": "\"monotone\"",
-							"computed": false
-						}
-					]
-				},
-				"required": false,
-				"description": "The interpolation prop determines how data points should be connected\nwhen plotting a line",
-				"defaultValue": {
-					"value": "\"linear\"",
-					"computed": false
-				}
-			},
-			"label": {
-				"type": {
-					"name": "string"
-				},
-				"required": false,
-				"description": "The label prop specifies a label to display at the end of a line component"
-			},
-			"labelComponent": {
-				"type": {
-					"name": "element"
-				},
-				"required": false,
-				"description": "The labelComponent prop takes in an entire, HTML-complete label component\nwhich will be used to create labels for line to use"
-			},
-			"padding": {
-				"type": {
-					"name": "union",
-					"value": [
-						{
-							"name": "number"
-						},
-						{
-							"name": "shape",
-							"value": {
-								"top": {
-									"name": "number",
-									"required": false
-								},
-								"bottom": {
-									"name": "number",
-									"required": false
-								},
-								"left": {
-									"name": "number",
-									"required": false
-								},
-								"right": {
-									"name": "number",
-									"required": false
-								}
-							}
-						}
-					]
-				},
-				"required": false,
-				"description": "The padding props specifies the amount of padding in number of pixels between\nthe edge of the chart and any rendered child components. This prop can be given\nas a number or as an object with padding specified for top, bottom, left\nand right.",
-				"defaultValue": {
-					"value": "50",
-					"computed": false
-				}
-			},
-			"samples": {
-				"type": {
-					"name": "custom",
-					"raw": "Util.PropTypes.nonNegative"
-				},
-				"required": false,
-				"description": "The samples prop specifies how many individual points to plot when plotting\ny as a function of x. Samples is ignored if x props are provided instead.",
-				"defaultValue": {
-					"value": "50",
-					"computed": false
-				}
-			},
-			"scale": {
-				"type": {
-					"name": "union",
-					"value": [
-						{
-							"name": "custom",
-							"raw": "Util.PropTypes.scale"
-						},
-						{
-							"name": "shape",
-							"value": {
-								"x": {
-									"name": "custom",
-									"raw": "Util.PropTypes.scale",
-									"required": false
-								},
-								"y": {
-									"name": "custom",
-									"raw": "Util.PropTypes.scale",
-									"required": false
-								}
-							}
-						}
-					]
-				},
-				"required": false,
-				"description": "The scale prop determines which scales your chart should use. This prop can be\ngiven as a function, or as an object that specifies separate functions for x and y.\n@examples d3.time.scale(), {x: d3.scale.linear(), y: d3.scale.log()}",
-				"defaultValue": {
-					"value": "d3.scale.linear()",
-					"computed": true
-				}
-			},
-			"standalone": {
-				"type": {
-					"name": "bool"
-				},
-				"required": false,
-				"description": "The standalone prop determines whether the component will render a standalone svg\nor a <g> tag that will be included in an external svg. Set standalone to false to\ncompose VictoryLine with other components within an enclosing <svg> tag.",
-				"defaultValue": {
-					"value": "true",
-					"computed": false
-				}
-			},
-			"style": {
-				"type": {
-					"name": "shape",
-					"value": {
-						"parent": {
-							"name": "object",
-							"required": false
-						},
-						"data": {
-							"name": "object",
-							"required": false
-						},
-						"labels": {
-							"name": "object",
-							"required": false
-						}
+						]
+					},
+					"required": false,
+					"description": "The y prop provides another way to supply data for line to plot. This prop can be given\nas a function of x, or an array of values. If x props are given, they will be used\nin plotting (x, y) data points. If x props are not provided, a set of x values\nevenly spaced across the x domain will be calculated, and used for plotting data points.\n@examples (x) => Math.sin(x), [1, 2, 3]",
+					"defaultValue": {
+						"value": "(x) => x",
+						"computed": false
 					}
-				},
-				"required": false,
-				"description": "The style prop specifies styles for your chart. VictoryLine relies on Radium,\nso valid Radium style objects should work for this prop, however height, width, and margin\nare used to calculate range, and need to be expressed as a number of pixels\n@examples {data: {stroke: \"red\"}, labels: {fontSize: 14}}"
-			},
-			"width": {
-				"type": {
-					"name": "custom",
-					"raw": "Util.PropTypes.nonNegative"
-				},
-				"required": false,
-				"description": "The width props specifies the width of the chart container element in pixels",
-				"defaultValue": {
-					"value": "450",
-					"computed": false
-				}
-			},
-			"x": {
-				"type": {
-					"name": "custom",
-					"raw": "Util.PropTypes.homogeneousArray"
-				},
-				"required": false,
-				"description": "The x prop provides another way to supply data for line to plot. This prop can be given\nas an array of values, and it will be plotted against whatever y prop is provided. If no\nprops are provided for y, the values in x will be plotted as the identity function (x) => x.\n@examples [1, 2, 3]"
-			},
-			"y": {
-				"type": {
-					"name": "union",
-					"value": [
-						{
-							"name": "array"
-						},
-						{
-							"name": "func"
-						}
-					]
-				},
-				"required": false,
-				"description": "The y prop provides another way to supply data for line to plot. This prop can be given\nas a function of x, or an array of values. If x props are given, they will be used\nin plotting (x, y) data points. If x props are not provided, a set of x values\nevenly spaced across the x domain will be calculated, and used for plotting data points.\n@examples (x) => Math.sin(x), [1, 2, 3]",
-				"defaultValue": {
-					"value": "(x) => x",
-					"computed": false
 				}
 			}
 		}
-	};
+	]
 
 /***/ },
-/* 428 */
+/* 431 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -101787,19 +101866,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _radium2 = _interopRequireDefault(_radium);
 
-	var _d3 = __webpack_require__(429);
+	var _d3 = __webpack_require__(432);
 
 	var _d32 = _interopRequireDefault(_d3);
 
-	var _lodash = __webpack_require__(430);
+	var _lodash = __webpack_require__(433);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _victoryAnimation = __webpack_require__(432);
+	var _victoryAnimation = __webpack_require__(435);
 
-	var _victoryLabel = __webpack_require__(435);
+	var _victoryLabel = __webpack_require__(438);
 
-	var _victoryUtil = __webpack_require__(437);
+	var _victoryUtil = __webpack_require__(440);
 
 	var _victoryUtil2 = _interopRequireDefault(_victoryUtil);
 
@@ -102179,7 +102258,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 429 */
+/* 432 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;!function() {
@@ -111734,7 +111813,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}();
 
 /***/ },
-/* 430 */
+/* 433 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -124089,10 +124168,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(431)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(434)(module), (function() { return this; }())))
 
 /***/ },
-/* 431 */
+/* 434 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -124108,17 +124187,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 432 */
+/* 435 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	module.exports = {
-	  VictoryAnimation: __webpack_require__(433)
+	  VictoryAnimation: __webpack_require__(436)
 	};
 
 /***/ },
-/* 433 */
+/* 436 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*global requestAnimationFrame, cancelAnimationFrame, setTimeout*/
@@ -124143,11 +124222,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _d3 = __webpack_require__(429);
+	var _d3 = __webpack_require__(432);
 
 	var _d32 = _interopRequireDefault(_d3);
 
-	var _util = __webpack_require__(434);
+	var _util = __webpack_require__(437);
 
 	(0, _util.addVictoryInterpolator)();
 
@@ -124306,7 +124385,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 434 */
+/* 437 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -124317,11 +124396,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	var _d3 = __webpack_require__(429);
+	var _d3 = __webpack_require__(432);
 
 	var _d32 = _interopRequireDefault(_d3);
 
-	var _lodash = __webpack_require__(430);
+	var _lodash = __webpack_require__(433);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -124463,17 +124542,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.addVictoryInterpolator = addVictoryInterpolator;
 
 /***/ },
-/* 435 */
+/* 438 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	module.exports = {
-	  VictoryLabel: __webpack_require__(436)
+	  VictoryLabel: __webpack_require__(439)
 	};
 
 /***/ },
-/* 436 */
+/* 439 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -124500,11 +124579,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _radium2 = _interopRequireDefault(_radium);
 
-	var _victoryUtil = __webpack_require__(437);
+	var _victoryUtil = __webpack_require__(440);
 
 	var _victoryUtil2 = _interopRequireDefault(_victoryUtil);
 
-	var _lodash = __webpack_require__(430);
+	var _lodash = __webpack_require__(433);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -124665,7 +124744,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 437 */
+/* 440 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -124676,23 +124755,23 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
 
-	var _collection = __webpack_require__(438);
+	var _collection = __webpack_require__(441);
 
 	var Collection = _interopRequireWildcard(_collection);
 
-	var _log = __webpack_require__(439);
+	var _log = __webpack_require__(442);
 
 	var Log = _interopRequireWildcard(_log);
 
-	var _style = __webpack_require__(440);
+	var _style = __webpack_require__(443);
 
 	var Style = _interopRequireWildcard(_style);
 
-	var _type = __webpack_require__(445);
+	var _type = __webpack_require__(447);
 
 	var Type = _interopRequireWildcard(_type);
 
-	var _propTypes = __webpack_require__(446);
+	var _propTypes = __webpack_require__(448);
 
 	var PropTypes = _interopRequireWildcard(_propTypes);
 
@@ -124706,7 +124785,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = exports["default"];
 
 /***/ },
-/* 438 */
+/* 441 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -124717,7 +124796,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	var _lodash = __webpack_require__(430);
+	var _lodash = __webpack_require__(433);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -124749,7 +124828,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.removeUndefined = removeUndefined;
 
 /***/ },
-/* 439 */
+/* 442 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* global console */
@@ -124771,7 +124850,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.warn = warn;
 
 /***/ },
-/* 440 */
+/* 443 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -124782,7 +124861,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	var _reduceCssCalc = __webpack_require__(441);
+	var _reduceCssCalc = __webpack_require__(444);
 
 	var _reduceCssCalc2 = _interopRequireDefault(_reduceCssCalc);
 
@@ -124838,14 +124917,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.getColorScale = getColorScale;
 
 /***/ },
-/* 441 */
+/* 444 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * Module dependencies
 	 */
-	var balanced = __webpack_require__(442)
-	var reduceFunctionCall = __webpack_require__(443)
+	var balanced = __webpack_require__(445)
+	var reduceFunctionCall = __webpack_require__(446)
 
 	/**
 	 * Constantes
@@ -124997,7 +125076,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 442 */
+/* 445 */
 /***/ function(module, exports) {
 
 	module.exports = function(a, b, str) {
@@ -125027,13 +125106,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 443 */
+/* 446 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
 	 * Module dependencies
 	 */
-	var balanced = __webpack_require__(444)
+	var balanced = __webpack_require__(445)
 
 	/**
 	 * Expose `reduceFunctionCall`
@@ -125107,37 +125186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 444 */
-/***/ function(module, exports) {
-
-	module.exports = function(a, b, str) {
-	  var bal = 0;
-	  var m = {};
-
-	  for (var i = 0; i < str.length; i++) {
-	    if (a == str.substr(i, a.length)) {
-	      if (!('start' in m)) m.start = i;
-	      bal++;
-	    }
-	    else if (b == str.substr(i, b.length) && 'start' in m) {
-	      bal--;
-	      if (!bal) {
-	        m.end = i;
-	        m.pre = str.substr(0, m.start);
-	        m.body = (m.end - m.start > 1)
-	          ? str.substring(m.start + a.length, m.end)
-	          : '';
-	        m.post = str.slice(m.end + b.length);
-	        return m;
-	      }
-	    }
-	  }
-	};
-
-
-
-/***/ },
-/* 445 */
+/* 447 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -125188,7 +125237,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.getConstructorName = getConstructorName;
 
 /***/ },
-/* 446 */
+/* 448 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -125201,9 +125250,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _react = __webpack_require__(1);
 
-	var _type = __webpack_require__(445);
+	var _type = __webpack_require__(447);
 
-	var _lodash = __webpack_require__(430);
+	var _lodash = __webpack_require__(433);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -125297,7 +125346,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.homogeneousArray = homogeneousArray;
 
 /***/ },
-/* 447 */
+/* 449 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
