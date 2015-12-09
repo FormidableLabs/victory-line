@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import Ecology from "ecology";
 import Radium, { Style } from "radium";
 import { VictoryTheme } from "formidable-landers";
-import * as docgen from "react-docgen"
+import {parse as parseComponent} from "react-docgen";
 
 @Radium
 class Docs extends React.Component {
@@ -12,7 +12,7 @@ class Docs extends React.Component {
       <div>
         <Ecology
           overview={require("!!raw!./ecology.md")}
-          source={docgen.parse(require("!!raw!../src/components/victory-line"))}
+          source={parseComponent(require("!!raw!../src/components/victory-line"))}
           scope={{React, ReactDOM, VictoryLine: require("../src/components/victory-line")}}
           playgroundtheme="elegant" />
         <Style rules={VictoryTheme}/>
