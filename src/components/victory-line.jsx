@@ -1,6 +1,6 @@
 import React, { PropTypes } from "react";
 import Radium from "radium";
-import d3 from "d3";
+import d3Scale from "d3-scale";
 import _ from "lodash";
 import LineSegment from "./line-segment";
 import {VictoryAnimation} from "victory-animation";
@@ -70,19 +70,24 @@ export default class VictoryLine extends React.Component {
      * when plotting a line
      */
     interpolation: PropTypes.oneOf([
-      "linear",
-      "linear-closed",
-      "step",
-      "step-before",
-      "step-after",
       "basis",
-      "basis-open",
-      "basis-closed",
+      "basisClosed",
+      "basisOpen",
       "bundle",
       "cardinal",
-      "cardinal-open",
-      "cardinal-closed",
-      "monotone"
+      "cardinalClosed",
+      "cardinalOpen",
+      "catmullRom",
+      "catmullRomClosed",
+      "catmullRomOpen",
+      "linear",
+      "linearClosed",
+      "monotone",
+      "natural",
+      "radial",
+      "step",
+      "stepAfter",
+      "stepBefore"
     ]),
     /**
      * The label prop specifies a label to display at the end of a line component
@@ -171,7 +176,7 @@ export default class VictoryLine extends React.Component {
     interpolation: "linear",
     padding: 50,
     samples: 50,
-    scale: d3.scale.linear(),
+    scale: d3Scale.linear(),
     standalone: true,
     width: 450,
     y: (x) => x
