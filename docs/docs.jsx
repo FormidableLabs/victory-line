@@ -1,9 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Ecology from 'ecology';
-import Radium, { Style } from 'radium';
+import React from "react";
+import ReactDOM from "react-dom";
+import Ecology from "ecology";
+import Radium, { Style } from "radium";
 
-import { VictoryTheme } from 'formidable-landers';
+import { VictoryTheme } from "formidable-landers";
 
 @Radium
 class Docs extends React.Component {
@@ -11,10 +11,10 @@ class Docs extends React.Component {
     return (
       <div>
         <Ecology
-          overview={require('!!raw!./ecology.md')}
-          source={require('json!./victory-line.json')}
-          scope={{React, ReactDOM, VictoryLine: require('../src/components/victory-line')}}
-          playgroundtheme='elegant' />
+          overview={require("!!raw!./ecology.md")}
+          source={require("!!docgen!../src/components/victory-line")[0]}
+          scope={{React, ReactDOM, VictoryLine: require("../src/components/victory-line")}}
+          playgroundtheme="elegant" />
         <Style rules={VictoryTheme}/>
       </div>
     )
