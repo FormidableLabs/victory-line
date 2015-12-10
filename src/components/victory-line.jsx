@@ -271,7 +271,8 @@ export default class VictoryLine extends React.Component {
     const step = _.max(domain) / samples;
     // return an array of x values spaced across the domain,
     // include the maximum of the domain
-    return _.union(_.range(_.min(domain), _.max(domain), step), [_.max(domain)]);
+    const xArray = _.union(_.range(_.min(domain), _.max(domain), step), [_.max(domain)]);
+    return _.filter(xArray, (x) => x !== 0);
   }
 
   returnOrGenerateY(props, x) {
