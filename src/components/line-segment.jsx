@@ -1,6 +1,6 @@
 import React, { PropTypes } from "react";
 import Radium from "radium";
-import d3 from "d3";
+import d3Shape from "d3-shape";
 
 
 @Radium
@@ -15,8 +15,8 @@ export default class LineSegment extends React.Component {
   render() {
     const xScale = this.props.scale.x;
     const yScale = this.props.scale.y;
-    const lineFunction = d3.svg.line()
-      .interpolate(this.props.interpolation)
+    const lineFunction = d3Shape.line()
+        .curve(d3Shape[this.props.interpolation])
       .x((data) => xScale(data.x))
       .y((data) => yScale(data.y));
     return (
