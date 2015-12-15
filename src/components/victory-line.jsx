@@ -1,6 +1,6 @@
 import React, { PropTypes } from "react";
 import Radium from "radium";
-import d3 from "d3";
+import d3Scale from "d3-scale";
 import _ from "lodash";
 import LineSegment from "./line-segment";
 import {VictoryAnimation} from "victory-animation";
@@ -70,19 +70,24 @@ export default class VictoryLine extends React.Component {
      * when plotting a line
      */
     interpolation: PropTypes.oneOf([
-      "linear",
-      "linear-closed",
-      "step",
-      "step-before",
-      "step-after",
       "basis",
-      "basis-open",
-      "basis-closed",
+      "basisClosed",
+      "basisOpen",
       "bundle",
       "cardinal",
-      "cardinal-open",
-      "cardinal-closed",
-      "monotone"
+      "cardinalClosed",
+      "cardinalOpen",
+      "catmullRom",
+      "catmullRomClosed",
+      "catmullRomOpen",
+      "linear",
+      "linearClosed",
+      "monotone",
+      "natural",
+      "radial",
+      "step",
+      "stepAfter",
+      "stepBefore"
     ]),
     /**
      * The label prop specifies a label to display at the end of a line component
@@ -116,7 +121,7 @@ export default class VictoryLine extends React.Component {
     /**
      * The scale prop determines which scales your chart should use. This prop can be
      * given as a function, or as an object that specifies separate functions for x and y.
-     * @examples d3.time.scale(), {x: d3.scale.linear(), y: d3.scale.log()}
+     * @examples d3Scale.time(), {x: d3Scale.linear(), y: d3Scale.log()}
      */
     scale: PropTypes.oneOfType([
       Util.PropTypes.scale,
@@ -171,7 +176,7 @@ export default class VictoryLine extends React.Component {
     interpolation: "linear",
     padding: 50,
     samples: 50,
-    scale: d3.scale.linear(),
+    scale: d3Scale.linear(),
     standalone: true,
     width: 450,
     y: (x) => x
@@ -271,7 +276,8 @@ export default class VictoryLine extends React.Component {
     const step = _.max(domain) / samples;
     // return an array of x values spaced across the domain,
     // include the maximum of the domain
-    return _.union(_.range(_.min(domain), _.max(domain), step), [_.max(domain)]);
+    const xArray = _.union(_.range(_.min(domain), _.max(domain), step), [_.max(domain)]);
+    return _.filter(xArray, (x) => x !== 0);
   }
 
   returnOrGenerateY(props, x) {
