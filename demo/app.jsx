@@ -58,7 +58,7 @@ class App extends React.Component {
       <VictoryLine
         style={{parent: {border: "1px solid black", margin: "5px"}, data: {stroke: "blue"}}}
         y={(x) => Math.sin(2 * Math.PI * x)}
-        labelComponent={<VictoryLabel>{"label\ntwo"}</VictoryLabel>}
+        label={<VictoryLabel>{"label\ntwo"}</VictoryLabel>}
         sample={25}
       />
 
