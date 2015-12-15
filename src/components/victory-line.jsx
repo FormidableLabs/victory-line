@@ -1,10 +1,9 @@
+import _ from "lodash";
 import React, { PropTypes } from "react";
 import Radium from "radium";
 import d3Scale from "d3-scale";
-import _ from "lodash";
 import LineSegment from "./line-segment";
-import {VictoryAnimation} from "victory-animation";
-import {VictoryLabel} from "victory-label";
+import LineLabel from "./line-label";
 import Util from "victory-util";
 
 const defaultStyles = {
@@ -90,14 +89,10 @@ export default class VictoryLine extends React.Component {
       "stepBefore"
     ]),
     /**
-     * The label prop specifies a label to display at the end of a line component
+     * The label prop specifies a label to display at the end of a line component,
+     * this prop can be given as a value, or as an entire label component
      */
-    label: PropTypes.string,
-    /**
-     * The labelComponent prop takes in an entire, HTML-complete label component
-     * which will be used to create labels for line to use
-     */
-    labelComponent: PropTypes.element,
+    label: PropTypes.any,
     /**
      * The padding props specifies the amount of padding in number of pixels between
      * the edge of the chart and any rendered child components. This prop can be given
@@ -317,37 +312,12 @@ export default class VictoryLine extends React.Component {
     return _.merge({opacity, fill, padding}, this.style.labels);
   }
 
-  renderLabel() {
-    if (!this.props.label && !this.props.labelComponent) {
-      return undefined;
-    }
-    const position = {
-      x: this.scale.x.call(this, _.last(_.flatten(this.dataSegments)).x),
-      y: this.scale.y.call(this, _.last(_.flatten(this.dataSegments)).y)
-    };
-    const text = this.props.label || "";
-    const component = this.props.labelComponent;
-    const componentStyle = component && component.props.style || {};
-    const style = _.merge({}, this.getLabelStyle(), componentStyle);
-    const children = component && component.props.children || text;
-    const props = {
-      x: component && component.props.x || position.x + style.padding,
-      y: component && component.props.y || position.y - style.padding,
-      data: this.dataset, // Pass dataset for custom label component to access
-      textAnchor: component && component.props.textAnchor || "start",
-      verticalAnchor: component && component.props.verticalAnchor || "middle",
-      style
-    };
-    return component ?
-      React.cloneElement(component, props, children) :
-      React.createElement(VictoryLabel, props, children);
-  }
-
   renderLine() {
     return _.map(this.dataSegments, (segment, index) => {
       return (
         <LineSegment
           key={`line-segment-${index}`}
+          animate={this.props.animate}
           data={segment}
           interpolation={this.props.interpolation}
           scale={this.scale}
@@ -355,6 +325,26 @@ export default class VictoryLine extends React.Component {
         />
       );
     });
+  }
+
+  renderLabel() {
+    if (!this.props.label) {
+      return undefined;
+    }
+    const position = {
+      x: this.scale.x.call(this, _.last(_.flatten(this.dataSegments)).x),
+      y: this.scale.y.call(this, _.last(_.flatten(this.dataSegments)).y)
+    };
+    return (
+      <LineLabel
+        key={`line-label`}
+        animate={this.props.animate}
+        data={this.dataset}
+        position={position}
+        label={this.props.label}
+        style={this.getLabelStyle()}
+      />
+    );
   }
 
   renderData() {
@@ -367,27 +357,9 @@ export default class VictoryLine extends React.Component {
   }
 
   render() {
-    // If animating, return a `VictoryAnimation` element that will create
-    // a new `VictoryLine` with nearly identical props, except (1) tweened
-    // and (2) `animate` set to null so we don't recurse forever.
-    if (this.props.animate) {
-      // Do less work by having `VictoryAnimation` tween only values that
-      // make sense to tween. In the future, allow customization of animated
-      // prop whitelist/blacklist?
-      const animateData = _.pick(this.props, [
-        "data", "domain", "height", "padding", "samples", "style", "width", "x", "y"
-      ]);
-      return (
-        <VictoryAnimation {...this.props.animate} data={animateData}>
-          {(props) => <VictoryLine {...this.props} {...props} animate={null}/>}
-        </VictoryAnimation>
-      );
-    } else {
-      this.getCalculatedValues(this.props);
-    }
+    this.getCalculatedValues(this.props);
     const style = this.style.parent;
     const group = <g style={style}>{this.renderData()}</g>;
-
     return this.props.standalone ? <svg style={style}>{group}</svg> : group;
   }
 }
