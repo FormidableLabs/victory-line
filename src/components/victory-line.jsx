@@ -218,8 +218,14 @@ export default class VictoryLine extends React.Component {
   }
 
   getScale(props, axis) {
-    const scale = props.scale[axis] ? props.scale[axis].copy() :
-      props.scale.copy();
+    let scale;
+    if (props.scale && props.scale[axis]) {
+      scale = props.scale[axis].copy();
+    } else if (props.scale && !_.isObject(props.scale)) {
+      scale = props.scale.copy();
+    } else {
+      scale = d3Scale.linear().copy();
+    }
     const range = this.range[axis];
     const domain = this.domain[axis];
     scale.range(range);
@@ -228,8 +234,10 @@ export default class VictoryLine extends React.Component {
   }
 
   getDomain(props, axis) {
-    if (props.domain) {
-      return props.domain[axis] || props.domain;
+    if (props.domain && props.domain[axis]) {
+      return props.domain[axis];
+    } else if (props.domain && !_.isObject(props.domain)) {
+      return props.domain;
     } else {
       return [_.min(_.pluck(this.dataset, axis)), _.max(_.pluck(this.dataset, axis))];
     }
