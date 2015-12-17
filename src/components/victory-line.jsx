@@ -5,6 +5,7 @@ import d3Scale from "d3-scale";
 import LineSegment from "./line-segment";
 import LineLabel from "./line-label";
 import Util from "victory-util";
+import {VictoryAnimation} from "victory-animation";
 
 const defaultStyles = {
   data: {
@@ -325,7 +326,6 @@ export default class VictoryLine extends React.Component {
       return (
         <LineSegment
           key={`line-segment-${index}`}
-          animate={this.props.animate}
           data={segment}
           interpolation={this.props.interpolation}
           scale={this.scale}
@@ -346,7 +346,6 @@ export default class VictoryLine extends React.Component {
     return (
       <LineLabel
         key={`line-label`}
-        animate={this.props.animate}
         data={this.dataset}
         position={position}
         label={this.props.label}
@@ -365,7 +364,24 @@ export default class VictoryLine extends React.Component {
   }
 
   render() {
-    this.getCalculatedValues(this.props);
+    // If animating, return a `VictoryAnimation` element that will create
+    // a new `VictoryLine` with nearly identical props, except (1) tweened
+    // and (2) `animate` set to null so we don't recurse forever.
+    if (this.props.animate) {
+      // Do less work by having `VictoryAnimation` tween only values that
+      // make sense to tween. In the future, allow customization of animated
+      // prop whitelist/blacklist?
+      const animateData = _.pick(this.props, [
+        "data", "domain", "height", "padding", "samples", "style", "width", "x", "y"
+      ]);
+      return (
+        <VictoryAnimation {...this.props.animate} data={animateData}>
+          {(props) => <VictoryLine {...this.props} {...props} animate={null}/>}
+        </VictoryAnimation>
+      );
+    } else {
+      this.getCalculatedValues(this.props);
+    }
     const style = this.style.parent;
     const group = <g style={style}>{this.renderData()}</g>;
     return this.props.standalone ? <svg style={style}>{group}</svg> : group;

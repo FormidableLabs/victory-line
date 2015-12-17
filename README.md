@@ -3,14 +3,14 @@
 Victory Line
 ============
 
-`victory-line` draws an SVG line on your screen. Unlike core `d3`, it can graph
-functions or passed in data, from a clean `React` interface. Style, data,
-interpolate, scale -- all can be overridden by passing in new values.
+[Interactive documentation for VictoryLine]("https://victory.formidable.com/victory-line")
+
+VictoryLine creates a line from data. VictoryLine is a composable component, so it does not include an axis.  Check out VictoryChart for easy to use bar charts and more.
 
 IMPORTANT
 =========
 
-This project is in a pre-release state. We're hard at work fixing bugs and improving the API. Be prepared for breaking changes! 
+This project is in a pre-release state. We're hard at work fixing bugs and improving the API. Be prepared for breaking changes!
 
 ## Development
 
