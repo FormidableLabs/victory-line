@@ -2,12 +2,10 @@ import _ from "lodash";
 import React, { PropTypes } from "react";
 import Radium from "radium";
 import d3Shape from "d3-shape";
-import {VictoryAnimation} from "victory-animation";
 
 @Radium
 export default class LineSegment extends React.Component {
   static propTypes = {
-    animate: PropTypes.object,
     data: PropTypes.array,
     interpolation: PropTypes.string,
     scale: PropTypes.object,
@@ -44,19 +42,7 @@ export default class LineSegment extends React.Component {
   }
 
   render() {
-    if (this.props.animate) {
-      // Do less work by having `VictoryAnimation` tween only values that
-      // make sense to tween. In the future, allow customization of animated
-      // prop whitelist/blacklist?
-      const animateData = _.pick(this.props, ["style", "data", "scale"]);
-      return (
-        <VictoryAnimation {...this.props.animate} data={animateData}>
-          {(props) => <LineSegment {...this.props} {...props} animate={null}/>}
-        </VictoryAnimation>
-      );
-    } else {
-      this.getCalculatedValues(this.props);
-    }
+    this.getCalculatedValues(this.props);
     return this.renderLine();
   }
 }
