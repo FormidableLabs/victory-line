@@ -1,4 +1,5 @@
-import _ from "lodash";
+import isFunction from "lodash/lang/isFunction";
+import transform from "lodash/object/transform";
 import React, { PropTypes } from "react";
 import Radium from "radium";
 import d3Shape from "d3-shape";
@@ -13,13 +14,13 @@ export default class LineSegment extends React.Component {
   };
 
   evaluateStyle(style) {
-    return _.transform(style, (result, value, key) => {
+    return transform(style, (result, value, key) => {
       result[key] = this.evaluateProp(value);
     });
   }
 
   evaluateProp(prop) {
-    return _.isFunction(prop) ? prop.call(this, this.props.data) : prop;
+    return isFunction(prop) ? prop.call(this, this.props.data) : prop;
   }
 
   getCalculatedValues(props) {
