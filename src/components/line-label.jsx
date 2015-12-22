@@ -1,4 +1,6 @@
-import _ from "lodash";
+import isFunction from "lodash/lang/isFunction";
+import merge from "lodash/object/merge";
+import transform from "lodash/object/transform";
 import React, { PropTypes } from "react";
 import Radium from "radium";
 import {VictoryLabel} from "victory-label";
@@ -13,14 +15,14 @@ export default class LineLabel extends React.Component {
   };
 
   evaluateStyle(style) {
-    return _.transform(style, (result, value, key) => {
-      result[key] = _.isFunction(value) ? value.call(this, this.props.data) : value;
+    return transform(style, (result, value, key) => {
+      result[key] = isFunction(value) ? value.call(this, this.props.data) : value;
     });
   }
 
   renderLabelComponent(props) {
     const component = props.label;
-    const style = this.evaluateStyle(_.merge({padding: 0}, props.style, component.props.style));
+    const style = this.evaluateStyle(merge({padding: 0}, props.style, component.props.style));
     const children = component.props.children || "";
     const newProps = {
       x: component.props.x || props.position.x + style.padding,
@@ -34,7 +36,7 @@ export default class LineLabel extends React.Component {
   }
 
   renderVictoryLabel(props) {
-    const style = this.evaluateStyle(_.merge({padding: 0}, props.style));
+    const style = this.evaluateStyle(merge({padding: 0}, props.style));
     return (
       <VictoryLabel
         x={props.position.x + style.padding}

@@ -1,4 +1,22 @@
-import _ from "lodash";
+import flatten from "lodash/array/flatten";
+import last from "lodash/array/last";
+import take from "lodash/array/take";
+import union from "lodash/array/union";
+import zip from "lodash/array/zip";
+import pluck from "lodash/collection/pluck";
+import sortBy from "lodash/collection/sortBy";
+import isArray from "lodash/lang/isArray";
+import isEmpty from "lodash/lang/isEmpty";
+import isFunction from "lodash/lang/isFunction";
+import isNull from "lodash/lang/isNull";
+import isNumber from "lodash/lang/isNumber";
+import isObject from "lodash/lang/isObject";
+import isUndefined from "lodash/lang/isUndefined";
+import merge from "lodash/object/merge";
+import pick from "lodash/object/pick";
+import max from "lodash/math/max";
+import min from "lodash/math/min";
+import lodashRange from "lodash/utility/range";
 import React, { PropTypes } from "react";
 import Radium from "radium";
 import d3Scale from "d3-scale";
@@ -201,15 +219,15 @@ export default class VictoryLine extends React.Component {
     const style = props.style || defaultStyles;
     const {data, labels, parent} = style;
     return {
-      parent: _.merge({height: props.height, width: props.width}, parent),
-      labels: _.merge({}, defaultStyles.labels, labels),
-      data: _.merge({}, defaultStyles.data, data)
+      parent: merge({height: props.height, width: props.width}, parent),
+      labels: merge({}, defaultStyles.labels, labels),
+      data: merge({}, defaultStyles.data, data)
     };
   }
 
   getPadding(props) {
-    const padding = _.isNumber(props.padding) ? props.padding : 0;
-    const paddingObj = _.isObject(props.padding) ? props.padding : {};
+    const padding = isNumber(props.padding) ? props.padding : 0;
+    const paddingObj = isObject(props.padding) ? props.padding : {};
     return {
       top: paddingObj.top || padding,
       bottom: paddingObj.bottom || padding,
@@ -222,7 +240,7 @@ export default class VictoryLine extends React.Component {
     let scale;
     if (props.scale && props.scale[axis]) {
       scale = props.scale[axis].copy();
-    } else if (props.scale && !_.isObject(props.scale)) {
+    } else if (props.scale && !isObject(props.scale)) {
       scale = props.scale.copy();
     } else {
       scale = d3Scale.linear().copy();
@@ -237,10 +255,10 @@ export default class VictoryLine extends React.Component {
   getDomain(props, axis) {
     if (props.domain && props.domain[axis]) {
       return props.domain[axis];
-    } else if (props.domain && !_.isObject(props.domain)) {
+    } else if (props.domain && !isObject(props.domain)) {
       return props.domain;
     } else {
-      return [_.min(_.pluck(this.dataset, axis)), _.max(_.pluck(this.dataset, axis))];
+      return [min(pluck(this.dataset, axis)), max(pluck(this.dataset, axis))];
     }
   }
 
@@ -257,11 +275,11 @@ export default class VictoryLine extends React.Component {
     }
     const x = this.returnOrGenerateX(props);
     const y = this.returnOrGenerateY(props, x);
-    const n = _.min([x.length, y.length]);
+    const n = min([x.length, y.length]);
     // create a dataset from x and y with n points
-    const dataset = _.zip(_.take(x, n), _.take(y, n));
+    const dataset = zip(take(x, n), take(y, n));
     // return data as an array of objects
-    return _.map(dataset, (point) => {
+    return dataset.map((point) => {
       return {x: point[0], y: point[1]};
     });
   }
@@ -276,19 +294,19 @@ export default class VictoryLine extends React.Component {
     const domainFromScale = props.scale && props.scale.x ?
       props.scale.x.domain() : props.scale.domain();
     const domain = domainFromProps || domainFromScale;
-    const samples = _.isArray(props.y) ? props.y.length : props.samples;
-    const step = _.max(domain) / samples;
+    const samples = isArray(props.y) ? props.y.length : props.samples;
+    const step = max(domain) / samples;
     // return an array of x values spaced across the domain,
     // include the maximum of the domain
-    const xArray = _.union(_.range(_.min(domain), _.max(domain), step), [_.max(domain)]);
-    return _.filter(xArray, (x) => x !== 0);
+    const xArray = union(lodashRange(min(domain), max(domain), step), [max(domain)]);
+    return xArray.filter((x) => x !== 0);
   }
 
   returnOrGenerateY(props, x) {
-    if (_.isFunction(props.y)) {
+    if (isFunction(props.y)) {
       // if y is a function, apply the function y to to each value of the array x,
       // and return the results as an array
-      return _.map(x, (datum) => props.y(datum));
+      return x.map((datum) => props.y(datum));
     }
     // y is either a function or an array, and is never undefined
     // if it isn't a function, just return it.
@@ -296,18 +314,18 @@ export default class VictoryLine extends React.Component {
   }
 
   getDataSegments() {
-    const orderedData = _.sortBy(this.dataset, "x");
+    const orderedData = sortBy(this.dataset, "x");
     const segments = [];
     let segmentStartIndex = 0;
-    _.each(orderedData, (datum, index) => {
-      if (_.isNull(datum.y) || _.isUndefined(datum.y)) {
+    orderedData.forEach((datum, index) => {
+      if (isNull(datum.y) || isUndefined(datum.y)) {
         segments.push(orderedData.slice(segmentStartIndex, index));
         segmentStartIndex = index + 1;
       }
     });
     segments.push(orderedData.slice(segmentStartIndex, orderedData.length));
-    return _.filter(segments, (segment) => {
-      return !_.isEmpty(segment);
+    return segments.filter((segment) => {
+      return !isEmpty(segment);
     });
   }
 
@@ -318,11 +336,11 @@ export default class VictoryLine extends React.Component {
     // use fill instead of stroke for text
     const fill = this.style.data.stroke;
     const padding = this.style.labels.padding || 0;
-    return _.merge({opacity, fill, padding}, this.style.labels);
+    return merge({}, opacity, fill, padding, this.style.labels);
   }
 
   renderLine() {
-    return _.map(this.dataSegments, (segment, index) => {
+    return this.dataSegments.map((segment, index) => {
       return (
         <LineSegment
           key={`line-segment-${index}`}
@@ -340,8 +358,8 @@ export default class VictoryLine extends React.Component {
       return undefined;
     }
     const position = {
-      x: this.scale.x.call(this, _.last(_.flatten(this.dataSegments)).x),
-      y: this.scale.y.call(this, _.last(_.flatten(this.dataSegments)).y)
+      x: this.scale.x.call(this, last(flatten(this.dataSegments)).x),
+      y: this.scale.y.call(this, last(flatten(this.dataSegments)).y)
     };
     return (
       <LineLabel
@@ -371,7 +389,7 @@ export default class VictoryLine extends React.Component {
       // Do less work by having `VictoryAnimation` tween only values that
       // make sense to tween. In the future, allow customization of animated
       // prop whitelist/blacklist?
-      const animateData = _.pick(this.props, [
+      const animateData = pick(this.props, [
         "data", "domain", "height", "padding", "samples", "style", "width", "x", "y"
       ]);
       return (
