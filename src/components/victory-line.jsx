@@ -221,7 +221,7 @@ export default class VictoryLine extends React.Component {
     // use fill instead of stroke for text
     const fill = style.data.stroke;
     const padding = style.labels.padding || 0;
-    return merge({}, opacity, fill, padding, style.labels);
+    return merge({}, {opacity, fill, padding}, style.labels);
   }
 
   renderLine(calculatedProps) {
