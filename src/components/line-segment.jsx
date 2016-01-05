@@ -1,8 +1,7 @@
-import isFunction from "lodash/lang/isFunction";
-import transform from "lodash/object/transform";
 import React, { PropTypes } from "react";
 import Radium from "radium";
 import d3Shape from "d3-shape";
+import { Chart } from "victory-util";
 
 @Radium
 export default class LineSegment extends React.Component {
@@ -13,19 +12,9 @@ export default class LineSegment extends React.Component {
     style: PropTypes.object
   };
 
-  evaluateStyle(style) {
-    return transform(style, (result, value, key) => {
-      result[key] = this.evaluateProp(value);
-    });
-  }
-
-  evaluateProp(prop) {
-    return isFunction(prop) ? prop.call(this, this.props.data) : prop;
-  }
-
   getCalculatedValues(props) {
-    this.style = this.evaluateStyle(props.style);
-    this.interpolation = this.evaluateProp(props.interpolation);
+    this.style = Chart.evaluateStyle(props.style, props.data);
+    this.interpolation = Chart.evaluateProp(props.interpolation, props.data);
     const xScale = props.scale.x;
     const yScale = props.scale.y;
     const lineFunction = d3Shape.line()
