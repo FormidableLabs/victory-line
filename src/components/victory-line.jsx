@@ -1,20 +1,16 @@
 import flatten from "lodash/array/flatten";
 import last from "lodash/array/last";
-import pluck from "lodash/collection/pluck";
 import sortBy from "lodash/collection/sortBy";
 import isEmpty from "lodash/lang/isEmpty";
 import isNull from "lodash/lang/isNull";
-import isObject from "lodash/lang/isObject";
 import isUndefined from "lodash/lang/isUndefined";
 import merge from "lodash/object/merge";
 import pick from "lodash/object/pick";
-import max from "lodash/math/max";
-import min from "lodash/math/min";
 import React from "react";
 import Radium from "radium";
 import LineSegment from "./line-segment";
 import LineLabel from "./line-label";
-import {Chart, Data, PropTypes, Scale} from "victory-util";
+import {Chart, Data, Domain, PropTypes, Scale} from "victory-util";
 import {VictoryAnimation} from "victory-animation";
 
 const defaultStyles = {
@@ -189,16 +185,6 @@ export default class VictoryLine extends React.Component {
     y: (x) => x
   };
 
-  getDomain(dataset, props, axis) {
-    if (props.domain && props.domain[axis]) {
-      return props.domain[axis];
-    } else if (props.domain && !isObject(props.domain)) {
-      return props.domain;
-    } else {
-      return [min(pluck(dataset, axis)), max(pluck(dataset, axis))];
-    }
-  }
-
   getDataSegments(dataset) {
     const orderedData = sortBy(dataset, "x");
     const segments = [];
@@ -268,8 +254,8 @@ export default class VictoryLine extends React.Component {
       y: Chart.getRange(props, "y")
     };
     const domain = {
-      x: this.getDomain(dataset, props, "x"),
-      y: this.getDomain(dataset, props, "y")
+      x: Domain.getDomainFromProps(props, "x") || Domain.getDomainFromData(dataset, "x"),
+      y: Domain.getDomainFromProps(props, "y") || Domain.getDomainFromData(dataset, "y")
     };
     const scale = {
       x: Scale.getBaseScale(props, "x").domain(domain.x).range(range.x),
