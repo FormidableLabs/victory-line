@@ -12,7 +12,6 @@ import max from "lodash/math/max";
 import min from "lodash/math/min";
 import React from "react";
 import Radium from "radium";
-import d3Scale from "d3-scale";
 import LineSegment from "./line-segment";
 import LineLabel from "./line-label";
 import {Chart, Data, PropTypes, Scale} from "victory-util";
@@ -183,7 +182,7 @@ export default class VictoryLine extends React.Component {
     interpolation: "linear",
     padding: 50,
     samples: 50,
-    scale: d3Scale.linear(),
+    scale: "linear",
     standalone: true,
     width: 450,
     y: (x) => x

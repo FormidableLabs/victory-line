@@ -5,7 +5,6 @@ import ReactDOM from "react-dom";
 import {VictoryLine} from "../src/index";
 import _ from "lodash";
 import {VictoryLabel} from "victory-label";
-import d3Scale from "d3-scale";
 
 class App extends React.Component {
   constructor(props) {
@@ -85,7 +84,7 @@ class App extends React.Component {
 
       <VictoryLine
         style={{parent: {border: "1px solid black", margin: "5px"}}}
-        scale={{x: d3Scale.linear(), y: d3Scale.log()}}
+        scale={{x: "linear", y: "log"}}
       />
       </div>
     );
