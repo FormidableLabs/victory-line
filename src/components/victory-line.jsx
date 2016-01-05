@@ -126,8 +126,9 @@ export default class VictoryLine extends React.Component {
     samples: PropTypes.nonNegative,
     /**
      * The scale prop determines which scales your chart should use. This prop can be
-     * given as a function, or as an object that specifies separate functions for x and y.
-     * @examples d3Scale.time(), {x: d3Scale.linear(), y: d3Scale.log()}
+     * given as a string specifying a supported scale ("linear", "time", "log", "sqrt"),
+     * as a d3 scale function, or as an object with scales specified for x and y
+     * @exampes d3Scale.time(), {x: "linear", y: "log"}
      */
     scale: React.PropTypes.oneOfType([
       PropTypes.scale,
