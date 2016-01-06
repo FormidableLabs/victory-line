@@ -185,6 +185,10 @@ export default class VictoryLine extends React.Component {
     y: (x) => x
   };
 
+  static getDomain = (props, axis) => {
+    return Domain.getDomain(props, axis);
+  };
+
   getDataSegments(dataset) {
     const orderedData = sortBy(dataset, "x");
     const segments = [];
@@ -254,8 +258,8 @@ export default class VictoryLine extends React.Component {
       y: Chart.getRange(props, "y")
     };
     const domain = {
-      x: Domain.getDomainFromProps(props, "x") || Domain.getDomainFromData(dataset, "x"),
-      y: Domain.getDomainFromProps(props, "y") || Domain.getDomainFromData(dataset, "y")
+      x: Domain.getDomain(props, "x"),
+      y: Domain.getDomain(props, "y")
     };
     const scale = {
       x: Scale.getBaseScale(props, "x").domain(domain.x).range(range.x),
