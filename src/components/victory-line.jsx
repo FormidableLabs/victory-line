@@ -6,12 +6,12 @@ import isNull from "lodash/lang/isNull";
 import isUndefined from "lodash/lang/isUndefined";
 import merge from "lodash/object/merge";
 import pick from "lodash/object/pick";
-import React from "react";
+import React, { PropTypes } from "react";
 import Radium from "radium";
 import LineSegment from "./line-segment";
 import LineLabel from "./line-label";
-import {Chart, Data, Domain, PropTypes, Scale} from "victory-util";
-import {VictoryAnimation} from "victory-animation";
+import { PropTypes as CustomPropTypes, Chart, Data, Domain, Scale } from "victory-util";
+import { VictoryAnimation } from "victory-animation";
 
 const defaultStyles = {
   data: {
@@ -40,16 +40,16 @@ export default class VictoryLine extends React.Component {
      * Large datasets might animate slowly due to the inherent limits of svg rendering.
      * @examples {velocity: 0.02, onEnd: () => alert("done!")}
      */
-    animate: React.PropTypes.object,
+    animate: PropTypes.object,
     /**
      * The data prop specifies the data to be plotted. Data should be in the form of an array
      * of data points where each data point should be an object with x and y properties.
      * @examples [{x: 1, y: 12}, {x: 10, y: 25}, {x: 100, y: 34}]
      */
-    data: React.PropTypes.arrayOf(
-      React.PropTypes.shape({
-        x: React.PropTypes.any,
-        y: React.PropTypes.any
+    data: PropTypes.arrayOf(
+      PropTypes.shape({
+        x: PropTypes.any,
+        y: PropTypes.any
       })
     ),
     /**
@@ -60,22 +60,22 @@ export default class VictoryLine extends React.Component {
      * available information.
      * @examples [-1, 1], {x: [0, 100], y: [0, 1]}
      */
-    domain: React.PropTypes.oneOfType([
-      PropTypes.domain,
-      React.PropTypes.shape({
-        x: PropTypes.domain,
-        y: PropTypes.domain
+    domain: PropTypes.oneOfType([
+      CustomPropTypes.domain,
+      PropTypes.shape({
+        x: CustomPropTypes.domain,
+        y: CustomPropTypes.domain
       })
     ]),
     /**
      * The height props specifies the height of the chart container element in pixels
      */
-    height: PropTypes.nonNegative,
+    height: CustomPropTypes.nonNegative,
     /**
      * The interpolation prop determines how data points should be connected
      * when plotting a line
      */
-    interpolation: React.PropTypes.oneOf([
+    interpolation: PropTypes.oneOf([
       "basis",
       "basisClosed",
       "basisOpen",
@@ -99,38 +99,38 @@ export default class VictoryLine extends React.Component {
      * The label prop specifies a label to display at the end of a line component,
      * this prop can be given as a value, or as an entire label component
      */
-    label: React.PropTypes.any,
+    label: PropTypes.any,
     /**
      * The padding props specifies the amount of padding in number of pixels between
      * the edge of the chart and any rendered child components. This prop can be given
      * as a number or as an object with padding specified for top, bottom, left
      * and right.
      */
-    padding: React.PropTypes.oneOfType([
-      React.PropTypes.number,
-      React.PropTypes.shape({
-        top: React.PropTypes.number,
-        bottom: React.PropTypes.number,
-        left: React.PropTypes.number,
-        right: React.PropTypes.number
+    padding: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.shape({
+        top: PropTypes.number,
+        bottom: PropTypes.number,
+        left: PropTypes.number,
+        right: PropTypes.number
       })
     ]),
     /**
      * The samples prop specifies how many individual points to plot when plotting
      * y as a function of x. Samples is ignored if x props are provided instead.
      */
-    samples: PropTypes.nonNegative,
+    samples: CustomPropTypes.nonNegative,
     /**
      * The scale prop determines which scales your chart should use. This prop can be
      * given as a string specifying a supported scale ("linear", "time", "log", "sqrt"),
      * as a d3 scale function, or as an object with scales specified for x and y
      * @exampes d3Scale.time(), {x: "linear", y: "log"}
      */
-    scale: React.PropTypes.oneOfType([
-      PropTypes.scale,
-      React.PropTypes.shape({
-        x: PropTypes.scale,
-        y: PropTypes.scale
+    scale: PropTypes.oneOfType([
+      CustomPropTypes.scale,
+      PropTypes.shape({
+        x: CustomPropTypes.scale,
+        y: CustomPropTypes.scale
       })
     ]),
     /**
@@ -138,29 +138,29 @@ export default class VictoryLine extends React.Component {
      * or a <g> tag that will be included in an external svg. Set standalone to false to
      * compose VictoryLine with other components within an enclosing <svg> tag.
      */
-    standalone: React.PropTypes.bool,
+    standalone: PropTypes.bool,
     /**
      * The style prop specifies styles for your chart. VictoryLine relies on Radium,
      * so valid Radium style objects should work for this prop, however height, width, and margin
      * are used to calculate range, and need to be expressed as a number of pixels
      * @examples {data: {stroke: "red"}, labels: {fontSize: 14}}
      */
-    style: React.PropTypes.shape({
-      parent: React.PropTypes.object,
-      data: React.PropTypes.object,
-      labels: React.PropTypes.object
+    style: PropTypes.shape({
+      parent: PropTypes.object,
+      data: PropTypes.object,
+      labels: PropTypes.object
     }),
     /**
      * The width props specifies the width of the chart container element in pixels
      */
-    width: PropTypes.nonNegative,
+    width: CustomPropTypes.nonNegative,
     /**
      * The x prop provides another way to supply data for line to plot. This prop can be given
      * as an array of values, and it will be plotted against whatever y prop is provided. If no
      * props are provided for y, the values in x will be plotted as the identity function (x) => x.
      * @examples [1, 2, 3]
      */
-    x: PropTypes.homogeneousArray,
+    x: CustomPropTypes.homogeneousArray,
     /**
      * The y prop provides another way to supply data for line to plot. This prop can be given
      * as a function of x, or an array of values. If x props are given, they will be used
@@ -168,9 +168,9 @@ export default class VictoryLine extends React.Component {
      * evenly spaced across the x domain will be calculated, and used for plotting data points.
      * @examples (x) => Math.sin(x), [1, 2, 3]
      */
-    y: React.PropTypes.oneOfType([
-      PropTypes.homogeneousArray,
-      React.PropTypes.func
+    y: PropTypes.oneOfType([
+      CustomPropTypes.homogeneousArray,
+      PropTypes.func
     ])
   };
 
