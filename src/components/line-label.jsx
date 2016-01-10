@@ -21,7 +21,6 @@ export default class LineLabel extends React.Component {
     const newProps = {
       x: component.props.x || props.position.x + style.padding,
       y: component.props.y || props.position.y - style.padding,
-      data: props.data, // Pass data for custom label component to access
       textAnchor: component.props.textAnchor || "start",
       verticalAnchor: component.props.verticalAnchor || "middle",
       style
@@ -35,7 +34,6 @@ export default class LineLabel extends React.Component {
       <VictoryLabel
         x={props.position.x + style.padding}
         y={props.position.y - style.padding}
-        data={props.data}
         textAnchor={"start"}
         verticalAnchor={"middle"}
         style={style}
