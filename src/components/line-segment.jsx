@@ -12,27 +12,18 @@ export default class LineSegment extends React.Component {
     style: PropTypes.object
   };
 
-  getCalculatedValues(props) {
-    this.style = Chart.evaluateStyle(props.style, props.data);
-    this.interpolation = Chart.evaluateProp(props.interpolation, props.data);
-    const xScale = props.scale.x;
-    const yScale = props.scale.y;
+  render() {
+    const style = Chart.evaluateStyle(this.props.style, this.props.data);
+    const interpolation = Chart.evaluateProp(this.props.interpolation, this.props.data);
+    const xScale = this.props.scale.x;
+    const yScale = this.props.scale.y;
     const lineFunction = d3Shape.line()
-        .curve(d3Shape[this.interpolation])
+        .curve(d3Shape[interpolation])
       .x((data) => xScale(data.x))
       .y((data) => yScale(data.y));
-    this.path = lineFunction(props.data);
-
-  }
-
-  renderLine() {
+    const path = lineFunction(this.props.data);
     return (
-      <path style={this.style} d={this.path}/>
+      <path style={style} d={path}/>
     );
-  }
-
-  render() {
-    this.getCalculatedValues(this.props);
-    return this.renderLine();
   }
 }
