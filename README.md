@@ -3,9 +3,11 @@
 Victory Line
 ============
 
-[Interactive documentation for VictoryLine]("https://victory.formidable.com/victory-line")
+VictoryLine creates a line from data. VictoryLine is a composable component, so it does not include an axis.  Check out [VictoryChart](https://github.com/formidablelabs/victory-chart) for easy to use bar charts and more.
 
-VictoryLine creates a line from data. VictoryLine is a composable component, so it does not include an axis.  Check out VictoryChart for easy to use bar charts and more.
+API Documentation
+-----------------
+See http://github.com/formidablelabs/victory-chart
 
 IMPORTANT
 =========
