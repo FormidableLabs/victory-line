@@ -7,7 +7,7 @@ VictoryLine creates a line from data. VictoryLine is a composable component, so 
 
 API Documentation
 -----------------
-See http://github.com/formidablelabs/victory-chart
+Detailed documentation and interactive examples can be found at http://github.com/formidablelabs/victory-chart
 
 IMPORTANT
 =========
