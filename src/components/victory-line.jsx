@@ -185,9 +185,7 @@ export default class VictoryLine extends React.Component {
     y: (x) => x
   };
 
-  static getDomain = (props, axis) => {
-    return Domain.getDomain(props, axis);
-  };
+  static getDomain = Domain.getDomain.bind(Domain);
 
   getDataSegments(dataset) {
     const orderedData = sortBy(dataset, "x");
