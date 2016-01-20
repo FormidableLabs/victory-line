@@ -5,8 +5,8 @@ import _ from "lodash";
 import {VictoryLabel} from "victory-label";
 
 export default class App extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       data: this.getData(),
       style: {
