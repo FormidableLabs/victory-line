@@ -1,8 +1,7 @@
-import isFunction from "lodash/lang/isFunction";
-import transform from "lodash/object/transform";
 import React, { PropTypes } from "react";
 import Radium from "radium";
 import d3Shape from "d3-shape";
+import { Chart } from "victory-util";
 
 @Radium
 export default class LineSegment extends React.Component {
@@ -13,37 +12,18 @@ export default class LineSegment extends React.Component {
     style: PropTypes.object
   };
 
-  evaluateStyle(style) {
-    return transform(style, (result, value, key) => {
-      result[key] = this.evaluateProp(value);
-    });
-  }
-
-  evaluateProp(prop) {
-    return isFunction(prop) ? prop.call(this, this.props.data) : prop;
-  }
-
-  getCalculatedValues(props) {
-    this.style = this.evaluateStyle(props.style);
-    this.interpolation = this.evaluateProp(props.interpolation);
-    const xScale = props.scale.x;
-    const yScale = props.scale.y;
+  render() {
+    const style = Chart.evaluateStyle(this.props.style, this.props.data);
+    const interpolation = Chart.evaluateProp(this.props.interpolation, this.props.data);
+    const xScale = this.props.scale.x;
+    const yScale = this.props.scale.y;
     const lineFunction = d3Shape.line()
-        .curve(d3Shape[this.interpolation])
+        .curve(d3Shape[interpolation])
       .x((data) => xScale(data.x))
       .y((data) => yScale(data.y));
-    this.path = lineFunction(props.data);
-
-  }
-
-  renderLine() {
+    const path = lineFunction(this.props.data);
     return (
-      <path style={this.style} d={this.path}/>
+      <path style={style} d={path}/>
     );
-  }
-
-  render() {
-    this.getCalculatedValues(this.props);
-    return this.renderLine();
   }
 }

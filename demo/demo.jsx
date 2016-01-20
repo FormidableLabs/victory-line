@@ -3,7 +3,6 @@ import React from "react";
 import {VictoryLine} from "../src/index";
 import _ from "lodash";
 import {VictoryLabel} from "victory-label";
-import d3Scale from "d3-scale";
 
 export default class App extends React.Component {
   constructor() {
@@ -68,6 +67,20 @@ export default class App extends React.Component {
       <VictoryLine
         style={{parent: {border: "1px solid black", margin: "5px"}}}
         data={[
+          {x: new Date(1982, 1, 1), y: 125},
+          {x: new Date(1987, 1, 1), y: 257},
+          {x: new Date(1993, 1, 1), y: 345},
+          {x: new Date(1997, 1, 1), y: 515},
+          {x: new Date(2001, 1, 1), y: 132},
+          {x: new Date(2005, 1, 1), y: 305},
+          {x: new Date(2011, 1, 1), y: 270},
+          {x: new Date(2015, 1, 1), y: 470}
+        ]}
+      />
+
+      <VictoryLine
+        style={{parent: {border: "1px solid black", margin: "5px"}}}
+        data={[
           {x: 1, y: 1},
           {x: 2, y: 3},
           {x: 3, y: 5},
@@ -83,7 +96,7 @@ export default class App extends React.Component {
 
       <VictoryLine
         style={{parent: {border: "1px solid black", margin: "5px"}}}
-        scale={{x: d3Scale.linear(), y: d3Scale.log()}}
+        scale={{x: "linear", y: "log"}}
       />
       </div>
     );
