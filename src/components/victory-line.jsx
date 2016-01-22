@@ -12,11 +12,17 @@ import LineSegment from "./line-segment";
 import LineLabel from "./line-label";
 import { PropTypes as CustomPropTypes, Chart, Data, Domain, Scale } from "victory-util";
 import { VictoryAnimation } from "victory-animation";
+import ReactART from "react-art";
+
+let {
+  Surface,
+  Group,
+} = ReactART;
+
 
 const defaultStyles = {
   data: {
     strokeWidth: 2,
-    fill: "none",
     stroke: "#756f6a",
     opacity: 1
   },
@@ -230,7 +236,7 @@ export default class VictoryLine extends React.Component {
 
   renderLabel(calculatedProps) {
     const {dataset, dataSegments, scale, style} = calculatedProps;
-    if (!this.props.label) {
+    if (true) {
       return undefined;
     }
     const position = {
@@ -265,10 +271,10 @@ export default class VictoryLine extends React.Component {
     };
     const calculatedProps = {dataset, dataSegments, scale, style};
     return (
-      <g style={style.parent}>
+      <Group {...style.parent}>
         {this.renderLine(calculatedProps)}
         {this.renderLabel(calculatedProps)}
-      </g>
+      </Group>
     );
   }
 
@@ -290,7 +296,7 @@ export default class VictoryLine extends React.Component {
       );
     }
     const style = Chart.getStyles(this.props, defaultStyles);
-    const group = <g style={style.parent}>{this.renderData(this.props, style)}</g>;
-    return this.props.standalone ? <svg style={style.parent}>{group}</svg> : group;
+    const group = <Group {...style.parent}>{this.renderData(this.props, style)}</Group>;
+    return this.props.standalone ? <Surface {...style.parent}>{group}</Surface> : group;
   }
 }

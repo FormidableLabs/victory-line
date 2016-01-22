@@ -10,14 +10,14 @@ export default class App extends React.Component {
     this.state = {
       data: this.getData(),
       style: {
-        stroke: "blue",
+        stroke: "#fafafa",
         strokeWidth: 2
       }
     };
   }
 
   getData() {
-    return _.map(_.range(100), (i) => {
+    return _.map(_.range(500), (i) => {
       return {
         x: i,
         y: Math.random()
@@ -28,8 +28,8 @@ export default class App extends React.Component {
   getStyles() {
     const colors = ["red", "orange", "cyan", "green", "blue", "purple"];
     return {
-      stroke: colors[_.random(0, 5)],
-      strokeWidth: [_.random(1, 5)]
+      stroke: "#000000",
+      strokeWidth: [_.random(1, 2)]
     };
   }
 
@@ -46,21 +46,22 @@ export default class App extends React.Component {
     return (
       <div className="demo">
         <VictoryLine
+          width={1200}
           style={{parent: {border: "1px solid black", margin: "5px"}, data: this.state.style}}
           data={this.state.data}
           label={"label\none"}
-          animate={{velocity: 0.03}}
+          animate={{velocity: 0.01}}
         />
 
       <VictoryLine
-        style={{parent: {border: "1px solid black", margin: "5px"}, data: {stroke: "blue"}}}
+        style={{parent: {border: "1px solid black", margin: "5px"}, data: {stroke: "#1234ab"}}}
         y={(x) => Math.sin(2 * Math.PI * x)}
         label={<VictoryLabel>{"label\ntwo"}</VictoryLabel>}
         sample={25}
       />
 
       <VictoryLine
-        style={{parent: {border: "1px solid black", margin: "5px"}, data: {stroke: "red"}}}
+        style={{parent: {border: "1px solid black", margin: "5px"}, data: {stroke: "#ababab"}}}
         y={(x) => x * x}
       />
 

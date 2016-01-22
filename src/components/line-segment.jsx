@@ -2,6 +2,13 @@ import React, { PropTypes } from "react";
 import Radium from "radium";
 import d3Shape from "d3-shape";
 import { Chart } from "victory-util";
+import ReactART from "react-art";
+
+let {
+  Shape,
+  Path
+} = ReactART;
+
 
 @Radium
 export default class LineSegment extends React.Component {
@@ -23,7 +30,7 @@ export default class LineSegment extends React.Component {
       .y((data) => yScale(data.y));
     const path = lineFunction(this.props.data);
     return (
-      <path style={style} d={path}/>
+      <Shape {...style} d={new Path(path)}/>
     );
   }
 }
