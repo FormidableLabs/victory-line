@@ -123,4 +123,33 @@ describe("components/victory-line", () => {
       expect(path.length).to.equal(3);
     });
   });
+
+  describe("rendering with accessors", () => {
+    it("renders array-type data", () => {
+      const data = [
+        [1, 2],
+        [3, 4]
+      ];
+      renderedComponent = TestUtils.renderIntoDocument(<VictoryLine data={data} x={0} y={1} />);
+      const path = TestUtils.scryRenderedDOMComponentsWithTag(renderedComponent, "path");
+      expect(path.length).to.equal(1);
+    });
+
+    it("renders data values with null accessor", () => {
+      const data = [1, 2, 3, 4];
+      renderedComponent = TestUtils.renderIntoDocument(<VictoryLine data={data} x={null} y={null} />);
+      const path = TestUtils.scryRenderedDOMComponentsWithTag(renderedComponent, "path");
+      expect(path.length).to.equal(1);
+    });
+
+    it("renders deeply nested data", () => {
+      const data = [
+        {a: {b: [{x: 1, y: 2}]}},
+        {a: {b: [{x: 3, y: 4}]}}
+      ];
+      renderedComponent = TestUtils.renderIntoDocument(<VictoryLine data={data} x={'a.b[0].x'} y={'a.b.0.y'} />);
+      const path = TestUtils.scryRenderedDOMComponentsWithTag(renderedComponent, "path");
+      expect(path.length).to.equal(1);
+    });
+  });
 });
