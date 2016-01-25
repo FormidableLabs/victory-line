@@ -137,7 +137,9 @@ describe("components/victory-line", () => {
 
     it("renders data values with null accessor", () => {
       const data = [1, 2, 3, 4];
-      renderedComponent = TestUtils.renderIntoDocument(<VictoryLine data={data} x={null} y={null} />);
+      renderedComponent = TestUtils.renderIntoDocument(
+        <VictoryLine data={data} x={null} y={null} />
+      );
       const path = TestUtils.scryRenderedDOMComponentsWithTag(renderedComponent, "path");
       expect(path.length).to.equal(1);
     });
@@ -147,7 +149,9 @@ describe("components/victory-line", () => {
         {a: {b: [{x: 1, y: 2}]}},
         {a: {b: [{x: 3, y: 4}]}}
       ];
-      renderedComponent = TestUtils.renderIntoDocument(<VictoryLine data={data} x={'a.b[0].x'} y={'a.b.0.y'} />);
+      renderedComponent = TestUtils.renderIntoDocument(
+        <VictoryLine data={data} x={'a.b[0].x'} y={'a.b.0.y'} />
+      );
       const path = TestUtils.scryRenderedDOMComponentsWithTag(renderedComponent, "path");
       expect(path.length).to.equal(1);
     });
