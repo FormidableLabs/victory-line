@@ -42,8 +42,8 @@ export default class VictoryLine extends React.Component {
      */
     animate: PropTypes.object,
     /**
-     * The data prop specifies the data to be plotted. Data should be in the form of an array
-     * of data points, or an array of arrays of data points for multiple datasets.
+     * The data prop specifies the data to be plotted.
+     * Data should be in the form of an array of data points.
      * Each data point may be any format you wish (depending on the `x` and `y` accessor props),
      * but by default, an object with x and y properties is expected.
      * @examples [{x: 1, y: 2}, {x: 2, y: 3}], [[1, 2], [2, 3]],
