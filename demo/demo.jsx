@@ -28,8 +28,8 @@ export default class App extends React.Component {
   getStyles() {
     const colors = ["red", "orange", "cyan", "green", "blue", "purple"];
     return {
-      stroke: "#000000",
-      strokeWidth: [_.random(1, 2)]
+      stroke: colors[_.random(0, 5)],
+      strokeWidth: [_.random(1, 5)]
     };
   }
 

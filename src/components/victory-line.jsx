@@ -12,13 +12,7 @@ import LineSegment from "./line-segment";
 import LineLabel from "./line-label";
 import { PropTypes as CustomPropTypes, Chart, Data, Domain, Scale } from "victory-util";
 import { VictoryAnimation } from "victory-animation";
-import ReactART from "react-art";
-
-let {
-  Surface,
-  Group,
-} = ReactART;
-
+import { Group, Surface } from "react-art";
 
 const defaultStyles = {
   data: {
@@ -30,7 +24,6 @@ const defaultStyles = {
     padding: 5,
     fontFamily: "Helvetica",
     fontSize: 10,
-    strokeWidth: 0,
     stroke: "transparent",
     textAnchor: "start"
   }
@@ -236,7 +229,7 @@ export default class VictoryLine extends React.Component {
 
   renderLabel(calculatedProps) {
     const {dataset, dataSegments, scale, style} = calculatedProps;
-    if (true) {
+    if (!this.props.label) {
       return undefined;
     }
     const position = {
