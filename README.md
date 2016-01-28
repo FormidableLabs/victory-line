@@ -1,4 +1,5 @@
 [![Travis Status][trav_img]][trav_site]
+![](https://badge-size.herokuapp.com/FormidableLabs/victory-line/master/dist/victory-line.js.svg?compression=gzip)
 
 Victory Line
 ============
