@@ -1,6 +1,6 @@
 {
   "name": "victory-line",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Line Component for Victory",
   "main": "lib/index.js",
   "repository": {
@@ -16,26 +16,29 @@
   "scripts": {
     "postinstall": "cd lib || builder run npm:postinstall || (echo 'POSTINSTALL FAILED: If using npm v2, please upgrade to npm v3. See bug https://github.com/FormidableLabs/builder/issues/35' && exit 1)",
     "preversion": "builder run npm:preversion",
-    "version": "builder run npm:version",
+    "version": "builder run npm:version && git add dist && git commit -m \"Commit 'dist/' for publishing\"",
     "test": "builder run npm:test"
   },
   "dependencies": {
     "builder": "~2.4.0",
     "builder-victory-component": "~0.2.1",
     "d3-shape": "^0.2.0",
+    "lodash": "^3.10.1",
+    "radium": "^0.16.2",
+    "react-art": "git+https://github.com/formidablelabs/react-art#supportBrowserColors",
     "victory-animation": "^0.0.13",
-    "victory-label": "^0.1.8",
-    "victory-util": "^2.1.1"
+    "victory-label":  "^0.3.0",
+    "victory-util": "^2.1.2"
   },
   "devDependencies": {
     "builder-victory-component-dev": "~0.2.1",
     "chai": "^3.2.0",
     "mocha": "^2.2.5",
     "react": "0.14.x",
-    "react-art": "^0.14.0",
-    "react-addons-test-utils": "0.14.x",
+    "react-addons-test-utils": "^0.14.0",
     "react-dom": "0.14.x",
     "sinon": "^1.15.4",
-    "sinon-chai": "^2.8.0"
+    "sinon-chai": "^2.8.0",
+    "victory-chart": "^2.2.0"
   }
 }
