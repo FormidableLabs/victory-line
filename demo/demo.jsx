@@ -1,7 +1,8 @@
 /*global window:false */
 import React from "react";
-import {VictoryLine} from "../src/index";
 import _ from "lodash";
+import {VictoryLine} from "../src/index";
+// import {VictoryChart} from "victory-chart";
 import {VictoryLabel} from "victory-label";
 
 export default class App extends React.Component {
@@ -9,20 +10,24 @@ export default class App extends React.Component {
     super();
     this.state = {
       data: this.getData(),
+      arrayData: this.getArrayData(),
       style: {
-        stroke: "blue",
+        stroke: "#fafafa",
         strokeWidth: 2
       }
     };
   }
 
   getData() {
-    return _.map(_.range(100), (i) => {
+    return _.map(_.range(500), (i) => {
       return {
         x: i,
         y: Math.random()
       };
     });
+  }
+  getArrayData() {
+    return _.range(40).map((i) => [i, i + (Math.random() * 3)]);
   }
 
   getStyles() {
@@ -46,58 +51,104 @@ export default class App extends React.Component {
     return (
       <div className="demo">
         <VictoryLine
+          width={1200}
           style={{parent: {border: "1px solid black", margin: "5px"}, data: this.state.style}}
           data={this.state.data}
           label={"label\none"}
-          animate={{velocity: 0.03}}
+          animate={{velocity: 0.01}}
         />
 
-      <VictoryLine
-        style={{parent: {border: "1px solid black", margin: "5px"}, data: {stroke: "blue"}}}
-        y={(x) => Math.sin(2 * Math.PI * x)}
-        label={<VictoryLabel>{"label\ntwo"}</VictoryLabel>}
-        sample={25}
-      />
+        <ChartWrap>
+          <VictoryLine
+            style={{parent: {border: "1px solid black", margin: "5px"}, data: {stroke: "blue"}}}
+            y={(d) => Math.sin(2 * Math.PI * d.x)}
+            label={<VictoryLabel>{"label\ntwo"}</VictoryLabel>}
+            sample={25}
+          />
+        </ChartWrap>
 
-      <VictoryLine
-        style={{parent: {border: "1px solid black", margin: "5px"}, data: {stroke: "red"}}}
-        y={(x) => x * x}
-      />
+        <ChartWrap>
+          <VictoryLine
+            style={{parent: {border: "1px solid black", margin: "5px"}, data: {stroke: "red"}}}
+            data={_.range(0, 100)}
+            x={null}
+            y={(d) => d * d}
+          />
+        </ChartWrap>
 
-      <VictoryLine
-        style={{parent: {border: "1px solid black", margin: "5px"}}}
-        data={[
-          {x: new Date(1982, 1, 1), y: 125},
-          {x: new Date(1987, 1, 1), y: 257},
-          {x: new Date(1993, 1, 1), y: 345},
-          {x: new Date(1997, 1, 1), y: 515},
-          {x: new Date(2001, 1, 1), y: 132},
-          {x: new Date(2005, 1, 1), y: 305},
-          {x: new Date(2011, 1, 1), y: 270},
-          {x: new Date(2015, 1, 1), y: 470}
-        ]}
-      />
+        <ChartWrap>
+          <VictoryLine
+            style={{parent: {border: "1px solid black", margin: "5px"}}}
+            data={this.state.arrayData}
+            x={0}
+            y={1}
+          />
+        </ChartWrap>
 
-      <VictoryLine
-        style={{parent: {border: "1px solid black", margin: "5px"}}}
-        data={[
-          {x: 1, y: 1},
-          {x: 2, y: 3},
-          {x: 3, y: 5},
-          {x: 4, y: 2},
-          {x: 5, y: null},
-          {x: 6, y: null},
-          {x: 7, y: 6},
-          {x: 8, y: 7},
-          {x: 9, y: 8},
-          {x: 10, y: 12}
-        ]}
-      />
+        <ChartWrap>
+          <VictoryLine
+            style={{parent: {border: "1px solid black", margin: "5px"}}}
+            data={[
+              {x: new Date(1982, 1, 1), y: 125},
+              {x: new Date(1987, 1, 1), y: 257},
+              {x: new Date(1993, 1, 1), y: 345},
+              {x: new Date(1997, 1, 1), y: 515},
+              {x: new Date(2001, 1, 1), y: 132},
+              {x: new Date(2005, 1, 1), y: 305},
+              {x: new Date(2011, 1, 1), y: 270},
+              {x: new Date(2015, 1, 1), y: 470}
+            ]}
+          />
+        </ChartWrap>
 
-      <VictoryLine
-        style={{parent: {border: "1px solid black", margin: "5px"}}}
-        scale={{x: "linear", y: "log"}}
-      />
+        <ChartWrap>
+          <VictoryLine
+            style={{parent: {border: "1px solid black", margin: "5px"}}}
+            data={[
+              {x: 1, y: 1},
+              {x: 2, y: 3},
+              {x: 3, y: 5},
+              {x: 4, y: 2},
+              {x: 5, y: null},
+              {x: 6, y: null},
+              {x: 7, y: 6},
+              {x: 8, y: 7},
+              {x: 9, y: 8},
+              {x: 10, y: 12}
+            ]}
+          />
+        </ChartWrap>
+
+        <ChartWrap>
+          <VictoryLine
+            style={{parent: {border: "1px solid black", margin: "5px"}}}
+            scale={{x: "linear", y: "log"}}
+          />
+        </ChartWrap>
+      </div>
+    );
+  }
+}
+
+class ChartWrap extends React.Component {
+  static propTypes = {
+    width: React.PropTypes.number,
+    height: React.PropTypes.number,
+    children: React.PropTypes.any
+  };
+  static defaultProps = {
+    width: 350,
+    height: 250
+  };
+  // renders both a standalone chart, and a version wrapped in VictoryChart,
+  // to test both cases at once
+  render() {
+    return (
+      <div>
+        {React.cloneElement(this.props.children, this.props)}
+        {/* turn off chart wrapper until converted to react-art
+        <VictoryChart {...this.props}>{this.props.children}</VictoryChart>
+        */}
       </div>
     );
   }

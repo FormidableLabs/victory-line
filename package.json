@@ -25,18 +25,20 @@
     "d3-shape": "^0.2.0",
     "lodash": "^3.10.1",
     "radium": "^0.16.2",
+    "react-art": "git+https://github.com/formidablelabs/react-art#supportBrowserColors",
     "victory-animation": "^0.0.13",
-    "victory-label": "^0.1.8",
-    "victory-util": "^2.1.0"
+    "victory-label":  "^0.3.0",
+    "victory-util": "^2.1.2"
   },
   "devDependencies": {
     "builder-victory-component-dev": "~0.2.1",
     "chai": "^3.2.0",
     "mocha": "^2.2.5",
     "react": "0.14.x",
-    "react-addons-test-utils": "0.14.x",
+    "react-addons-test-utils": "^0.14.0",
     "react-dom": "0.14.x",
     "sinon": "^1.15.4",
-    "sinon-chai": "^2.8.0"
+    "sinon-chai": "^2.8.0",
+    "victory-chart": "^2.2.0"
   }
 }

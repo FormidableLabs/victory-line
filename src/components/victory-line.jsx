@@ -12,11 +12,11 @@ import LineSegment from "./line-segment";
 import LineLabel from "./line-label";
 import { PropTypes as CustomPropTypes, Chart, Data, Domain, Scale } from "victory-util";
 import { VictoryAnimation } from "victory-animation";
+import { Group, Surface } from "react-art";
 
 const defaultStyles = {
   data: {
     strokeWidth: 2,
-    fill: "none",
     stroke: "#756f6a",
     opacity: 1
   },
@@ -24,7 +24,6 @@ const defaultStyles = {
     padding: 5,
     fontFamily: "Helvetica",
     fontSize: 10,
-    strokeWidth: 0,
     stroke: "transparent",
     textAnchor: "start"
   }
@@ -42,16 +41,14 @@ export default class VictoryLine extends React.Component {
      */
     animate: PropTypes.object,
     /**
-     * The data prop specifies the data to be plotted. Data should be in the form of an array
-     * of data points where each data point should be an object with x and y properties.
-     * @examples [{x: 1, y: 12}, {x: 10, y: 25}, {x: 100, y: 34}]
+     * The data prop specifies the data to be plotted.
+     * Data should be in the form of an array of data points.
+     * Each data point may be any format you wish (depending on the `x` and `y` accessor props),
+     * but by default, an object with x and y properties is expected.
+     * @examples [{x: 1, y: 2}, {x: 2, y: 3}], [[1, 2], [2, 3]],
+     * [[{x: "a", y: 1}, {x: "b", y: 2}], [{x: "a", y: 2}, {x: "b", y: 3}]]
      */
-    data: PropTypes.arrayOf(
-      PropTypes.shape({
-        x: PropTypes.any,
-        y: PropTypes.any
-      })
-    ),
+    data: PropTypes.array,
     /**
      * The domain prop describes the range of values your chart will include. This prop can be
      * given as a array of the minimum and maximum expected values for your chart,
@@ -155,22 +152,36 @@ export default class VictoryLine extends React.Component {
      */
     width: CustomPropTypes.nonNegative,
     /**
-     * The x prop provides another way to supply data for line to plot. This prop can be given
-     * as an array of values, and it will be plotted against whatever y prop is provided. If no
-     * props are provided for y, the values in x will be plotted as the identity function (x) => x.
-     * @examples [1, 2, 3]
+     * The x prop specifies how to access the X value of each data point.
+     * If given as a function, it will be run on each data point, and returned value will be used.
+     * If given as an integer, it will be used as an array index for array-type data points.
+     * If given as a string, it will be used as a property key for object-type data points.
+     * If given as an array of strings, or a string containing dots or brackets,
+     * it will be used as a nested object property path (for details see Lodash docs for _.get).
+     * If `null` or `undefined`, the data value will be used as is (identity function/pass-through).
+     * @examples 0, 'x', 'x.value.nested.1.thing', 'x[2].also.nested', null, d => Math.sin(d)
      */
-    x: CustomPropTypes.homogeneousArray,
+    x: PropTypes.oneOfType([
+      PropTypes.func,
+      CustomPropTypes.allOfType([CustomPropTypes.integer, CustomPropTypes.nonNegative]),
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string)
+    ]),
     /**
-     * The y prop provides another way to supply data for line to plot. This prop can be given
-     * as a function of x, or an array of values. If x props are given, they will be used
-     * in plotting (x, y) data points. If x props are not provided, a set of x values
-     * evenly spaced across the x domain will be calculated, and used for plotting data points.
-     * @examples (x) => Math.sin(x), [1, 2, 3]
+     * The y prop specifies how to access the Y value of each data point.
+     * If given as a function, it will be run on each data point, and returned value will be used.
+     * If given as an integer, it will be used as an array index for array-type data points.
+     * If given as a string, it will be used as a property key for object-type data points.
+     * If given as an array of strings, or a string containing dots or brackets,
+     * it will be used as a nested object property path (for details see Lodash docs for _.get).
+     * If `null` or `undefined`, the data value will be used as is (identity function/pass-through).
+     * @examples 0, 'y', 'y.value.nested.1.thing', 'y[2].also.nested', null, d => Math.sin(d)
      */
     y: PropTypes.oneOfType([
-      CustomPropTypes.homogeneousArray,
-      PropTypes.func
+      PropTypes.func,
+      CustomPropTypes.allOfType([CustomPropTypes.integer, CustomPropTypes.nonNegative]),
+      PropTypes.string,
+      PropTypes.arrayOf(PropTypes.string)
     ])
   };
 
@@ -182,7 +193,8 @@ export default class VictoryLine extends React.Component {
     scale: "linear",
     standalone: true,
     width: 450,
-    y: (x) => x
+    x: "x",
+    y: "y"
   };
 
   static getDomain = Domain.getDomain.bind(Domain);
@@ -265,10 +277,10 @@ export default class VictoryLine extends React.Component {
     };
     const calculatedProps = {dataset, dataSegments, scale, style};
     return (
-      <g style={style.parent}>
+      <Group {...style.parent}>
         {this.renderLine(calculatedProps)}
         {this.renderLabel(calculatedProps)}
-      </g>
+      </Group>
     );
   }
 
@@ -290,7 +302,7 @@ export default class VictoryLine extends React.Component {
       );
     }
     const style = Chart.getStyles(this.props, defaultStyles);
-    const group = <g style={style.parent}>{this.renderData(this.props, style)}</g>;
-    return this.props.standalone ? <svg style={style.parent}>{group}</svg> : group;
+    const group = <Group {...style.parent}>{this.renderData(this.props, style)}</Group>;
+    return this.props.standalone ? <Surface {...style.parent}>{group}</Surface> : group;
   }
 }
