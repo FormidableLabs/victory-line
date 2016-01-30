@@ -28,11 +28,31 @@ To display your own data, just pass in an array of data objects via the data pro
  />
 ```
 
+VictoryLine comes with data accessor props to make passing in data much more flexible.
+Assign a property to x or y, or process data on the fly.
+
+```playground
+<VictoryLine
+  data={[
+    {amount: 1, yield: 1, error: 0.5},
+    {amount: 2, yield: 2, error: 1.1},
+    {amount: 3, yield: 3, error: 0},
+    {amount: 4, yield: 2, error: 0.1},
+    {amount: 5, yield: 1, error: 1.5}
+  ]}
+  x={"amount"}
+  y={(data) => (data.yield + data.error)}
+/>
+```
+
+
 VictoryLine can also plot functions. Again, the domain is set so that the entire line is visible:
 
 ```playground
  <VictoryLine
-    y={(x) => Math.sin(2 * Math.PI * x)}
+    y={(data) =>
+      Math.sin(2 * Math.PI * data.x)
+    }
  />
 ```
 
@@ -68,6 +88,33 @@ Add labels, style the data, change the interpolation, add a custom domain:
  />
 ```
 
+### Functional styles
+
+VictoryLine also supports functional styles. Unlike other data components, style for VictoryLine  will be evaluated as a function of the entire dataset rather than a single data point.
+
+```playground
+ <VictoryLine
+   style={{
+    data: {
+      stroke: (data) => {
+        const max = _.max(data.map(
+          (datum) => datum.y)
+        );
+        return max > 2 ? "red" : "blue";
+      }
+    }
+   }}
+   data={[
+     {x: 0, y: 1},
+     {x: 1, y: 3},
+     {x: 2, y: 2},      
+     {x: 3, y: 4},
+     {x: 4, y: 3},
+     {x: 5, y: 5}
+   ]}
+ />
+```
+
 
 ### Animating
 
@@ -85,8 +132,8 @@ class App extends React.Component {
 
   getYFunction() {
     const n = _.random(2, 7);
-    return (x) => Math.exp(-n * x) *
-      Math.sin(2 * n * Math.PI * x);
+    return (data) => Math.exp(-n * data.x) *
+      Math.sin(2 * n * Math.PI * data.x);
   }
 
   getStyles() {
